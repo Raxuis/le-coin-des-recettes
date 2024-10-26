@@ -41,7 +41,7 @@ var cheerio = require("cheerio");
 var url = 'https://www.marmiton.org/recettes/index/categorie/plat-principal/';
 function scrapeRecipeDetails(link) {
     return __awaiter(this, void 0, void 0, function () {
-        var data, $_1, ingredients_1, steps_1, totalTime_1, error_1;
+        var data, $_1, ingredients_1, steps_1, totalTime_1, difficulty_1, budget_1, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -53,6 +53,8 @@ function scrapeRecipeDetails(link) {
                     ingredients_1 = [];
                     steps_1 = [];
                     totalTime_1 = 0;
+                    difficulty_1 = null;
+                    budget_1 = null;
                     // Extraction des ingrédients car div pour chaque élément sur site marmiton
                     $_1('.card-ingredient-title').each(function (_, element) {
                         var quantity = $_1(element).find('.card-ingredient-quantity .count').text().trim();
@@ -70,18 +72,24 @@ function scrapeRecipeDetails(link) {
                     $_1('.recipe-primary__item span').each(function (_, element) {
                         var timeText = $_1(element).text().trim();
                         if (timeText) {
-                            var timeMatch = timeText.match(/(\d+)\s*min/);
+                            var timeMatch = timeText.match(/(\d+)\s*min/); // Regex pour faire correspondre les caractères avant "min"
                             if (timeMatch) {
                                 totalTime_1 = parseInt(timeMatch[1]);
                             }
                         }
+                    });
+                    $_1('.recipe-primary__item .icon-difficulty + span').each(function (_, element) {
+                        difficulty_1 = $_1(element).text().trim() || null;
+                    });
+                    $_1('.recipe-primary__item .icon-price + span').each(function (_, element) {
+                        budget_1 = $_1(element).text().trim() || null;
                     });
                     $_1('.recipe-step-list__container > p').each(function (_, element) {
                         var step = $_1(element).text().trim();
                         if (step)
                             steps_1.push(step);
                     });
-                    return [2 /*return*/, { totalTime: totalTime_1, ingredients: ingredients_1, steps: steps_1 }];
+                    return [2 /*return*/, { totalTime: totalTime_1, ingredients: ingredients_1, steps: steps_1, difficulty: difficulty_1, budget: budget_1 }];
                 case 2:
                     error_1 = _a.sent();
                     console.error("Error fetching recipe details from ".concat(link, ":"), error_1);

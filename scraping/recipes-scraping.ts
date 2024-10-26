@@ -11,6 +11,8 @@ async function scrapeRecipeDetails(link: string) {
     const ingredients: string[] = [];
     const steps: string[] = [];
     let totalTime: number = 0;
+    let difficulty: string | null = null;
+    let budget: string | null = null;
 
     // Extraction des ingrédients car div pour chaque élément sur site marmiton
     $('.card-ingredient-title').each((_, element) => {
@@ -40,12 +42,20 @@ async function scrapeRecipeDetails(link: string) {
       }
     });
 
+    $('.recipe-primary__item .icon-difficulty + span').each((_, element) => {
+      difficulty = $(element).text().trim() || null;
+    });
+
+    $('.recipe-primary__item .icon-price + span').each((_, element) => {
+      budget = $(element).text().trim() || null;
+    });
+
     $('.recipe-step-list__container > p').each((_, element) => {
       const step = $(element).text().trim();
       if (step) steps.push(step);
     });
 
-    return { totalTime, ingredients, steps };
+    return { totalTime, ingredients, steps, difficulty, budget };
   } catch (error) {
     console.error(`Error fetching recipe details from ${link}:`, error);
     return null;
