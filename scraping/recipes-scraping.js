@@ -58,7 +58,7 @@ function scrapeRecipeDetails(link) {
                         var unit = $_1(element).find('.card-ingredient-quantity .unit').text().trim();
                         var name = $_1(element).find('.ingredient-name').text().trim();
                         var complement = $_1(element).find('.ingredient-complement').text().trim();
-                        var ingredient = "".concat(quantity, " ").concat(unit, " de ").concat(name);
+                        var ingredient = quantity && unit ? "".concat(quantity, " ").concat(unit, " de ").concat(name) : name;
                         if (complement) {
                             ingredient += " ".concat(complement);
                         }
@@ -69,6 +69,7 @@ function scrapeRecipeDetails(link) {
                         if (step)
                             steps_1.push(step);
                     });
+                    $_1('.recipe-primary__item > span');
                     return [2 /*return*/, { ingredients: ingredients_1, steps: steps_1 }];
                 case 2:
                     error_1 = _a.sent();
