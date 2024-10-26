@@ -41,7 +41,7 @@ var cheerio = require("cheerio");
 var url = 'https://www.marmiton.org/recettes/index/categorie/plat-principal/';
 function scrapeRecipeDetails(link) {
     return __awaiter(this, void 0, void 0, function () {
-        var data, $_1, ingredients_1, steps_1, error_1;
+        var data, $_1, ingredients_1, steps_1, totalTime_1, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -52,6 +52,7 @@ function scrapeRecipeDetails(link) {
                     $_1 = cheerio.load(data);
                     ingredients_1 = [];
                     steps_1 = [];
+                    totalTime_1 = 0;
                     // Extraction des ingrédients car div pour chaque élément sur site marmiton
                     $_1('.card-ingredient-title').each(function (_, element) {
                         var quantity = $_1(element).find('.card-ingredient-quantity .count').text().trim();
@@ -66,13 +67,21 @@ function scrapeRecipeDetails(link) {
                         }
                         ingredients_1.push(ingredient.trim());
                     });
+                    $_1('.recipe-primary__item span').each(function (_, element) {
+                        var timeText = $_1(element).text().trim();
+                        if (timeText) {
+                            var timeMatch = timeText.match(/(\d+)\s*min/);
+                            if (timeMatch) {
+                                totalTime_1 = parseInt(timeMatch[1]);
+                            }
+                        }
+                    });
                     $_1('.recipe-step-list__container > p').each(function (_, element) {
                         var step = $_1(element).text().trim();
                         if (step)
                             steps_1.push(step);
                     });
-                    $_1('.recipe-primary__item > span');
-                    return [2 /*return*/, { ingredients: ingredients_1, steps: steps_1 }];
+                    return [2 /*return*/, { totalTime: totalTime_1, ingredients: ingredients_1, steps: steps_1 }];
                 case 2:
                     error_1 = _a.sent();
                     console.error("Error fetching recipe details from ".concat(link, ":"), error_1);

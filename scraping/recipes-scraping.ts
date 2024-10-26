@@ -10,6 +10,7 @@ async function scrapeRecipeDetails(link: string) {
 
     const ingredients: string[] = [];
     const steps: string[] = [];
+    let totalTime: number = 0;
 
     // Extraction des ingrédients car div pour chaque élément sur site marmiton
     $('.card-ingredient-title').each((_, element) => {
@@ -29,14 +30,22 @@ async function scrapeRecipeDetails(link: string) {
       ingredients.push(ingredient.trim());
     });
 
+    $('.recipe-primary__item span').each((_, element) => {
+      const timeText = $(element).text().trim();
+      if (timeText) {
+        const timeMatch = timeText.match(/(\d+)\s*min/); // Regex pour faire correspondre les caractères avant "min"
+        if (timeMatch) {
+          totalTime = parseInt(timeMatch[1]);
+        }
+      }
+    });
+
     $('.recipe-step-list__container > p').each((_, element) => {
       const step = $(element).text().trim();
       if (step) steps.push(step);
     });
 
-    $('.recipe-primary__item > span')
-
-    return { ingredients, steps };
+    return { totalTime, ingredients, steps };
   } catch (error) {
     console.error(`Error fetching recipe details from ${link}:`, error);
     return null;
