@@ -18,7 +18,9 @@ async function scrapeRecipeDetails(link: string) {
       const name = $(element).find('.ingredient-name').text().trim();
       const complement = $(element).find('.ingredient-complement').text().trim();
 
-      let ingredient = quantity && unit ? `${quantity} ${unit} de ${name}` : name;
+      let ingredient = quantity && unit ? `${quantity} ${unit} de ${name}`
+        : quantity ? `${quantity} ${name}`
+          : name;
 
       if (complement) {
         ingredient += ` ${complement}`;

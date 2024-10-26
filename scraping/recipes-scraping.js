@@ -58,7 +58,9 @@ function scrapeRecipeDetails(link) {
                         var unit = $_1(element).find('.card-ingredient-quantity .unit').text().trim();
                         var name = $_1(element).find('.ingredient-name').text().trim();
                         var complement = $_1(element).find('.ingredient-complement').text().trim();
-                        var ingredient = quantity && unit ? "".concat(quantity, " ").concat(unit, " de ").concat(name) : name;
+                        var ingredient = quantity && unit ? "".concat(quantity, " ").concat(unit, " de ").concat(name)
+                            : quantity ? "".concat(quantity, " ").concat(name)
+                                : name;
                         if (complement) {
                             ingredient += " ".concat(complement);
                         }
