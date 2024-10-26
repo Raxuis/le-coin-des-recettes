@@ -1,5 +1,9 @@
+<script setup lang="ts">
+const layout = "custom";
+</script>
+
 <template>
-  <div>
+  <NuxtLayout :name="layout">
     <NuxtRouteAnnouncer />
-  </div>
+  </NuxtLayout>
 </template>
