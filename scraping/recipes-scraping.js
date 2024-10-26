@@ -41,7 +41,7 @@ var cheerio = require("cheerio");
 var url = 'https://www.marmiton.org/recettes/index/categorie/plat-principal/';
 function scrapeRecipeDetails(link) {
     return __awaiter(this, void 0, void 0, function () {
-        var data, $_1, ingredients_1, steps_1, totalTime_1, difficulty_1, budget_1, error_1;
+        var data, $_1, ingredients_1, steps_1, preparationTime, totalTime_1, difficulty_1, budget_1, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -52,6 +52,7 @@ function scrapeRecipeDetails(link) {
                     $_1 = cheerio.load(data);
                     ingredients_1 = [];
                     steps_1 = [];
+                    preparationTime = 0;
                     totalTime_1 = 0;
                     difficulty_1 = null;
                     budget_1 = null;
@@ -69,12 +70,14 @@ function scrapeRecipeDetails(link) {
                         }
                         ingredients_1.push(ingredient.trim());
                     });
-                    $_1('.recipe-primary__item span').each(function (_, element) {
+                    $_1('.time__total div').each(function (_, element) {
                         var timeText = $_1(element).text().trim();
                         if (timeText) {
-                            var timeMatch = timeText.match(/(\d+)\s*min/); // Regex pour faire correspondre les caractères avant "min"
+                            var timeMatch = timeText.match(/(\d+)\s*h\s*(\d+)?|(\d+)\s*min/);
                             if (timeMatch) {
-                                totalTime_1 = parseInt(timeMatch[1]);
+                                var hours = parseInt(timeMatch[1]) || 0;
+                                var minutes = parseInt(timeMatch[2]) || parseInt(timeMatch[3]) || 0;
+                                totalTime_1 = (hours * 60) + minutes;
                             }
                         }
                     });

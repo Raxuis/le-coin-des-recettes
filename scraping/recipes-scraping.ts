@@ -10,6 +10,7 @@ async function scrapeRecipeDetails(link: string) {
 
     const ingredients: string[] = [];
     const steps: string[] = [];
+    let preparationTime: number = 0;
     let totalTime: number = 0;
     let difficulty: string | null = null;
     let budget: string | null = null;
@@ -32,12 +33,14 @@ async function scrapeRecipeDetails(link: string) {
       ingredients.push(ingredient.trim());
     });
 
-    $('.recipe-primary__item span').each((_, element) => {
+    $('.time__total div').each((_, element) => {
       const timeText = $(element).text().trim();
       if (timeText) {
-        const timeMatch = timeText.match(/(\d+)\s*min/); // Regex pour faire correspondre les caractères avant "min"
+        const timeMatch = timeText.match(/(\d+)\s*h\s*(\d+)?|(\d+)\s*min/); // Regex pour checker si c'est sous le format ..h.. ou ..min
         if (timeMatch) {
-          totalTime = parseInt(timeMatch[1]);
+          const hours = parseInt(timeMatch[1]) || 0;
+          const minutes = parseInt(timeMatch[2]) || parseInt(timeMatch[3]) || 0;
+          totalTime = (hours * 60) + minutes;
         }
       }
     });
