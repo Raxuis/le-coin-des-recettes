@@ -22,7 +22,7 @@ model Recipes {
   id              String   @id @default(uuid())
   // image       String?
   // sourceUrl   String?
-  title           String
+  title           String   @unique
   author          String?
   ingredients     String[]
   steps           String[]
