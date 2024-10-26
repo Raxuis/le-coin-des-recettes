@@ -39,33 +39,87 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var axios_1 = require("axios");
 var cheerio = require("cheerio");
 var url = 'https://www.marmiton.org/recettes/index/categorie/plat-principal/';
-function scrapeRecipes() {
+function scrapeRecipeDetails(link) {
     return __awaiter(this, void 0, void 0, function () {
-        var data, $_1, recipes_1, error_1;
+        var data, $_1, ingredients_1, steps_1, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
-                    return [4 /*yield*/, axios_1.default.get(url)];
+                    return [4 /*yield*/, axios_1.default.get(link)];
                 case 1:
                     data = (_a.sent()).data;
                     $_1 = cheerio.load(data);
-                    recipes_1 = [];
-                    $_1('.recipe-card').each(function (index, element) {
-                        var title = $_1(element).find('.recipe-card__title').text().trim();
-                        var link = $_1(element).find('a').attr('href');
-                        recipes_1.push({
-                            title: title,
-                            link: link || ''
-                        });
+                    ingredients_1 = [];
+                    steps_1 = [];
+                    // Extraction des ingrédients car div pour chaque élément sur site marmiton
+                    $_1('.card-ingredient-title').each(function (_, element) {
+                        var quantity = $_1(element).find('.card-ingredient-quantity .count').text().trim();
+                        var unit = $_1(element).find('.card-ingredient-quantity .unit').text().trim();
+                        var name = $_1(element).find('.ingredient-name').text().trim();
+                        var complement = $_1(element).find('.ingredient-complement').text().trim();
+                        var ingredient = "".concat(quantity, " ").concat(unit, " de ").concat(name);
+                        if (complement) {
+                            ingredient += " ".concat(complement);
+                        }
+                        ingredients_1.push(ingredient.trim());
                     });
-                    console.log(recipes_1);
-                    return [3 /*break*/, 3];
+                    $_1('.recipe-step-list__container > p').each(function (_, element) {
+                        var step = $_1(element).text().trim();
+                        if (step)
+                            steps_1.push(step);
+                    });
+                    return [2 /*return*/, { ingredients: ingredients_1, steps: steps_1 }];
                 case 2:
                     error_1 = _a.sent();
-                    console.error('Error scraping the recipes:', error_1);
-                    return [3 /*break*/, 3];
+                    console.error("Error fetching recipe details from ".concat(link, ":"), error_1);
+                    return [2 /*return*/, null];
                 case 3: return [2 /*return*/];
+            }
+        });
+    });
+}
+function scrapeRecipes() {
+    return __awaiter(this, void 0, void 0, function () {
+        var data, $_2, recipes_2, _i, recipes_1, recipe, details, error_2;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 6, , 7]);
+                    return [4 /*yield*/, axios_1.default.get(url)];
+                case 1:
+                    data = (_a.sent()).data;
+                    $_2 = cheerio.load(data);
+                    recipes_2 = [];
+                    $_2('.recipe-card').each(function (index, element) {
+                        var title = $_2(element).find('.recipe-card__title').text().trim();
+                        var link = $_2(element).find('a').attr('href');
+                        var image = $_2(element).find('img').attr('src');
+                        if (link) {
+                            recipes_2.push({ title: title, link: link, image: image });
+                        }
+                    });
+                    _i = 0, recipes_1 = recipes_2;
+                    _a.label = 2;
+                case 2:
+                    if (!(_i < recipes_1.length)) return [3 /*break*/, 5];
+                    recipe = recipes_1[_i];
+                    return [4 /*yield*/, scrapeRecipeDetails(recipe.link)];
+                case 3:
+                    details = _a.sent();
+                    recipe.details = details;
+                    _a.label = 4;
+                case 4:
+                    _i++;
+                    return [3 /*break*/, 2];
+                case 5:
+                    console.log(JSON.stringify(recipes_2, null, 2));
+                    return [3 /*break*/, 7];
+                case 6:
+                    error_2 = _a.sent();
+                    console.error('Error scraping the recipes:', error_2);
+                    return [3 /*break*/, 7];
+                case 7: return [2 /*return*/];
             }
         });
     });
