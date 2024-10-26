@@ -20,6 +20,8 @@ model User {
 
 model Recipes {
   id          String   @id @default(uuid())
+  // image       String?
+  // sourceUrl   String?
   author      String?
   tags        String[]
   ingredients String[]
