@@ -156,7 +156,9 @@ function scrapeRecipes() {
                     return [4 /*yield*/, scrapeRecipeDetails(recipe.link)];
                 case 3:
                     details = _a.sent();
-                    recipe.details = details;
+                    if (details) {
+                        Object.assign(recipe, details);
+                    }
                     _a.label = 4;
                 case 4:
                     _i++;

@@ -111,7 +111,9 @@ async function scrapeRecipes() {
 
     for (const recipe of recipes) {
       const details = await scrapeRecipeDetails(recipe.link);
-      recipe.details = details;
+      if (details) {
+        Object.assign(recipe, details);
+      }
     }
 
     console.log(JSON.stringify(recipes, null, 2));
