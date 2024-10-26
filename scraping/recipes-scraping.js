@@ -36,9 +36,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var client_1 = require("@prisma/client");
 var axios_1 = require("axios");
 var cheerio = require("cheerio");
 var url = 'https://www.marmiton.org/recettes/index/categorie/plat-principal/';
+var prisma = new client_1.PrismaClient();
 function scrapeRecipeDetails(link) {
     return __awaiter(this, void 0, void 0, function () {
         var data, $_1, ingredients_1, steps_1, preparationTime_1, restingTime_1, cookingTime_1, totalTime, difficulty_1, budget_1, error_1;
@@ -130,11 +132,11 @@ function scrapeRecipeDetails(link) {
 }
 function scrapeRecipes() {
     return __awaiter(this, void 0, void 0, function () {
-        var data, $_2, recipes_2, _i, recipes_1, recipe, details, error_2;
+        var data, $_2, recipes_2, _i, recipes_1, recipe, details, recipesToInsert, error_2, error_3;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 6, , 7]);
+                    _a.trys.push([0, 10, 11, 13]);
                     return [4 /*yield*/, axios_1.default.get(url)];
                 case 1:
                     data = (_a.sent()).data;
@@ -165,12 +167,41 @@ function scrapeRecipes() {
                     return [3 /*break*/, 2];
                 case 5:
                     console.log(JSON.stringify(recipes_2, null, 2));
-                    return [3 /*break*/, 7];
+                    _a.label = 6;
                 case 6:
+                    _a.trys.push([6, 8, , 9]);
+                    recipesToInsert = recipes_2.map(function (recipe) { return ({
+                        title: recipe.title,
+                        preparationTime: recipe.preparationTime,
+                        restingTime: recipe.restingTime,
+                        cookingTime: recipe.cookingTime,
+                        totalTime: recipe.totalTime,
+                        ingredients: recipe.ingredients,
+                        steps: recipe.steps,
+                        difficulty: recipe.difficulty || '',
+                        budget: recipe.budget || '',
+                    }); });
+                    return [4 /*yield*/, prisma.recipes.createMany({
+                            data: recipesToInsert,
+                        })];
+                case 7:
+                    _a.sent();
+                    console.log("Succeeded to add datas");
+                    return [3 /*break*/, 9];
+                case 8:
                     error_2 = _a.sent();
-                    console.error('Error scraping the recipes:', error_2);
-                    return [3 /*break*/, 7];
-                case 7: return [2 /*return*/];
+                    console.error("Error while adding datas", error_2);
+                    return [3 /*break*/, 9];
+                case 9: return [3 /*break*/, 13];
+                case 10:
+                    error_3 = _a.sent();
+                    console.error('Error scraping the recipes:', error_3);
+                    return [3 /*break*/, 13];
+                case 11: return [4 /*yield*/, prisma.$disconnect()];
+                case 12:
+                    _a.sent();
+                    return [7 /*endfinally*/];
+                case 13: return [2 /*return*/];
             }
         });
     });

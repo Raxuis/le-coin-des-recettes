@@ -1,7 +1,11 @@
+import { PrismaClient, type Recipes } from '@prisma/client';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 
 const url = 'https://www.marmiton.org/recettes/index/categorie/plat-principal/';
+
+const prisma = new PrismaClient()
+
 
 async function scrapeRecipeDetails(link: string) {
   try {
@@ -117,8 +121,30 @@ async function scrapeRecipes() {
     }
 
     console.log(JSON.stringify(recipes, null, 2));
+    try {
+      const recipesToInsert = recipes.map((recipe) => ({
+        title: recipe.title,
+        preparationTime: recipe.preparationTime,
+        restingTime: recipe.restingTime,
+        cookingTime: recipe.cookingTime,
+        totalTime: recipe.totalTime,
+        ingredients: recipe.ingredients,
+        steps: recipe.steps,
+        difficulty: recipe.difficulty || '',
+        budget: recipe.budget || '',
+      }));
+
+      await prisma.recipes.createMany({
+        data: recipesToInsert,
+      });
+      console.log("Succeeded to add datas");
+    } catch (error) {
+      console.error("Error while adding datas", error);
+    }
   } catch (error) {
     console.error('Error scraping the recipes:', error);
+  } finally {
+    await prisma.$disconnect();
   }
 }
 
