@@ -19,18 +19,19 @@ model User {
 }
 
 model Recipes {
-  id          String   @id @default(uuid())
+  id              String   @id @default(uuid())
   // image       String?
   // sourceUrl   String?
-  author      String?
-  tags        String[]
-  ingredients String[]
-  steps       String[]
-  people      Int
-  budget      Int
-  difficulty  Int
-  prepTime    Int
-  totalTime   Int
+  title           String
+  author          String?
+  ingredients     String[]
+  steps           String[]
+  preparationTime Int
+  restingTime     Int
+  cookingTime     Int
+  totalTime       Int
+  difficulty      String
+  budget          String
 
   // Relation avec User si c'est une recette créée par un utilisateur de la plateforme
   creator   User?   @relation(fields: [creatorId], references: [id])
