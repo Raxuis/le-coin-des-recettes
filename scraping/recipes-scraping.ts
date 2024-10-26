@@ -11,6 +11,8 @@ async function scrapeRecipeDetails(link: string) {
     const ingredients: string[] = [];
     const steps: string[] = [];
     let preparationTime: number = 0;
+    let restingTime: number = 0;
+    let cookingTime: number = 0;
     let totalTime: number = 0;
     let difficulty: string | null = null;
     let budget: string | null = null;
@@ -33,17 +35,34 @@ async function scrapeRecipeDetails(link: string) {
       ingredients.push(ingredient.trim());
     });
 
-    $('.time__total div').each((_, element) => {
-      const timeText = $(element).text().trim();
-      if (timeText) {
-        const timeMatch = timeText.match(/(\d+)\s*h\s*(\d+)?|(\d+)\s*min/); // Regex pour checker si c'est sous le format ..h.. ou ..min
+    // Extraction des temps (préparation, repos, cuisson)
+    $('.time__details > div').each((_, element) => {
+      const label = $(element).find('span').text().trim();
+      const timeText = $(element).find('div').text().trim();
+
+      let timeInMinutes = 0;
+
+      if (timeText !== '-') {
+        const timeMatch = timeText.match(/(\d+)\s*h\s*(\d+)?|(\d+)\s*min/);
         if (timeMatch) {
           const hours = parseInt(timeMatch[1]) || 0;
           const minutes = parseInt(timeMatch[2]) || parseInt(timeMatch[3]) || 0;
-          totalTime = (hours * 60) + minutes;
+          timeInMinutes = (hours * 60) + minutes;
         }
       }
+
+      // Attribue le temps en fonction du label
+      if (label.includes('Préparation')) {
+        preparationTime = timeInMinutes;
+      } else if (label.includes('Repos')) {
+        restingTime = timeInMinutes;
+      } else if (label.includes('Cuisson')) {
+        cookingTime = timeInMinutes;
+      }
     });
+
+    // Calcul du temps total pour éviter de rechercher dans le DOM
+    totalTime = preparationTime + restingTime + cookingTime;
 
     $('.recipe-primary__item .icon-difficulty + span').each((_, element) => {
       difficulty = $(element).text().trim() || null;
@@ -58,7 +77,16 @@ async function scrapeRecipeDetails(link: string) {
       if (step) steps.push(step);
     });
 
-    return { totalTime, ingredients, steps, difficulty, budget };
+    return {
+      preparationTime,
+      restingTime,
+      cookingTime,
+      totalTime,
+      ingredients,
+      steps,
+      difficulty,
+      budget
+    };
   } catch (error) {
     console.error(`Error fetching recipe details from ${link}:`, error);
     return null;

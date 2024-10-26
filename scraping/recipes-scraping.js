@@ -41,7 +41,7 @@ var cheerio = require("cheerio");
 var url = 'https://www.marmiton.org/recettes/index/categorie/plat-principal/';
 function scrapeRecipeDetails(link) {
     return __awaiter(this, void 0, void 0, function () {
-        var data, $_1, ingredients_1, steps_1, preparationTime, totalTime_1, difficulty_1, budget_1, error_1;
+        var data, $_1, ingredients_1, steps_1, preparationTime_1, restingTime_1, cookingTime_1, totalTime, difficulty_1, budget_1, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -52,8 +52,10 @@ function scrapeRecipeDetails(link) {
                     $_1 = cheerio.load(data);
                     ingredients_1 = [];
                     steps_1 = [];
-                    preparationTime = 0;
-                    totalTime_1 = 0;
+                    preparationTime_1 = 0;
+                    restingTime_1 = 0;
+                    cookingTime_1 = 0;
+                    totalTime = 0;
                     difficulty_1 = null;
                     budget_1 = null;
                     // Extraction des ingrédients car div pour chaque élément sur site marmiton
@@ -70,17 +72,32 @@ function scrapeRecipeDetails(link) {
                         }
                         ingredients_1.push(ingredient.trim());
                     });
-                    $_1('.time__total div').each(function (_, element) {
-                        var timeText = $_1(element).text().trim();
-                        if (timeText) {
+                    // Extraction des temps (préparation, repos, cuisson)
+                    $_1('.time__details > div').each(function (_, element) {
+                        var label = $_1(element).find('span').text().trim();
+                        var timeText = $_1(element).find('div').text().trim();
+                        var timeInMinutes = 0;
+                        if (timeText !== '-') {
                             var timeMatch = timeText.match(/(\d+)\s*h\s*(\d+)?|(\d+)\s*min/);
                             if (timeMatch) {
                                 var hours = parseInt(timeMatch[1]) || 0;
                                 var minutes = parseInt(timeMatch[2]) || parseInt(timeMatch[3]) || 0;
-                                totalTime_1 = (hours * 60) + minutes;
+                                timeInMinutes = (hours * 60) + minutes;
                             }
                         }
+                        // Attribue le temps en fonction du label
+                        if (label.includes('Préparation')) {
+                            preparationTime_1 = timeInMinutes;
+                        }
+                        else if (label.includes('Repos')) {
+                            restingTime_1 = timeInMinutes;
+                        }
+                        else if (label.includes('Cuisson')) {
+                            cookingTime_1 = timeInMinutes;
+                        }
                     });
+                    // Calcul du temps total pour éviter de rechercher dans le DOM
+                    totalTime = preparationTime_1 + restingTime_1 + cookingTime_1;
                     $_1('.recipe-primary__item .icon-difficulty + span').each(function (_, element) {
                         difficulty_1 = $_1(element).text().trim() || null;
                     });
@@ -92,7 +109,16 @@ function scrapeRecipeDetails(link) {
                         if (step)
                             steps_1.push(step);
                     });
-                    return [2 /*return*/, { totalTime: totalTime_1, ingredients: ingredients_1, steps: steps_1, difficulty: difficulty_1, budget: budget_1 }];
+                    return [2 /*return*/, {
+                            preparationTime: preparationTime_1,
+                            restingTime: restingTime_1,
+                            cookingTime: cookingTime_1,
+                            totalTime: totalTime,
+                            ingredients: ingredients_1,
+                            steps: steps_1,
+                            difficulty: difficulty_1,
+                            budget: budget_1
+                        }];
                 case 2:
                     error_1 = _a.sent();
                     console.error("Error fetching recipe details from ".concat(link, ":"), error_1);
