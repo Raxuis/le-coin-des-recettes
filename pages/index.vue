@@ -36,11 +36,15 @@ const { data, status } = useFetch<Recipes[]>('/api/recipes');
               <p class="text-lg">{{ recipe.title }}</p>
             </div>
           </template>
+          <div class="inline-flex gap-1 group">
+            <NuxtLink class="underline underline-offset-2" :to="`/recipe/${slugTitle(recipe.title)}`">En savoir plus</NuxtLink>
+            <UIcon name="lucide:arrow-up-right" class="size-5 mt-1 group-hover:translate-x-1 duration-300" />
+          </div>
           <template #footer>
             <div class="flex justify-between px-2">
               <UTooltip text="Difficulté" :popper="{ placement: 'top' }">
                 <UButton color="gray" class="text-serenade-500">
-                  <UIcon name="mdi:chef-hat" class="w-5 h-5" />
+                  <UIcon name="mdi:chef-hat" class="size-5" />
                   {{ firstCharacterToUppercase(recipe.budget) }}
                 </UButton>
               </UTooltip>
@@ -50,8 +54,6 @@ const { data, status } = useFetch<Recipes[]>('/api/recipes');
                   {{ firstCharacterToUppercase(recipe.difficulty) }}
                 </UButton>
               </UTooltip>
-              <!-- <p class="text-base">{{ firstCharacterToUppercase(recipe.difficulty) }}</p>
-              <p class="text-base">{{ firstCharacterToUppercase(recipe.budget) }}</p> -->
             </div>
           </template>
         </UCard>

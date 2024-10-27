@@ -33,6 +33,9 @@ importers:
       '@iconify-json/fluent':
         specifier: ^1.2.5
         version: 1.2.5
+      '@iconify-json/lucide':
+        specifier: ^1.2.10
+        version: 1.2.10
       '@iconify-json/mdi':
         specifier: ^1.2.1
         version: 1.2.1
@@ -682,6 +685,9 @@ packages:
 
   '@iconify-json/heroicons@1.2.1':
     resolution: {integrity: sha512-TkKfS5U27kE5MXmSGLzPoz95BP5VA9xEJXwJFwmPMVLX+xyWq0OkoiWTUXB0uAoQODpb8BaRpzSydItrq9fIRA==}
+
+  '@iconify-json/lucide@1.2.10':
+    resolution: {integrity: sha512-cR1xpRJ4dnoXlC0ShDjzbrZyu+ICH4OUaYl7S51MhZUO1H040s7asVqv0LsDbofSLDuzWkHCLsBabTTRL0mCUg==}
 
   '@iconify-json/mdi@1.2.1':
     resolution: {integrity: sha512-dSkQU78gsZV6Yxnq78+LuX7jzeFC/5NAmz7O3rh558GimGFcwMVY/OtqRowIzjqJBmMmWZft7wkFV4TrwRXjlg==}
@@ -4361,6 +4367,10 @@ snapshots:
       '@iconify/types': 2.0.0
 
   '@iconify-json/heroicons@1.2.1':
+    dependencies:
+      '@iconify/types': 2.0.0
+
+  '@iconify-json/lucide@1.2.10':
     dependencies:
       '@iconify/types': 2.0.0
 
