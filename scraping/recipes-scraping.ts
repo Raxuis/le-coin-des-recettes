@@ -2,7 +2,8 @@ import { PrismaClient, type Recipes } from '@prisma/client';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 
-const url = 'https://www.marmiton.org/recettes/index/categorie/plat-principal/';
+const mealUrl = 'https://www.marmiton.org/recettes/index/categorie/plat-principal';
+
 
 const prisma = new PrismaClient()
 
@@ -98,54 +99,76 @@ async function scrapeRecipeDetails(link: string) {
 }
 
 async function scrapeRecipes() {
-  try {
-    const { data } = await axios.get(url);
-    const $ = cheerio.load(data);
-    const recipes: any[] = [];
+  let page = 1;
+  let hasMorePages = true;
 
-    $('.recipe-card').each((index, element) => {
-      const title = $(element).find('.recipe-card__title').text().trim();
-      const link = $(element).find('a').attr('href');
-      const image = $(element).find('img').attr('src');
-
-      if (link) {
-        recipes.push({ title, link, image });
-      }
-    });
-
-    for (const recipe of recipes) {
-      const details = await scrapeRecipeDetails(recipe.link);
-      if (details) {
-        Object.assign(recipe, details);
-      }
-    }
-
-    console.log(JSON.stringify(recipes, null, 2));
+  while (hasMorePages) {
     try {
-      const recipesToInsert = recipes.map((recipe) => ({
-        title: recipe.title,
-        preparationTime: recipe.preparationTime,
-        restingTime: recipe.restingTime,
-        cookingTime: recipe.cookingTime,
-        totalTime: recipe.totalTime,
-        ingredients: recipe.ingredients,
-        steps: recipe.steps,
-        difficulty: recipe.difficulty || '',
-        budget: recipe.budget || '',
-      }));
+      const currentPageUrl = `${mealUrl}/${page}`;
+      const { data } = await axios.get(currentPageUrl);
+      const $ = cheerio.load(data);
+      const recipes: any[] = [];
 
-      await prisma.recipes.createMany({
-        data: recipesToInsert,
+      $('.recipe-card').each((index, element) => {
+        const title = $(element).find('.recipe-card__title').text().trim();
+        const link = $(element).find('a').attr('href');
+        const image = $(element).find('img').attr('src');
+
+        if (link) {
+          recipes.push({ title, link, image });
+        }
       });
-      console.log("Succeeded to add datas");
+
+      if (recipes.length === 0) {
+        hasMorePages = false;
+        console.log('No more recipes found. Stopping the scraper.');
+        break;
+      }
+
+      for (const recipe of recipes) {
+        const details = await scrapeRecipeDetails(recipe.link);
+        if (details) {
+          Object.assign(recipe, details);
+        }
+      }
+
+      try {
+        for (const recipe of recipes) {
+          const existingRecipe = await prisma.recipes.findUnique({
+            where: { title: recipe.title },
+          });
+
+          if (!existingRecipe) {
+            await prisma.recipes.create({
+              data: {
+                title: recipe.title,
+                preparationTime: recipe.preparationTime,
+                restingTime: recipe.restingTime,
+                cookingTime: recipe.cookingTime,
+                totalTime: recipe.totalTime,
+                ingredients: recipe.ingredients,
+                steps: recipe.steps,
+                difficulty: recipe.difficulty || '',
+                budget: recipe.budget || '',
+              },
+            });
+            console.log(`Recipe '${recipe.title}' added to the database.`);
+          } else {
+            console.log(`Recipe '${recipe.title}' already exists. Skipping insertion.`);
+          }
+        }
+      } catch (error) {
+        console.error('Error while adding data to the database:', error);
+      }
+
+      page += 1;
     } catch (error) {
-      console.error("Error while adding datas", error);
+      console.error(`Error fetching page ${page}: `, error);
+      hasMorePages = false;
     }
-  } catch (error) {
-    console.error('Error scraping the recipes:', error);
-  } finally {
-    await prisma.$disconnect();
   }
+
+  await prisma.$disconnect();
 }
 
 scrapeRecipes();

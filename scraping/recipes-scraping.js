@@ -39,7 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var client_1 = require("@prisma/client");
 var axios_1 = require("axios");
 var cheerio = require("cheerio");
-var url = 'https://www.marmiton.org/recettes/index/categorie/plat-principal/';
+var mealUrl = 'https://www.marmiton.org/recettes/index/categorie/plat-principal';
 var prisma = new client_1.PrismaClient();
 function scrapeRecipeDetails(link) {
     return __awaiter(this, void 0, void 0, function () {
@@ -132,76 +132,118 @@ function scrapeRecipeDetails(link) {
 }
 function scrapeRecipes() {
     return __awaiter(this, void 0, void 0, function () {
-        var data, $_2, recipes_2, _i, recipes_1, recipe, details, recipesToInsert, error_2, error_3;
+        var page, hasMorePages, _loop_1, state_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 10, 11, 13]);
-                    return [4 /*yield*/, axios_1.default.get(url)];
+                    page = 1;
+                    hasMorePages = true;
+                    _loop_1 = function () {
+                        var currentPageUrl, data, $_2, recipes_3, _i, recipes_1, recipe, details, _b, recipes_2, recipe, existingRecipe, error_2, error_3;
+                        return __generator(this, function (_c) {
+                            switch (_c.label) {
+                                case 0:
+                                    _c.trys.push([0, 14, , 15]);
+                                    currentPageUrl = "".concat(mealUrl, "/").concat(page);
+                                    return [4 /*yield*/, axios_1.default.get(currentPageUrl)];
+                                case 1:
+                                    data = (_c.sent()).data;
+                                    $_2 = cheerio.load(data);
+                                    recipes_3 = [];
+                                    $_2('.recipe-card').each(function (index, element) {
+                                        var title = $_2(element).find('.recipe-card__title').text().trim();
+                                        var link = $_2(element).find('a').attr('href');
+                                        var image = $_2(element).find('img').attr('src');
+                                        if (link) {
+                                            recipes_3.push({ title: title, link: link, image: image });
+                                        }
+                                    });
+                                    if (recipes_3.length === 0) {
+                                        hasMorePages = false;
+                                        console.log('No more recipes found. Stopping the scraper.');
+                                        return [2 /*return*/, "break"];
+                                    }
+                                    _i = 0, recipes_1 = recipes_3;
+                                    _c.label = 2;
+                                case 2:
+                                    if (!(_i < recipes_1.length)) return [3 /*break*/, 5];
+                                    recipe = recipes_1[_i];
+                                    return [4 /*yield*/, scrapeRecipeDetails(recipe.link)];
+                                case 3:
+                                    details = _c.sent();
+                                    if (details) {
+                                        Object.assign(recipe, details);
+                                    }
+                                    _c.label = 4;
+                                case 4:
+                                    _i++;
+                                    return [3 /*break*/, 2];
+                                case 5:
+                                    _c.trys.push([5, 12, , 13]);
+                                    _b = 0, recipes_2 = recipes_3;
+                                    _c.label = 6;
+                                case 6:
+                                    if (!(_b < recipes_2.length)) return [3 /*break*/, 11];
+                                    recipe = recipes_2[_b];
+                                    return [4 /*yield*/, prisma.recipes.findUnique({
+                                            where: { title: recipe.title },
+                                        })];
+                                case 7:
+                                    existingRecipe = _c.sent();
+                                    if (!!existingRecipe) return [3 /*break*/, 9];
+                                    return [4 /*yield*/, prisma.recipes.create({
+                                            data: {
+                                                title: recipe.title,
+                                                preparationTime: recipe.preparationTime,
+                                                restingTime: recipe.restingTime,
+                                                cookingTime: recipe.cookingTime,
+                                                totalTime: recipe.totalTime,
+                                                ingredients: recipe.ingredients,
+                                                steps: recipe.steps,
+                                                difficulty: recipe.difficulty || '',
+                                                budget: recipe.budget || '',
+                                            },
+                                        })];
+                                case 8:
+                                    _c.sent();
+                                    console.log("Recipe '".concat(recipe.title, "' added to the database."));
+                                    return [3 /*break*/, 10];
+                                case 9:
+                                    console.log("Recipe '".concat(recipe.title, "' already exists. Skipping insertion."));
+                                    _c.label = 10;
+                                case 10:
+                                    _b++;
+                                    return [3 /*break*/, 6];
+                                case 11: return [3 /*break*/, 13];
+                                case 12:
+                                    error_2 = _c.sent();
+                                    console.error('Error while adding data to the database:', error_2);
+                                    return [3 /*break*/, 13];
+                                case 13:
+                                    page += 1;
+                                    return [3 /*break*/, 15];
+                                case 14:
+                                    error_3 = _c.sent();
+                                    console.error("Error fetching page ".concat(page, ": "), error_3);
+                                    hasMorePages = false;
+                                    return [3 /*break*/, 15];
+                                case 15: return [2 /*return*/];
+                            }
+                        });
+                    };
+                    _a.label = 1;
                 case 1:
-                    data = (_a.sent()).data;
-                    $_2 = cheerio.load(data);
-                    recipes_2 = [];
-                    $_2('.recipe-card').each(function (index, element) {
-                        var title = $_2(element).find('.recipe-card__title').text().trim();
-                        var link = $_2(element).find('a').attr('href');
-                        var image = $_2(element).find('img').attr('src');
-                        if (link) {
-                            recipes_2.push({ title: title, link: link, image: image });
-                        }
-                    });
-                    _i = 0, recipes_1 = recipes_2;
-                    _a.label = 2;
+                    if (!hasMorePages) return [3 /*break*/, 3];
+                    return [5 /*yield**/, _loop_1()];
                 case 2:
-                    if (!(_i < recipes_1.length)) return [3 /*break*/, 5];
-                    recipe = recipes_1[_i];
-                    return [4 /*yield*/, scrapeRecipeDetails(recipe.link)];
-                case 3:
-                    details = _a.sent();
-                    if (details) {
-                        Object.assign(recipe, details);
-                    }
-                    _a.label = 4;
+                    state_1 = _a.sent();
+                    if (state_1 === "break")
+                        return [3 /*break*/, 3];
+                    return [3 /*break*/, 1];
+                case 3: return [4 /*yield*/, prisma.$disconnect()];
                 case 4:
-                    _i++;
-                    return [3 /*break*/, 2];
-                case 5:
-                    console.log(JSON.stringify(recipes_2, null, 2));
-                    _a.label = 6;
-                case 6:
-                    _a.trys.push([6, 8, , 9]);
-                    recipesToInsert = recipes_2.map(function (recipe) { return ({
-                        title: recipe.title,
-                        preparationTime: recipe.preparationTime,
-                        restingTime: recipe.restingTime,
-                        cookingTime: recipe.cookingTime,
-                        totalTime: recipe.totalTime,
-                        ingredients: recipe.ingredients,
-                        steps: recipe.steps,
-                        difficulty: recipe.difficulty || '',
-                        budget: recipe.budget || '',
-                    }); });
-                    return [4 /*yield*/, prisma.recipes.createMany({
-                            data: recipesToInsert,
-                        })];
-                case 7:
                     _a.sent();
-                    console.log("Succeeded to add datas");
-                    return [3 /*break*/, 9];
-                case 8:
-                    error_2 = _a.sent();
-                    console.error("Error while adding datas", error_2);
-                    return [3 /*break*/, 9];
-                case 9: return [3 /*break*/, 13];
-                case 10:
-                    error_3 = _a.sent();
-                    console.error('Error scraping the recipes:', error_3);
-                    return [3 /*break*/, 13];
-                case 11: return [4 /*yield*/, prisma.$disconnect()];
-                case 12:
-                    _a.sent();
-                    return [7 /*endfinally*/];
-                case 13: return [2 /*return*/];
+                    return [2 /*return*/];
             }
         });
     });
