@@ -18,14 +18,22 @@ async function updateRecipeSlugs() {
     const recipes = await prisma.recipes.findMany();
 
     for (const recipe of recipes) {
-      const slug = slugTitle(recipe.title);
+      let slug = slugTitle(recipe.title);
+      let uniqueSlug = slug;
+      let count = 1;
+
+      // Checking if the slug is unique, if not, modify it
+      while (await prisma.recipes.findUnique({ where: { slug: uniqueSlug } })) {
+        uniqueSlug = `${slug}-${count}`;
+        count++;
+      }
 
       await prisma.recipes.update({
         where: { id: recipe.id },
-        data: { slug: slug },
+        data: { slug: uniqueSlug },
       });
 
-      console.log(`Updated slug for recipe: ${recipe.title} -> ${slug}`);
+      console.log(`Updated slug for recipe: ${recipe.title} -> ${uniqueSlug}`);
     }
   } catch (error) {
     console.error('Error updating recipe slugs:', error);

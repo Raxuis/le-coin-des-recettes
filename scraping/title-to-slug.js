@@ -51,41 +51,50 @@ function slugTitle(title) {
 }
 function updateRecipeSlugs() {
     return __awaiter(this, void 0, void 0, function () {
-        var recipes, _i, recipes_1, recipe, slug, error_1;
+        var recipes, _i, recipes_1, recipe, slug, uniqueSlug, count, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 6, 7, 9]);
+                    _a.trys.push([0, 9, 10, 12]);
                     return [4 /*yield*/, prisma.recipes.findMany()];
                 case 1:
                     recipes = _a.sent();
                     _i = 0, recipes_1 = recipes;
                     _a.label = 2;
                 case 2:
-                    if (!(_i < recipes_1.length)) return [3 /*break*/, 5];
+                    if (!(_i < recipes_1.length)) return [3 /*break*/, 8];
                     recipe = recipes_1[_i];
                     slug = slugTitle(recipe.title);
-                    return [4 /*yield*/, prisma.recipes.update({
-                            where: { id: recipe.id },
-                            data: { slug: slug },
-                        })];
-                case 3:
-                    _a.sent();
-                    console.log("Updated slug for recipe: ".concat(recipe.title, " -> ").concat(slug));
-                    _a.label = 4;
+                    uniqueSlug = slug;
+                    count = 1;
+                    _a.label = 3;
+                case 3: return [4 /*yield*/, prisma.recipes.findUnique({ where: { slug: uniqueSlug } })];
                 case 4:
+                    if (!_a.sent()) return [3 /*break*/, 5];
+                    uniqueSlug = "".concat(slug, "-").concat(count);
+                    count++;
+                    return [3 /*break*/, 3];
+                case 5: return [4 /*yield*/, prisma.recipes.update({
+                        where: { id: recipe.id },
+                        data: { slug: uniqueSlug },
+                    })];
+                case 6:
+                    _a.sent();
+                    console.log("Updated slug for recipe: ".concat(recipe.title, " -> ").concat(uniqueSlug));
+                    _a.label = 7;
+                case 7:
                     _i++;
                     return [3 /*break*/, 2];
-                case 5: return [3 /*break*/, 9];
-                case 6:
+                case 8: return [3 /*break*/, 12];
+                case 9:
                     error_1 = _a.sent();
                     console.error('Error updating recipe slugs:', error_1);
-                    return [3 /*break*/, 9];
-                case 7: return [4 /*yield*/, prisma.$disconnect()];
-                case 8:
+                    return [3 /*break*/, 12];
+                case 10: return [4 /*yield*/, prisma.$disconnect()];
+                case 11:
                     _a.sent();
                     return [7 /*endfinally*/];
-                case 9: return [2 /*return*/];
+                case 12: return [2 /*return*/];
             }
         });
     });
