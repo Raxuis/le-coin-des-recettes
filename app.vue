@@ -4,6 +4,6 @@ const layout = "custom";
 
 <template>
   <NuxtLayout :name="layout">
-    <NuxtRouteAnnouncer />
+    <NuxtPage />
   </NuxtLayout>
 </template>
