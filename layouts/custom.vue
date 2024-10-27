@@ -9,7 +9,7 @@ const links = [{
 </script>
 
 <template>
-  <div class="container mx-auto font-playfair">
+  <div class="container mx-auto font-playfair max-sm:px-4">
     <nav class="flex justify-between items-center my-4">
       <a href="/" class="flex gap-2 items-center">
         <NuxtImg src="/icon.png" class="size-10" />
