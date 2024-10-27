@@ -32,7 +32,7 @@ const { data, status } = useFetch<Recipes[]>('/api/recipes');
               <p class="text-lg">{{ recipe.title }}</p>
             </div>
           </template>
-            <NuxtLink class="underline underline-offset-2 inline-flex gap-1 group" :to="`/recipe/dish/${slugTitle(recipe.title)}`">
+            <NuxtLink class="underline underline-offset-2 inline-flex gap-1 group" :to="`/recipe/dish/${recipe.slug}`">
               <p>En savoir plus</p>
               <UIcon name="lucide:arrow-up-right" class="size-5 mt-1 group-hover:translate-x-1 duration-300" />
             </NuxtLink>
