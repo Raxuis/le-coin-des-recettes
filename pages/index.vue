@@ -3,7 +3,6 @@ const recipe = ref('')
 import { useFetch } from '#app';
 import type { Recipes } from '@prisma/client';
 const { data, status } = useFetch<Recipes[]>('/api/recipes');
-if (data.value) console.log(data.value);
 </script>
 
 <template>
@@ -24,20 +23,38 @@ if (data.value) console.log(data.value);
     </div>
     <div>
       <p v-if="status === 'pending'">
-        Loading...
+        Veuillez patienter...
       </p>
       <div v-else-if="status === 'error'">
-      <p class="text-lg">Error</p>
+      <p class="text-lg">Erreur</p>
     </div>
     <div v-else>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <UCard v-for="recipe in data?.slice(0, 30)" :key="recipe.title">
-  <template #header>
-    <div class="flex flex-col space-y-2 items-center justify-center">
-      <p class="text-xl">{{ recipe.title }}</p>
-    </div>
-  </template>
-</UCard>
+          <template #header>
+            <div class="flex flex-col space-y-2 items-center justify-center">
+              <p class="text-lg">{{ recipe.title }}</p>
+            </div>
+          </template>
+          <template #footer>
+            <div class="flex justify-between px-2">
+              <UTooltip text="Difficulté" :popper="{ placement: 'top' }">
+                <UButton color="gray" class="text-serenade-500">
+                  <UIcon name="mdi:chef-hat" class="w-5 h-5" />
+                  {{ firstCharacterToUppercase(recipe.budget) }}
+                </UButton>
+              </UTooltip>
+              <UTooltip text="Budget" :popper="{ placement: 'top' }">
+                <UButton color="gray" class="text-norway-500">
+                  <UIcon name="arcticons:budgetwatch" class="w-5 h-5" />
+                  {{ firstCharacterToUppercase(recipe.difficulty) }}
+                </UButton>
+              </UTooltip>
+              <!-- <p class="text-base">{{ firstCharacterToUppercase(recipe.difficulty) }}</p>
+              <p class="text-base">{{ firstCharacterToUppercase(recipe.budget) }}</p> -->
+            </div>
+          </template>
+        </UCard>
       </div>
     </div>
     </div>
