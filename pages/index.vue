@@ -36,10 +36,10 @@ const { data, status } = useFetch<Recipes[]>('/api/recipes');
               <p class="text-lg">{{ recipe.title }}</p>
             </div>
           </template>
-          <div class="inline-flex gap-1 group">
-            <NuxtLink class="underline underline-offset-2" :to="`/recipe/${slugTitle(recipe.title)}`">En savoir plus</NuxtLink>
-            <UIcon name="lucide:arrow-up-right" class="size-5 mt-1 group-hover:translate-x-1 duration-300" />
-          </div>
+            <NuxtLink class="underline underline-offset-2 inline-flex gap-1 group" :to="`/recipe/${slugTitle(recipe.title)}`">
+              <p>En savoir plus</p>
+              <UIcon name="lucide:arrow-up-right" class="size-5 mt-1 group-hover:translate-x-1 duration-300" />
+            </NuxtLink>
           <template #footer>
             <div class="flex justify-between px-2">
               <UTooltip text="Difficulté" :popper="{ placement: 'top' }">
