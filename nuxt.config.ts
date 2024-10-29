@@ -9,10 +9,30 @@ export default defineNuxtConfig({
       "Playfair Display": true,
     }
   },
+  colorMode: {
+    preference: 'light'
+  },
+  auth: {
+    isEnabled: true,
+    disableServerSideAuth: false,
+    originEnvKey: 'AUTH_SECRET',
+    baseURL: `http://localhost:${process.env.PORT || 3000}`,
+    provider: {
+      defaultProvider: "google",
+      type: "authjs",
+      trustHost: false,
+      addDefaultCallbackUrl: true
+    },
+    sessionRefresh: {
+      enablePeriodically: true,
+      enableOnWindowFocus: true,
+    }
+  },
   modules: [
     '@vueuse/nuxt',
     '@nuxt/image',
     '@nuxtjs/google-fonts',
-    '@nuxt/ui'
+    '@nuxt/ui',
+    '@sidebase/nuxt-auth',
   ]
 })
