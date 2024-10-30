@@ -24,14 +24,20 @@ const { data, status } = useFetch<Recipes>('/api/recipe', {
     <div v-else class="flex flex-col space-y-2 font-lora">
       <p class="text-xl">{{ data?.title }}</p>
       <p class="text-lg">Étapes :</p>
-      <div v-for="step in data?.steps">
-        <li class="list-inside">{{ step }}</li>
-      </div>
-      <hr/>
+      <ol class="list-decimal list-inside space-y-1">
+        <li v-for="step in data?.steps" :key="step">
+          {{ step }}
+        </li>
+      </ol>
+
+      <hr />
+
       <p class="text-lg">Ingrédients :</p>
-      <div v-for="ingredient in data?.ingredients">
-        <li class="list-inside">{{ firstCharacterToUppercase(ingredient) }}</li>
-      </div>
+      <ul class="list-disc list-inside space-y-1">
+        <li v-for="ingredient in data?.ingredients" :key="ingredient">
+          {{ firstCharacterToUppercase(ingredient) }}
+        </li>
+      </ul>
     </div>
   </div>
 </template>
