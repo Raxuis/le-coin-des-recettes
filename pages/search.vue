@@ -20,7 +20,7 @@ watch(recipe, searchRecipes);
 
 <template>
   <div class="mt-10 font-lora space-y-4">
-    <UInput color="persian-red" size="lg" type="text" variant="outline" placeholder="Votre recette..." v-model="recipe" class="w-full" icon="fluent:receipt-search-20-regular"/>
+    <UInput color="persian-red" size="lg" type="text" variant="outline" placeholder="Votre recette..." v-model="recipe" class="w-full" icon="arcticons:recipe-keeper"/>
     <div>
       <p v-if="status === 'pending'">Veuillez patienter...</p>
       <div v-else-if="status === 'error'">
