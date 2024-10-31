@@ -43,7 +43,7 @@ var mealUrl = 'https://www.marmiton.org/recettes/index/categorie/plat-principal'
 var prisma = new client_1.PrismaClient();
 function scrapeRecipeDetails(link) {
     return __awaiter(this, void 0, void 0, function () {
-        var data, $_1, ingredients_1, steps_1, preparationTime_1, restingTime_1, cookingTime_1, totalTime, difficulty_1, budget_1, error_1;
+        var data, $_1, ingredients_1, steps_1, preparationTime_1, restingTime_1, cookingTime_1, totalTime, difficulty_1, budget_1, people, value, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -60,6 +60,7 @@ function scrapeRecipeDetails(link) {
                     totalTime = 0;
                     difficulty_1 = null;
                     budget_1 = null;
+                    people = 0;
                     // Extraction des ingrédients car div pour chaque élément sur site marmiton
                     $_1('.card-ingredient-title').each(function (_, element) {
                         var quantity = $_1(element).find('.card-ingredient-quantity .count').text().trim();
@@ -111,6 +112,8 @@ function scrapeRecipeDetails(link) {
                         if (step)
                             steps_1.push(step);
                     });
+                    value = $_1('input.recipe-ingredients__qt-counter__value.title-5').attr('value');
+                    people = parseInt(value || '0');
                     return [2 /*return*/, {
                             preparationTime: preparationTime_1,
                             restingTime: restingTime_1,
@@ -119,7 +122,8 @@ function scrapeRecipeDetails(link) {
                             ingredients: ingredients_1,
                             steps: steps_1,
                             difficulty: difficulty_1,
-                            budget: budget_1
+                            budget: budget_1,
+                            people: people
                         }];
                 case 2:
                     error_1 = _a.sent();
@@ -194,6 +198,7 @@ function scrapeRecipes() {
                                     return [4 /*yield*/, prisma.recipes.create({
                                             data: {
                                                 title: recipe.title,
+                                                people: recipe.people,
                                                 preparationTime: recipe.preparationTime,
                                                 restingTime: recipe.restingTime,
                                                 cookingTime: recipe.cookingTime,

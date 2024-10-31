@@ -21,6 +21,7 @@ async function scrapeRecipeDetails(link: string) {
     let totalTime: number = 0;
     let difficulty: string | null = null;
     let budget: string | null = null;
+    let people: number = 0;
 
     // Extraction des ingrédients car div pour chaque élément sur site marmiton
     $('.card-ingredient-title').each((_, element) => {
@@ -82,6 +83,9 @@ async function scrapeRecipeDetails(link: string) {
       if (step) steps.push(step);
     });
 
+    const value = $('input.recipe-ingredients__qt-counter__value.title-5').attr('value');
+    people = parseInt(value || '0');
+
     return {
       preparationTime,
       restingTime,
@@ -90,7 +94,8 @@ async function scrapeRecipeDetails(link: string) {
       ingredients,
       steps,
       difficulty,
-      budget
+      budget,
+      people
     };
   } catch (error) {
     console.error(`Error fetching recipe details from ${link}:`, error);
@@ -142,6 +147,7 @@ async function scrapeRecipes() {
             await prisma.recipes.create({
               data: {
                 title: recipe.title,
+                people: recipe.people,
                 preparationTime: recipe.preparationTime,
                 restingTime: recipe.restingTime,
                 cookingTime: recipe.cookingTime,
