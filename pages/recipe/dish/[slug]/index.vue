@@ -34,6 +34,7 @@ const { data, status } = useFetch<Recipes>('/api/recipe', {
           />
         <p class="text-xl">{{ data?.title }}</p>
       </div>
+      <p class="text-sm" v-if="data?.people">Recipe for : {{ data.people }}</p>
       <p class="text-lg">Étapes :</p>
       <ol class="list-decimal list-inside space-y-1">
         <li v-for="step in data?.steps" :key="step">

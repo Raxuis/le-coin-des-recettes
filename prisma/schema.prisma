@@ -23,6 +23,7 @@ model Recipes {
   // image       String?
   // sourceUrl   String?
   title           String   @unique
+  people          Int?
   slug            String?  @unique
   author          String?
   ingredients     String[]
