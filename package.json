@@ -23,6 +23,7 @@
     "@iconify-json/arcticons": "^1.2.4",
     "@iconify-json/fluent": "^1.2.5",
     "@iconify-json/lucide": "^1.2.10",
+    "@iconify-json/material-symbols": "^1.2.5",
     "@iconify-json/mdi": "^1.2.1",
     "@nuxtjs/google-fonts": "^3.2.0",
     "@nuxtjs/tailwindcss": "^6.12.2",
