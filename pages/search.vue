@@ -90,7 +90,8 @@ watch([recipe, selectedCategory, selectedDifficulty, selectedBudget], searchReci
         <p class="text-lg">Erreur</p>
       </div>
       <div v-else>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <p v-if="correspondingRecipes.length === 0">Aucune recette ne correspond à votre recherche.</p>
+        <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <UCard v-for="recipe in (correspondingRecipes.length ? correspondingRecipes : (data ?? [])).slice(0, 30)" :key="recipe.id">
             <template #header>
               <div class="flex flex-col items-center justify-center">
