@@ -80,20 +80,20 @@ const selectedBudget = ref<string[]>([]);
 
 watch([writtenRecipe, selectedCategory, selectedDifficulty, selectedBudget], searchRecipes);
 
-// const handleKeyDown = (event: KeyboardEvent) => {
-//   if ((event.metaKey || event.ctrlKey) && event.key === 'd') {
-//     event.preventDefault(); // Empêcher le comportement par défaut
-//     resetFilters(); // Réinitialiser les filtres
-//   }
-// };
+const handleKeyDown = (event: KeyboardEvent) => {
+  if ((event.metaKey || event.ctrlKey) && event.key === 'd') {
+    event.preventDefault();
+    resetFilters();
+  }
+};
 
-// onMounted(() => {
-//   window.addEventListener('keydown', handleKeyDown);
-// });
+onMounted(() => {
+  window.addEventListener('keydown', handleKeyDown);
+});
 
-// onBeforeUnmount(() => {
-//   window.removeEventListener('keydown', handleKeyDown);
-// });
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', handleKeyDown);
+});
 </script>
 
 <template>
