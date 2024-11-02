@@ -19,12 +19,13 @@ model User {
 }
 
 model Recipes {
-  id              String   @id @default(uuid())
+  id              String      @id @default(uuid())
   // image       String?
   // sourceUrl   String?
-  title           String   @unique
+  title           String      @unique
+  type            RecipeTypes
   people          Int?
-  slug            String?  @unique
+  slug            String?     @unique
   author          String?
   ingredients     String[]
   steps           String[]
@@ -41,4 +42,9 @@ model Recipes {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum RecipeTypes {
+  DISH
+  DESSERT
 }
