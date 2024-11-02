@@ -3,6 +3,34 @@ import { ref, watch } from 'vue';
 import { useFetch } from '#app';
 import type { Recipes } from '@prisma/client';
 
+const items = [
+  [{
+    label: 'Filtrez votre recherche',
+  }], [{
+    label: 'Catégorie recette',
+    icon: 'ep:dessert',
+    click: () => {
+      console.log('catégorie')
+    }
+  },{
+    label: 'Difficulté',
+    icon: 'mdi:chef-hat',
+    click: () => {
+      console.log('difficulté')
+    }
+  },{
+    label: 'Prix',
+    icon: 'arcticons:budgetwatch',
+    click: () => {
+      console.log('prix')
+    }
+  },], [{
+    label: 'Retirer filtres',
+    icon: 'i-heroicons-trash-20-solid',
+    shortcuts: ['⌘', 'D']
+  }]
+]
+
 const recipe = ref('');
 const correspondingRecipes = ref<Recipes[]>([]);
 const { data, status } = useFetch<Recipes[]>('/api/recipes');
@@ -21,6 +49,16 @@ watch(recipe, searchRecipes);
 <template>
   <div class="mt-10 font-lora space-y-4">
     <UInput color="persian-red" size="lg" type="text" variant="outline" placeholder="Votre recette..." v-model="recipe" class="w-full" icon="arcticons:recipe-keeper"/>
+    <UDropdown :items="items" :popper="{ placement: 'bottom-start' }">
+      <UButton
+    icon="material-symbols:filter-alt-outline"
+    size="sm"
+    color="norway"
+    variant="outline"
+    label="Filtrer"
+    :trailing="false"
+    />
+    </UDropdown>
     <div>
       <p v-if="status === 'pending'">Veuillez patienter...</p>
       <div v-else-if="status === 'error'">
