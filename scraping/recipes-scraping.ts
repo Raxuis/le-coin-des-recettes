@@ -1,12 +1,34 @@
-import { PrismaClient, type Recipes } from '@prisma/client';
+import { PrismaClient, RecipeTypes, type Recipes } from '@prisma/client';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 
-const mealUrl = 'https://www.marmiton.org/recettes/index/categorie/plat-principal';
+const dishUrl = 'https://www.marmiton.org/recettes/index/categorie/plat-principal';
+const dessertUrl = 'https://www.marmiton.org/recettes/index/categorie/dessert';
+const prisma = new PrismaClient();
 
+function slugTitle(title: string): string {
+  return title
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/--+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
 
-const prisma = new PrismaClient()
+async function createUniqueSlug(title: string): Promise<string> {
+  const baseSlug = slugTitle(title);
+  let uniqueSlug = baseSlug;
+  let count = 1;
 
+  while (await prisma.recipes.findUnique({ where: { slug: uniqueSlug } })) {
+    uniqueSlug = `${baseSlug}-${count}`;
+    count++;
+  }
+
+  return uniqueSlug;
+}
 
 async function scrapeRecipeDetails(link: string) {
   try {
@@ -15,13 +37,13 @@ async function scrapeRecipeDetails(link: string) {
 
     const ingredients: string[] = [];
     const steps: string[] = [];
-    let preparationTime: number = 0;
-    let restingTime: number = 0;
-    let cookingTime: number = 0;
-    let totalTime: number = 0;
+    let preparationTime = 0;
+    let restingTime = 0;
+    let cookingTime = 0;
+    let totalTime = 0;
     let difficulty: string | null = null;
     let budget: string | null = null;
-    let people: number = 0;
+    let people = 0;
 
     // Extraction des ingrédients car div pour chaque élément sur site marmiton
     $('.card-ingredient-title').each((_, element) => {
@@ -45,7 +67,6 @@ async function scrapeRecipeDetails(link: string) {
     $('.time__details > div').each((_, element) => {
       const label = $(element).find('span').text().trim();
       const timeText = $(element).find('div').text().trim();
-
       let timeInMinutes = 0;
 
       if (timeText !== '-') {
@@ -95,7 +116,7 @@ async function scrapeRecipeDetails(link: string) {
       steps,
       difficulty,
       budget,
-      people
+      people,
     };
   } catch (error) {
     console.error(`Error fetching recipe details from ${link}:`, error);
@@ -103,13 +124,13 @@ async function scrapeRecipeDetails(link: string) {
   }
 }
 
-async function scrapeRecipes() {
+async function scrapeRecipes(url: string, type: RecipeTypes) {
   let page = 1;
   let hasMorePages = true;
 
   while (hasMorePages) {
     try {
-      const currentPageUrl = `${mealUrl}/${page}`;
+      const currentPageUrl = `${url}/${page}`;
       const { data } = await axios.get(currentPageUrl);
       const $ = cheerio.load(data);
       const recipes: any[] = [];
@@ -134,6 +155,7 @@ async function scrapeRecipes() {
         const details = await scrapeRecipeDetails(recipe.link);
         if (details) {
           Object.assign(recipe, details);
+          recipe.slug = await createUniqueSlug(recipe.title);
         }
       }
 
@@ -147,6 +169,8 @@ async function scrapeRecipes() {
             await prisma.recipes.create({
               data: {
                 title: recipe.title,
+                type,
+                slug: recipe.slug,
                 people: recipe.people,
                 preparationTime: recipe.preparationTime,
                 restingTime: recipe.restingTime,
@@ -158,7 +182,7 @@ async function scrapeRecipes() {
                 budget: recipe.budget || '',
               },
             });
-            console.log(`Recipe '${recipe.title}' added to the database.`);
+            console.log(`Recipe '${recipe.title}' added to the database with type '${type}' and slug '${recipe.slug}'.`);
           } else {
             console.log(`Recipe '${recipe.title}' already exists. Skipping insertion.`);
           }
@@ -177,4 +201,5 @@ async function scrapeRecipes() {
   await prisma.$disconnect();
 }
 
-scrapeRecipes();
+scrapeRecipes(dishUrl, "DISH");
+scrapeRecipes(dessertUrl, "DESSERT");

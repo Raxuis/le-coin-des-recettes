@@ -39,8 +39,40 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var client_1 = require("@prisma/client");
 var axios_1 = require("axios");
 var cheerio = require("cheerio");
-var mealUrl = 'https://www.marmiton.org/recettes/index/categorie/plat-principal';
+var dishUrl = 'https://www.marmiton.org/recettes/index/categorie/plat-principal';
+var dessertUrl = 'https://www.marmiton.org/recettes/index/categorie/dessert';
 var prisma = new client_1.PrismaClient();
+function slugTitle(title) {
+    return title
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/--+/g, '-')
+        .replace(/^-+|-+$/g, '');
+}
+function createUniqueSlug(title) {
+    return __awaiter(this, void 0, void 0, function () {
+        var baseSlug, uniqueSlug, count;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    baseSlug = slugTitle(title);
+                    uniqueSlug = baseSlug;
+                    count = 1;
+                    _a.label = 1;
+                case 1: return [4 /*yield*/, prisma.recipes.findUnique({ where: { slug: uniqueSlug } })];
+                case 2:
+                    if (!_a.sent()) return [3 /*break*/, 3];
+                    uniqueSlug = "".concat(baseSlug, "-").concat(count);
+                    count++;
+                    return [3 /*break*/, 1];
+                case 3: return [2 /*return*/, uniqueSlug];
+            }
+        });
+    });
+}
 function scrapeRecipeDetails(link) {
     return __awaiter(this, void 0, void 0, function () {
         var data, $_1, ingredients_1, steps_1, preparationTime_1, restingTime_1, cookingTime_1, totalTime, difficulty_1, budget_1, people, value, error_1;
@@ -61,7 +93,6 @@ function scrapeRecipeDetails(link) {
                     difficulty_1 = null;
                     budget_1 = null;
                     people = 0;
-                    // Extraction des ingrédients car div pour chaque élément sur site marmiton
                     $_1('.card-ingredient-title').each(function (_, element) {
                         var quantity = $_1(element).find('.card-ingredient-quantity .count').text().trim();
                         var unit = $_1(element).find('.card-ingredient-quantity .unit').text().trim();
@@ -75,7 +106,7 @@ function scrapeRecipeDetails(link) {
                         }
                         ingredients_1.push(ingredient.trim());
                     });
-                    // Extraction des temps (préparation, repos, cuisson)
+                    // Extract times
                     $_1('.time__details > div').each(function (_, element) {
                         var label = $_1(element).find('span').text().trim();
                         var timeText = $_1(element).find('div').text().trim();
@@ -88,7 +119,6 @@ function scrapeRecipeDetails(link) {
                                 timeInMinutes = (hours * 60) + minutes;
                             }
                         }
-                        // Attribue le temps en fonction du label
                         if (label.includes('Préparation')) {
                             preparationTime_1 = timeInMinutes;
                         }
@@ -99,14 +129,16 @@ function scrapeRecipeDetails(link) {
                             cookingTime_1 = timeInMinutes;
                         }
                     });
-                    // Calcul du temps total pour éviter de rechercher dans le DOM
+                    // Total time
                     totalTime = preparationTime_1 + restingTime_1 + cookingTime_1;
+                    // Difficulty and budget
                     $_1('.recipe-primary__item .icon-difficulty + span').each(function (_, element) {
                         difficulty_1 = $_1(element).text().trim() || null;
                     });
                     $_1('.recipe-primary__item .icon-price + span').each(function (_, element) {
                         budget_1 = $_1(element).text().trim() || null;
                     });
+                    // Steps
                     $_1('.recipe-step-list__container > p').each(function (_, element) {
                         var step = $_1(element).text().trim();
                         if (step)
@@ -123,7 +155,7 @@ function scrapeRecipeDetails(link) {
                             steps: steps_1,
                             difficulty: difficulty_1,
                             budget: budget_1,
-                            people: people
+                            people: people,
                         }];
                 case 2:
                     error_1 = _a.sent();
@@ -134,7 +166,7 @@ function scrapeRecipeDetails(link) {
         });
     });
 }
-function scrapeRecipes() {
+function scrapeRecipes(url, type) {
     return __awaiter(this, void 0, void 0, function () {
         var page, hasMorePages, _loop_1, state_1;
         return __generator(this, function (_a) {
@@ -143,15 +175,15 @@ function scrapeRecipes() {
                     page = 1;
                     hasMorePages = true;
                     _loop_1 = function () {
-                        var currentPageUrl, data, $_2, recipes_3, _i, recipes_1, recipe, details, _b, recipes_2, recipe, existingRecipe, error_2, error_3;
-                        return __generator(this, function (_c) {
-                            switch (_c.label) {
+                        var currentPageUrl, data, $_2, recipes_3, _i, recipes_1, recipe, details, _b, _c, recipes_2, recipe, existingRecipe, error_2, error_3;
+                        return __generator(this, function (_d) {
+                            switch (_d.label) {
                                 case 0:
-                                    _c.trys.push([0, 14, , 15]);
-                                    currentPageUrl = "".concat(mealUrl, "/").concat(page);
+                                    _d.trys.push([0, 15, , 16]);
+                                    currentPageUrl = "".concat(url, "/").concat(page);
                                     return [4 /*yield*/, axios_1.default.get(currentPageUrl)];
                                 case 1:
-                                    data = (_c.sent()).data;
+                                    data = (_d.sent()).data;
                                     $_2 = cheerio.load(data);
                                     recipes_3 = [];
                                     $_2('.recipe-card').each(function (index, element) {
@@ -168,36 +200,41 @@ function scrapeRecipes() {
                                         return [2 /*return*/, "break"];
                                     }
                                     _i = 0, recipes_1 = recipes_3;
-                                    _c.label = 2;
+                                    _d.label = 2;
                                 case 2:
-                                    if (!(_i < recipes_1.length)) return [3 /*break*/, 5];
+                                    if (!(_i < recipes_1.length)) return [3 /*break*/, 6];
                                     recipe = recipes_1[_i];
                                     return [4 /*yield*/, scrapeRecipeDetails(recipe.link)];
                                 case 3:
-                                    details = _c.sent();
-                                    if (details) {
-                                        Object.assign(recipe, details);
-                                    }
-                                    _c.label = 4;
+                                    details = _d.sent();
+                                    if (!details) return [3 /*break*/, 5];
+                                    Object.assign(recipe, details);
+                                    _b = recipe;
+                                    return [4 /*yield*/, createUniqueSlug(recipe.title)];
                                 case 4:
+                                    _b.slug = _d.sent();
+                                    _d.label = 5;
+                                case 5:
                                     _i++;
                                     return [3 /*break*/, 2];
-                                case 5:
-                                    _c.trys.push([5, 12, , 13]);
-                                    _b = 0, recipes_2 = recipes_3;
-                                    _c.label = 6;
                                 case 6:
-                                    if (!(_b < recipes_2.length)) return [3 /*break*/, 11];
-                                    recipe = recipes_2[_b];
+                                    _d.trys.push([6, 13, , 14]);
+                                    _c = 0, recipes_2 = recipes_3;
+                                    _d.label = 7;
+                                case 7:
+                                    if (!(_c < recipes_2.length)) return [3 /*break*/, 12];
+                                    recipe = recipes_2[_c];
                                     return [4 /*yield*/, prisma.recipes.findUnique({
                                             where: { title: recipe.title },
                                         })];
-                                case 7:
-                                    existingRecipe = _c.sent();
-                                    if (!!existingRecipe) return [3 /*break*/, 9];
+                                case 8:
+                                    existingRecipe = _d.sent();
+                                    if (!!existingRecipe) return [3 /*break*/, 10];
                                     return [4 /*yield*/, prisma.recipes.create({
                                             data: {
                                                 title: recipe.title,
+                                                type: type,
+                                                slug: recipe.slug,
                                                 people: recipe.people,
                                                 preparationTime: recipe.preparationTime,
                                                 restingTime: recipe.restingTime,
@@ -209,30 +246,30 @@ function scrapeRecipes() {
                                                 budget: recipe.budget || '',
                                             },
                                         })];
-                                case 8:
-                                    _c.sent();
-                                    console.log("Recipe '".concat(recipe.title, "' added to the database."));
-                                    return [3 /*break*/, 10];
                                 case 9:
-                                    console.log("Recipe '".concat(recipe.title, "' already exists. Skipping insertion."));
-                                    _c.label = 10;
+                                    _d.sent();
+                                    console.log("Recipe '".concat(recipe.title, "' added to the database with type '").concat(type, "' and slug '").concat(recipe.slug, "'."));
+                                    return [3 /*break*/, 11];
                                 case 10:
-                                    _b++;
-                                    return [3 /*break*/, 6];
-                                case 11: return [3 /*break*/, 13];
-                                case 12:
-                                    error_2 = _c.sent();
-                                    console.error('Error while adding data to the database:', error_2);
-                                    return [3 /*break*/, 13];
+                                    console.log("Recipe '".concat(recipe.title, "' already exists. Skipping insertion."));
+                                    _d.label = 11;
+                                case 11:
+                                    _c++;
+                                    return [3 /*break*/, 7];
+                                case 12: return [3 /*break*/, 14];
                                 case 13:
-                                    page += 1;
-                                    return [3 /*break*/, 15];
+                                    error_2 = _d.sent();
+                                    console.error('Error while adding data to the database:', error_2);
+                                    return [3 /*break*/, 14];
                                 case 14:
-                                    error_3 = _c.sent();
+                                    page += 1;
+                                    return [3 /*break*/, 16];
+                                case 15:
+                                    error_3 = _d.sent();
                                     console.error("Error fetching page ".concat(page, ": "), error_3);
                                     hasMorePages = false;
-                                    return [3 /*break*/, 15];
-                                case 15: return [2 /*return*/];
+                                    return [3 /*break*/, 16];
+                                case 16: return [2 /*return*/];
                             }
                         });
                     };
@@ -253,4 +290,5 @@ function scrapeRecipes() {
         });
     });
 }
-scrapeRecipes();
+scrapeRecipes(dishUrl, "DISH");
+scrapeRecipes(dessertUrl, "DESSERT");
