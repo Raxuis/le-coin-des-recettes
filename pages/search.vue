@@ -1,16 +1,47 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue';
 import { useFetch } from '#app';
 import { RecipeTypes, type Recipes } from '@prisma/client';
 
-const recipe = ref('');
+const writtenRecipe = ref('');
 const correspondingRecipes = ref<Recipes[]>([]);
 const { data, status } = useFetch<Recipes[]>('/api/recipes');
+
+const items = [
+  [{
+    label: 'Retirer des filtres',
+  }], [{
+    label: 'Difficulté',
+    icon: 'mdi:chef-hat',
+    click: () => {
+      selectedDifficulty.value = [];
+    }
+  },{
+    label: 'Prix',
+    icon: 'arcticons:budgetwatch',
+    click: () => {
+      selectedBudget.value = [];
+    }
+  },{
+    label: 'Catégorie recette',
+    icon: 'ep:dessert',
+    click: () => {
+      selectedCategory.value = [];
+    }
+  },], [{
+    label: 'Tous les filtres',
+    icon: 'i-heroicons-trash-20-solid',
+    click: () => {
+      resetFilters();
+    },
+    shortcuts: ['⌘', 'D']
+  }]
+]
 
 const searchRecipes = () => {
   if (data.value) {
     correspondingRecipes.value = data.value.filter((r) => {
-      const matchesTitle = r.title.toLowerCase().includes(recipe.value.toLowerCase());
+      const matchesTitle = r.title.toLowerCase().includes(writtenRecipe.value.toLowerCase());
 
       const matchesCategory = selectedCategory.value.length
         ? selectedCategory.value.includes(r.type)
@@ -29,6 +60,11 @@ const searchRecipes = () => {
   }
 };
 
+const resetFilters = () => {
+  selectedCategory.value = [];
+  selectedDifficulty.value = [];
+  selectedBudget.value = [];
+};
 
 const category: RecipeTypes[] = [
   "PLAT",
@@ -42,19 +78,32 @@ const selectedCategory = ref<string[]>([]);
 const selectedDifficulty = ref<string[]>([]);
 const selectedBudget = ref<string[]>([]);
 
-watch([recipe, selectedCategory, selectedDifficulty, selectedBudget], searchRecipes);
-</script>
+watch([writtenRecipe, selectedCategory, selectedDifficulty, selectedBudget], searchRecipes);
 
+// const handleKeyDown = (event: KeyboardEvent) => {
+//   if ((event.metaKey || event.ctrlKey) && event.key === 'd') {
+//     event.preventDefault(); // Empêcher le comportement par défaut
+//     resetFilters(); // Réinitialiser les filtres
+//   }
+// };
+
+// onMounted(() => {
+//   window.addEventListener('keydown', handleKeyDown);
+// });
+
+// onBeforeUnmount(() => {
+//   window.removeEventListener('keydown', handleKeyDown);
+// });
+</script>
 
 <template>
   <div class="mt-10 font-lora space-y-4">
-    <UInput color="persian-red" size="lg" type="text" variant="outline" placeholder="Votre recette..." v-model="recipe" class="w-full" icon="arcticons:recipe-keeper"/>
+    <UInput color="persian-red" size="lg" type="text" variant="outline" placeholder="Votre recette..." v-model="writtenRecipe" class="w-full" icon="arcticons:recipe-keeper"/>
     <div class="flex space-x-8">
-      <div class="gap-2 focus:outline-none focus-visible:outline-0 disabled:cursor-not-allowed disabled:opacity-75 aria-disabled:cursor-not-allowed aria-disabled:opacity-75 flex-shrink-0 font-medium rounded-md text-sm gap-x-1.5 px-2.5 py-1.5 ring-1 ring-inset ring-current text-norway-500 dark:text-norway-400 hover:bg-norway-50 disabled:bg-transparent aria-disabled:bg-transparent dark:hover:bg-norway-950 dark:disabled:bg-transparent dark:aria-disabled:bg-transparent focus-visible:ring-2 focus-visible:ring-norway-500 dark:focus-visible:ring-norway-400 inline-flex items-center">
-        <UIcon name="material-symbols:filter-alt-outline" class="w-5 h-5" />
-        <p class="text-sm">Filtrer</p>
-      </div>
-    <div class="flex flex-grow space-x-2 min-w-0">
+      <UDropdown :items="items" :popper="{ placement: 'bottom-start' }">
+        <UButton color="white" label="Filtrer" trailing-icon="material-symbols:filter-alt-outline" />
+      </UDropdown>
+      <div class="flex flex-grow space-x-2 min-w-0">
         <USelectMenu
           v-model="selectedDifficulty"
           :options="difficulty"
@@ -83,14 +132,16 @@ watch([recipe, selectedCategory, selectedDifficulty, selectedBudget], searchReci
           icon="ep:dessert"
         />
       </div>
-</div>
+    </div>
     <div>
       <p v-if="status === 'pending'">Veuillez patienter...</p>
       <div v-else-if="status === 'error'">
         <p class="text-lg">Erreur</p>
       </div>
       <div v-else>
-        <p v-if="correspondingRecipes.length === 0">Aucune recette ne correspond à votre recherche.</p>
+        <div v-if="correspondingRecipes.length === 0 && (writtenRecipe || selectedCategory.length || selectedDifficulty.length || selectedBudget.length)">
+          <p class="text-lg">Aucune recette ne correspond à votre recherche</p>
+        </div>
         <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <UCard v-for="recipe in (correspondingRecipes.length ? correspondingRecipes : (data ?? [])).slice(0, 30)" :key="recipe.id">
             <template #header>
