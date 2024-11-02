@@ -99,11 +99,11 @@ onBeforeUnmount(() => {
 <template>
   <div class="mt-10 font-lora space-y-4">
     <UInput color="persian-red" size="lg" type="text" variant="outline" placeholder="Votre recette..." v-model="writtenRecipe" class="w-full" icon="arcticons:recipe-keeper"/>
-    <div class="flex space-y-2 sm:space-x-8 max-sm:flex-col">
+    <div class="flex max-sm:space-y-2 space-x-0 sm:space-x-8 max-sm:flex-col">
       <UDropdown :items="items" :popper="{ placement: 'bottom-start' }">
         <UButton color="white" label="Filtrer" trailing-icon="material-symbols:filter-alt-outline" />
       </UDropdown>
-      <div class="flex flex-grow space-y-1 sm:space-x-2 min-w-0 max-sm:flex-col ">
+      <div class="flex flex-grow space-x-0 sm:space-x-2 min-w-0 max-sm:space-y-1 max-sm:flex-col">
         <USelectMenu
           v-model="selectedDifficulty"
           :options="difficulty"
