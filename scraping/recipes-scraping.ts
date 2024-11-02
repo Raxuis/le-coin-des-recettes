@@ -201,5 +201,5 @@ async function scrapeRecipes(url: string, type: RecipeTypes) {
   await prisma.$disconnect();
 }
 
-scrapeRecipes(dishUrl, "DISH");
+scrapeRecipes(dishUrl, "PLAT");
 scrapeRecipes(dessertUrl, "DESSERT");

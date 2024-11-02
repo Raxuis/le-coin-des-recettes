@@ -93,6 +93,7 @@ function scrapeRecipeDetails(link) {
                     difficulty_1 = null;
                     budget_1 = null;
                     people = 0;
+                    // Extraction des ingrédients car div pour chaque élément sur site marmiton
                     $_1('.card-ingredient-title').each(function (_, element) {
                         var quantity = $_1(element).find('.card-ingredient-quantity .count').text().trim();
                         var unit = $_1(element).find('.card-ingredient-quantity .unit').text().trim();
@@ -106,7 +107,7 @@ function scrapeRecipeDetails(link) {
                         }
                         ingredients_1.push(ingredient.trim());
                     });
-                    // Extract times
+                    // Extraction des temps (préparation, repos, cuisson)
                     $_1('.time__details > div').each(function (_, element) {
                         var label = $_1(element).find('span').text().trim();
                         var timeText = $_1(element).find('div').text().trim();
@@ -119,6 +120,7 @@ function scrapeRecipeDetails(link) {
                                 timeInMinutes = (hours * 60) + minutes;
                             }
                         }
+                        // Attribue le temps en fonction du label
                         if (label.includes('Préparation')) {
                             preparationTime_1 = timeInMinutes;
                         }
@@ -129,16 +131,14 @@ function scrapeRecipeDetails(link) {
                             cookingTime_1 = timeInMinutes;
                         }
                     });
-                    // Total time
+                    // Calcul du temps total pour éviter de rechercher dans le DOM
                     totalTime = preparationTime_1 + restingTime_1 + cookingTime_1;
-                    // Difficulty and budget
                     $_1('.recipe-primary__item .icon-difficulty + span').each(function (_, element) {
                         difficulty_1 = $_1(element).text().trim() || null;
                     });
                     $_1('.recipe-primary__item .icon-price + span').each(function (_, element) {
                         budget_1 = $_1(element).text().trim() || null;
                     });
-                    // Steps
                     $_1('.recipe-step-list__container > p').each(function (_, element) {
                         var step = $_1(element).text().trim();
                         if (step)
@@ -290,5 +290,5 @@ function scrapeRecipes(url, type) {
         });
     });
 }
-scrapeRecipes(dishUrl, "DISH");
+scrapeRecipes(dishUrl, "PLAT");
 scrapeRecipes(dessertUrl, "DESSERT");
