@@ -30,8 +30,9 @@ watch(recipe, searchRecipes);
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <UCard v-for="recipe in (correspondingRecipes.length ? correspondingRecipes : (data ?? [])).slice(0, 30)" :key="recipe.id">
             <template #header>
-              <div class="flex flex-col space-y-2 items-center justify-center">
+              <div class="flex flex-col items-center justify-center">
                 <p class="text-lg">{{ recipe.title }}</p>
+                <p class="text-sm text-gray-500">{{ firstCharacterToUppercase(recipe.type.toLowerCase()) }}</p>
               </div>
             </template>
             <NuxtLink class="underline underline-offset-2 inline-flex gap-1 group" :to="`/recipe/dish/${recipe.slug}`">
