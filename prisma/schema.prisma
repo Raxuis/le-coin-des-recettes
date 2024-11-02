@@ -45,6 +45,6 @@ model Recipes {
 }
 
 enum RecipeTypes {
-  DISH
+  PLAT
   DESSERT
 }
