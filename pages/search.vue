@@ -120,7 +120,7 @@ onBeforeUnmount(() => {
           multiple
           option-attribute="name"
           class="flex-grow"
-          icon="arcticons:budgetwatch"
+          icon="material-symbols:money-bag-rounded"
         />
         <USelectMenu
           v-model="selectedCategory"
@@ -164,7 +164,7 @@ onBeforeUnmount(() => {
                 </UTooltip>
                 <UTooltip text="Budget" :popper="{ placement: 'top' }">
                   <UButton color="gray" class="text-norway-500">
-                    <UIcon name="arcticons:budgetwatch" class="size-5" />
+                    <UIcon name="material-symbols:money-bag-rounded" class="size-5" />
                     {{ firstCharacterToUppercase(recipe.budget) }}
                   </UButton>
                 </UTooltip>
