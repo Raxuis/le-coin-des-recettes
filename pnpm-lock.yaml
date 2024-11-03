@@ -36,6 +36,9 @@ importers:
       '@iconify-json/arcticons':
         specifier: ^1.2.4
         version: 1.2.4
+      '@iconify-json/bx':
+        specifier: ^1.2.1
+        version: 1.2.1
       '@iconify-json/ep':
         specifier: ^1.2.1
         version: 1.2.1
@@ -695,6 +698,9 @@ packages:
 
   '@iconify-json/arcticons@1.2.4':
     resolution: {integrity: sha512-T8gMdVIy6OfF8Qbq3qR5t5NljZIIeC9swQcfqv/zbNQYQ8JOwRcGBPRFlHumvobj7uzGZXIaV9TMXg5h+xDqDQ==}
+
+  '@iconify-json/bx@1.2.1':
+    resolution: {integrity: sha512-FQCpVnEqCRZmyzpJ5Ba31ff8b2lDLhjRuV8ZC0Cw4HsV/IgXoyW9CGH4vI0P7UGeTXHIj3iSDNwIpOoCpPqXVg==}
 
   '@iconify-json/ep@1.2.1':
     resolution: {integrity: sha512-m72jNpdlWI7Wd3TPs3RUd6nPiU1WWnWSvpOkM67HWNsyQrZDlTtLstLF9hAK8nhOxENi6ZO670A16mDvWJD9Cw==}
@@ -4596,6 +4602,10 @@ snapshots:
       vue: 3.5.12(typescript@5.6.3)
 
   '@iconify-json/arcticons@1.2.4':
+    dependencies:
+      '@iconify/types': 2.0.0
+
+  '@iconify-json/bx@1.2.1':
     dependencies:
       '@iconify/types': 2.0.0
 

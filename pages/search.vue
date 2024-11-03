@@ -18,13 +18,13 @@ const items = [
     }
   },{
     label: 'Prix',
-    icon: 'arcticons:budgetwatch',
+    icon: 'material-symbols:money-bag-rounded',
     click: () => {
       selectedBudget.value = [];
     }
   },{
     label: 'Catégorie recette',
-    icon: 'ep:dessert',
+    icon: 'bx:bxs-dish',
     click: () => {
       selectedCategory.value = [];
     }
@@ -129,7 +129,7 @@ onBeforeUnmount(() => {
           multiple
           option-attribute="name"
           class="flex-grow"
-          icon="ep:dessert"
+          icon="bx:bxs-dish"
         />
       </div>
     </div>
