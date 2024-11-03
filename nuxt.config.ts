@@ -34,5 +34,6 @@ export default defineNuxtConfig({
     '@nuxtjs/google-fonts',
     '@nuxt/ui',
     '@sidebase/nuxt-auth',
+    '@vueuse/motion/nuxt',
   ]
 })
