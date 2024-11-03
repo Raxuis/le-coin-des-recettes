@@ -145,9 +145,25 @@ onBeforeUnmount(() => {
         <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <UCard v-for="recipe in (correspondingRecipes.length ? correspondingRecipes : (data ?? [])).slice(0, 30)" :key="recipe.id">
             <template #header>
-              <div class="flex flex-col items-center justify-center">
-                <p class="text-lg">{{ recipe.title }}</p>
-                <p class="text-sm text-gray-500">{{ firstCharacterToUppercase(recipe.type.toLowerCase()) }}</p>
+              <div class="flex flex-col items-center justify-center space-y-2">
+                <div class="flex flex-col items-center justify-center">
+                  <p class="text-lg">{{ recipe.title }}</p>
+                  <p class="text-sm text-gray-500">{{ firstCharacterToUppercase(recipe.type.toLowerCase()) }}</p>
+                </div>
+                <div class="flex justify-center w-full gap-4 cursor-default">
+                  <UTooltip text="Temps de préparation" :popper="{ placement: 'top' }">
+                    <UBadge color="norway" variant="subtle" class="inline-flex gap-2"><UIcon name="material-symbols:concierge-rounded" class="size-5"/>{{ recipe.preparationTime }}min
+                    </UBadge>
+                  </UTooltip>
+                  <UTooltip text="Temps de cuisson" :popper="{ placement: 'top' }">
+                    <UBadge color="serenade" variant="subtle" class="inline-flex gap-2"><UIcon name="ph:cooking-pot-fill" class="size-5"/>{{ recipe.cookingTime }}min
+                    </UBadge>
+                  </UTooltip>
+                  <UTooltip text="Temps de repos" :popper="{ placement: 'top' }">
+                    <UBadge color="mercury" variant="subtle" class="inline-flex gap-2"><UIcon name="material-symbols:alarm" class="size-5"/>{{ recipe.restingTime }}min
+                    </UBadge>
+                  </UTooltip>
+                </div>
               </div>
             </template>
             <NuxtLink class="underline underline-offset-2 inline-flex gap-1 group" :to="`/recipe/dish/${recipe.slug}`">
