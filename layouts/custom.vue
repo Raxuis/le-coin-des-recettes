@@ -17,24 +17,27 @@ const links = [{
   to: '/search'
 }]
 
-const { data } = useAuth()
+const { data, signOut } = useAuth()
 const router = useRouter()
 
 </script>
 
 <template>
   <div class="container mx-auto font-playfair max-sm:px-4 mb-10">
-    <nav class="flex justify-between items-center my-4">
+    <nav class="flex max-sm:flex-col max-sm:space-y-4 justify-between sm:items-center my-4">
       <a href="/" class="flex gap-2 items-center">
         <NuxtImg src="/icon.png" class="size-10" />
         <p class="text-xl sm:text-2xl text-masala-900 hover:text-persian-red-800 dark:text-white transition-colors">Le Coin des Recettes</p>
       </a>
-      <ul class="flex gap-2 items-center">
+      <ul class="flex gap-2 items-center justify-between">
+        <div class="flex gap-2 items-center">
         <li v-for="link in links" :key="link.label" class="list-none text-masala-900 hover:text-persian-red-800 dark:text-white dark:hover:text-persian-red-400 transition-colors">
           <NuxtLink :to=link.to>
             {{ link.label }}
           </NuxtLink>
         </li>
+      </div>
+      <div class="flex gap-2 items-center">
         <li>
           <UButton
             :icon="isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'"
@@ -46,25 +49,34 @@ const router = useRouter()
             />
         </li>
         <li v-if="data">
-          <UButton
-            icon="material-symbols:person"
-            color="gray"
-            variant="ghost"
-            class="hover:text-persian-red-800 dark:hover:text-persian-red-400 transition-colors"
-            @click="router.push('/account')"
-            />
+          <UAvatar
+          :src="data.user?.image"
+          :alt="data.user?.name"
+          />
+        </li>
+        <li v-if="data">
+        <UButton
+          icon="lucide:log-out"
+          size="sm"
+          color="white"
+          variant="solid"
+          label="Log out"
+          :trailing="false"
+          @click="() => signOut"
+          />
         </li>
         <li v-else>
           <UButton
-    icon="line-md:log-in"
-    size="sm"
-    color="white"
-    variant="solid"
-    label="Log In"
-    :trailing="false"
-    @click="router.push('/auth/signIn')"
-  />
+          icon="cuida:login-outline"
+          size="sm"
+          color="white"
+          variant="solid"
+          label="Sign in"
+          :trailing="false"
+          @click="router.push('/auth/signIn')"
+          />
         </li>
+      </div>
       </ul>
     </nav>
     <NuxtPage />
