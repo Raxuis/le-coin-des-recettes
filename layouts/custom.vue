@@ -62,7 +62,7 @@ const router = useRouter()
           variant="solid"
           label="Log out"
           :trailing="false"
-          @click="() => signOut"
+          @click="() => signOut({ callbackUrl: '/' })"
           />
         </li>
         <li v-else>
