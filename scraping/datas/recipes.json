@@ -1,0 +1,160 @@
+[
+  {
+    "title": "Pâtes carbonara express",
+    "type": "PLAT",
+    "people": 2,
+    "slug": "pates-carbonara-express",
+    "ingredients": [
+      "200g de pâtes",
+      "100g de lardons",
+      "2 jaunes d'œufs",
+      "50g de parmesan râpé",
+      "Sel",
+      "Poivre"
+    ],
+    "steps": [
+      "Faire cuire les pâtes dans de l'eau bouillante salée selon les instructions du paquet.",
+      "Faire revenir les lardons dans une poêle.",
+      "Dans un bol, mélanger les jaunes d'œufs avec le parmesan, du sel et du poivre.",
+      "Égoutter les pâtes, les ajouter dans la poêle avec les lardons, et hors du feu, incorporer le mélange œufs-parmesan.",
+      "Mélanger rapidement et servir chaud."
+    ],
+    "preparationTime": 5,
+    "restingTime": 0,
+    "cookingTime": 10,
+    "totalTime": 15,
+    "difficulty": "Facile",
+    "budget": "Bon marché",
+    "specialEvent": "REPAS_ETUDIANT",
+    "creatorId": null,
+    "createdAt": "2024-11-05T13:00:00.000Z",
+    "updatedAt": "2024-11-05T13:00:00.000Z"
+  },
+  {
+    "title": "Omelette aux légumes",
+    "type": "PLAT",
+    "people": 1,
+    "slug": "omelette-aux-legumes",
+    "ingredients": [
+      "2 œufs",
+      "1/2 poivron",
+      "1 tomate",
+      "1 poignée d'épinards",
+      "Sel",
+      "Poivre",
+      "Huile d'olive"
+    ],
+    "steps": [
+      "Couper le poivron et la tomate en petits dés.",
+      "Faire revenir les légumes dans une poêle avec un peu d'huile d'olive.",
+      "Battre les œufs, saler et poivrer.",
+      "Verser les œufs dans la poêle avec les légumes et cuire à feu doux jusqu'à ce que l'omelette soit prise.",
+      "Servir chaud."
+    ],
+    "preparationTime": 5,
+    "restingTime": 0,
+    "cookingTime": 10,
+    "totalTime": 15,
+    "difficulty": "Facile",
+    "budget": "Bon marché",
+    "specialEvent": "REPAS_ETUDIANT",
+    "creatorId": null,
+    "createdAt": "2024-11-05T13:10:00.000Z",
+    "updatedAt": "2024-11-05T13:10:00.000Z"
+  },
+  {
+    "title": "Salade de riz au thon",
+    "type": "PLAT",
+    "people": 2,
+    "slug": "salade-de-riz-au-thon",
+    "ingredients": [
+      "150g de riz",
+      "1 boîte de thon au naturel",
+      "1 tomate",
+      "1/2 concombre",
+      "1 carotte",
+      "Vinaigrette",
+      "Sel",
+      "Poivre"
+    ],
+    "steps": [
+      "Faire cuire le riz selon les instructions du paquet, puis le laisser refroidir.",
+      "Couper la tomate, le concombre et la carotte en petits dés.",
+      "Égoutter le thon et l'émietter.",
+      "Dans un saladier, mélanger le riz, les légumes et le thon.",
+      "Assaisonner avec la vinaigrette, du sel et du poivre."
+    ],
+    "preparationTime": 10,
+    "restingTime": 0,
+    "cookingTime": 10,
+    "totalTime": 20,
+    "difficulty": "Facile",
+    "budget": "Bon marché",
+    "specialEvent": "REPAS_ETUDIANT",
+    "creatorId": null,
+    "createdAt": "2024-11-05T13:20:00.000Z",
+    "updatedAt": "2024-11-05T13:20:00.000Z"
+  },
+  {
+    "title": "Wrap au poulet et crudités",
+    "type": "PLAT",
+    "people": 1,
+    "slug": "wrap-au-poulet-et-crudites",
+    "ingredients": [
+      "1 tortilla de blé",
+      "50g de poulet cuit",
+      "1/2 tomate",
+      "1 feuille de laitue",
+      "1 cuillère à soupe de sauce au choix (mayonnaise, yaourt, etc.)"
+    ],
+    "steps": [
+      "Couper le poulet en morceaux et la tomate en dés.",
+      "Laver la laitue.",
+      "Étaler la sauce sur la tortilla.",
+      "Disposer le poulet, la tomate et la laitue sur la tortilla.",
+      "Rouler le wrap et servir immédiatement."
+    ],
+    "preparationTime": 5,
+    "restingTime": 0,
+    "cookingTime": 0,
+    "totalTime": 5,
+    "difficulty": "Facile",
+    "budget": "Bon marché",
+    "specialEvent": "REPAS_ETUDIANT",
+    "creatorId": null,
+    "createdAt": "2024-11-05T13:30:00.000Z",
+    "updatedAt": "2024-11-05T13:30:00.000Z"
+  },
+  {
+    "title": "Soupe de légumes rapide",
+    "type": "PLAT",
+    "people": 2,
+    "slug": "soupe-de-legumes-rapide",
+    "ingredients": [
+      "1 carotte",
+      "1 pomme de terre",
+      "1 courgette",
+      "1 cube de bouillon de légumes",
+      "500 ml d'eau",
+      "Sel",
+      "Poivre"
+    ],
+    "steps": [
+      "Éplucher et couper les légumes en morceaux.",
+      "Faire bouillir l'eau avec le bouillon de légumes.",
+      "Ajouter les légumes et cuire pendant 15 minutes.",
+      "Mixer la soupe et assaisonner avec du sel et du poivre.",
+      "Servir chaud."
+    ],
+    "preparationTime": 10,
+    "restingTime": 0,
+    "cookingTime": 15,
+    "totalTime": 25,
+    "difficulty": "Facile",
+    "budget": "Bon marché",
+    "specialEvent": "REPAS_ETUDIANT",
+    "creatorId": null,
+    "createdAt": "2024-11-05T13:40:00.000Z",
+    "updatedAt": "2024-11-05T13:40:00.000Z"
+  }
+]

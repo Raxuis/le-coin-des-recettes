@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "SpecialEvents" ADD VALUE 'SOIREE_ENTRE_AMIS';

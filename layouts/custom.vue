@@ -16,6 +16,10 @@ const links = [{
   label: 'Rechercher',
   to: '/search'
 }]
+
+const { data } = useAuth()
+const router = useRouter()
+
 </script>
 
 <template>
@@ -40,6 +44,26 @@ const links = [{
             @click="isDark = !isDark"
             class="hover:text-persian-red-800 dark:hover:text-persian-red-400 transition-colors"
             />
+        </li>
+        <li v-if="data">
+          <UButton
+            icon="material-symbols:person"
+            color="gray"
+            variant="ghost"
+            class="hover:text-persian-red-800 dark:hover:text-persian-red-400 transition-colors"
+            @click="router.push('/account')"
+            />
+        </li>
+        <li v-else>
+          <UButton
+    icon="line-md:log-in"
+    size="sm"
+    color="white"
+    variant="solid"
+    label="Log In"
+    :trailing="false"
+    @click="router.push('/auth/signIn')"
+  />
         </li>
       </ul>
     </nav>
