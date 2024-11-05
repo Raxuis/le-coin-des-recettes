@@ -67,7 +67,7 @@ const router = useRouter()
         </li>
         <li v-else>
           <UButton
-          icon="cuida:login-outline"
+          icon="lucide:log-in"
           size="sm"
           color="white"
           variant="solid"
