@@ -12,9 +12,8 @@ const state = reactive({
 })
 
 const specialEventSelected = ref<string>("");
-const { data} = useFetch<Recipes[]>('/api/get-special-events');
+const { data } = useFetch<Recipes[]>('/api/get-special-events');
 
-console.log(data)
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   console.log(event.data)
@@ -23,7 +22,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
 <template>
   <UForm :schema="searchSpecialEventsRecipes" :state="state" class="space-y-4" @submit="onSubmit">
-    <USelectMenu label="Choisissez un évènement" name="eventType" :options="data?.map((event) => ({ label: event.specialEvent, value: event.specialEvent }))" placeholder="Sélectionnez un événement" />
+    <USelectMenu label="Choisissez un évènement" name="eventType" :options="data?.map((event) => ({ label: event.specialEvent, value: event.specialEvent }))" placeholder="Sélectionnez un événement" v-model="specialEventSelected" />
     <UButton type="submit">
       Submit
     </UButton>
