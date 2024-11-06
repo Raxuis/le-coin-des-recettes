@@ -13,8 +13,11 @@ const links = [{
   label: 'À propos',
   to: '/about'
 }, {
-  label: 'Rechercher',
-  to: '/search'
+  label: 'Recettes',
+  to: '/recipes'
+}, {
+  label: 'Recettes d’événement',
+  to: '/event-recipes'
 }]
 
 const { data, signOut } = useAuth()
@@ -30,8 +33,8 @@ const router = useRouter()
         <p class="text-xl sm:text-2xl text-masala-900 hover:text-persian-red-800 dark:text-white transition-colors">Le Coin des Recettes</p>
       </a>
       <ul class="flex gap-2 items-center justify-between">
-        <div class="flex gap-2 items-center">
-        <li v-for="link in links" :key="link.label" class="list-none text-masala-900 hover:text-persian-red-800 dark:text-white dark:hover:text-persian-red-400 transition-colors">
+        <div class="flex items-center divide-x divide-white">
+        <li v-for="link in links" :key="link.label" class="list-none text-masala-900 hover:text-persian-red-800 dark:text-white dark:hover:text-persian-red-400 transition-colors px-2">
           <NuxtLink :to=link.to>
             {{ link.label }}
           </NuxtLink>
@@ -50,8 +53,8 @@ const router = useRouter()
         </li>
         <li v-if="data">
           <UAvatar
-          :src="data.user?.image"
-          :alt="data.user?.name"
+          :src="data.user?.image!"
+          :alt="data.user?.name!"
           />
         </li>
         <li v-if="data">
