@@ -15,7 +15,6 @@ export default NuxtAuthHandler({
   ],
   callbacks: {
     async signIn({ user }) {
-      console.log(user);
       try {
         let existingUser = await prisma.user.findUnique({
           where: { email: user.email || '' },

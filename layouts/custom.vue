@@ -60,7 +60,7 @@ const router = useRouter()
           size="sm"
           color="white"
           variant="solid"
-          label="Log out"
+          label="Se déconnecter"
           :trailing="false"
           @click="() => signOut({ callbackUrl: '/' })"
           />
@@ -71,7 +71,7 @@ const router = useRouter()
           size="sm"
           color="white"
           variant="solid"
-          label="Sign in"
+          label="Se connecter"
           :trailing="false"
           @click="router.push('/auth/signIn')"
           />
