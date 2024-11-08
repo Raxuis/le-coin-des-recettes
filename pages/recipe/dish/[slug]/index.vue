@@ -30,7 +30,7 @@ const { data, status } = useFetch<Recipes>('/api/recipe', {
           color="white"
           square
           variant="solid"
-          @click="router.push('/search')"
+          @click="router.push('/recipes')"
           />
         <p class="text-xl">{{ data?.title }}</p>
       </div>
