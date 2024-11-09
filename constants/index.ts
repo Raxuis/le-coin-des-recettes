@@ -1,0 +1,8 @@
+export const SPECIAL_EVENTS = [
+  'HALLOWEEN',
+  'NOEL',
+  'ANNIVERSAIRE',
+  'SOIREE_ENTRE_AMIS',
+  'REPAS_ETUDIANT',
+  'REPAS_FAMILLE',
+] as const;

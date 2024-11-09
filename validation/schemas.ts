@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { SpecialEvents } from "@prisma/client";
+import { SPECIAL_EVENTS } from "~/constants";
 
 export const searchSpecialEventsRecipes = z.object({
-  email: z.string().email('Invalid email'),
-  password: z.string().min(8, 'Must be at least 8 characters'),
-  eventType: z.enum(Object.values(SpecialEvents) as [SpecialEvents, ...SpecialEvents[]]),
+  eventType: z.enum(SPECIAL_EVENTS, {
+    errorMap: () => ({ message: `L'évènement est obligatoire et doit être une des valeurs : ${SPECIAL_EVENTS.join(", ")}.` }),
+  }),
 });
