@@ -2,18 +2,20 @@ import { PrismaClient } from "@prisma/client"
 const prisma = new PrismaClient()
 
 export default defineEventHandler(async (event) => {
+  const body = await readBody(event);
+
   try {
     const specialEvents = await prisma.recipes.findMany({
-      select: {
-        specialEvent: true,
-      },
-      distinct: ['specialEvent'],
       where: {
-        specialEvent: {
-          not: null,
-        },
+        specialEvent: body.eventType
       },
     })
+    if (specialEvents.length === 0) {
+      return createError({
+        statusCode: 404,
+        statusMessage: "Aucun événement spécial trouvé",
+      })
+    }
     return specialEvents
   } catch (error) {
     throw createError({
