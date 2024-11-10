@@ -12,9 +12,11 @@ const correspondingRecipes = ref<Recipes[]>([]);
 
 const state = reactive({
   eventType: undefined,
+  formSubmitted: false,
 })
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
+  state.formSubmitted = true;
   const { eventType } = event.data;
   try {
     const response = await useFetch('/api/get-special-events', {
@@ -49,7 +51,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       v-model="state.eventType"
     />
     </UFormGroup>
-    <UButton type="submit">
+    <UButton type="submit" :disabled="!state.eventType">
       Submit
     </UButton>
   </UForm>
@@ -79,7 +81,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       </template>
     </UCard>
   </div>
-  <div v-else>
+  <div v-if="state.formSubmitted && correspondingRecipes.length === 0">
     <p class="text-lg">Aucune recette ne correspond à votre recherche</p>
   </div>
 </div>
