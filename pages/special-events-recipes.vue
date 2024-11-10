@@ -29,6 +29,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       }));
     } else {
       correspondingRecipes.value = [];
+      state.eventType = undefined;
     }
   } catch (error) {
     console.log(error)
