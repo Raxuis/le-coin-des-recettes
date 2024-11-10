@@ -5,8 +5,10 @@ import { z } from 'zod';
 import { searchSpecialEventsRecipes } from '../validation/schemas';
 import { SPECIAL_EVENTS } from '~/constants';
 import { useFetch } from '#app';
+import {type Recipes} from '@prisma/client';
 
-type Schema = z.output<typeof searchSpecialEventsRecipes>
+type Schema = z.output<typeof searchSpecialEventsRecipes>;
+const correspondingRecipes = ref<Recipes[]>([]);
 
 const state = reactive({
   eventType: undefined,
@@ -19,7 +21,15 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       method: 'POST',
       body: JSON.stringify({ eventType }),
     })
-    console.log(response.data)
+    if (response.status.value === "success" && Array.isArray(response.data.value)) {
+      correspondingRecipes.value = response.data.value.map((recipe) => ({
+        ...recipe,
+        createdAt: new Date(recipe.createdAt),
+        updatedAt: new Date(recipe.updatedAt),
+      }));
+    } else {
+      state.eventType = undefined;
+    }
   } catch (error) {
     console.log(error)
   }
@@ -27,7 +37,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-  <UForm :schema="searchSpecialEventsRecipes" :state="state" class="space-y-4" @submit.prevent="onSubmit">
+  <div class="flex flex-col items-center justify-center space-y-4">
+  <UForm :schema="searchSpecialEventsRecipes" :state="state" class="w-full space-y-2" @submit.prevent="onSubmit">
     <UFormGroup label="Type d'évènement" name="eventType">
       <USelectMenu
       label="Choisissez un évènement"
@@ -41,4 +52,34 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       Submit
     </UButton>
   </UForm>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" v-if="correspondingRecipes.length">
+    <UCard v-for="recipe in correspondingRecipes.slice(0, 30)" :key="recipe.id">
+      <template #header>
+        <div class="flex flex-col items-center justify-center space-y-2">
+          <div class="flex flex-col items-center justify-center">
+            <p class="text-lg">{{ recipe.title }}</p>
+            <p class="text-sm text-gray-500">{{ firstCharacterToUppercase(recipe.type.toLowerCase()) }}</p>
+          </div>
+          <div class="flex justify-center w-full gap-4 cursor-default">
+            <UTooltip text="Temps de préparation" :popper="{ placement: 'top' }">
+              <UBadge color="norway" variant="subtle" class="inline-flex gap-2"><UIcon name="material-symbols:concierge-rounded" class="size-5"/>{{ recipe.preparationTime }}min
+              </UBadge>
+            </UTooltip>
+            <UTooltip text="Temps de cuisson" :popper="{ placement: 'top' }">
+              <UBadge color="serenade" variant="subtle" class="inline-flex gap-2"><UIcon name="ph:cooking-pot-fill" class="size-5"/>{{ recipe.cookingTime }}min
+              </UBadge>
+            </UTooltip>
+            <UTooltip text="Temps de repos" :popper="{ placement: 'top' }">
+              <UBadge color="mercury" variant="subtle" class="inline-flex gap-2"><UIcon name="material-symbols:alarm" class="size-5"/>{{ recipe.restingTime }}min
+              </UBadge>
+            </UTooltip>
+          </div>
+        </div>
+      </template>
+    </UCard>
+  </div>
+  <div v-else>
+    <p class="text-lg">Aucune recette ne correspond à votre recherche</p>
+  </div>
+</div>
 </template>
