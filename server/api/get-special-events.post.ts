@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
     if (specialEvents.length === 0) {
       return createError({
         statusCode: 404,
-        statusMessage: "Aucun événement spécial trouvé",
+        statusMessage: "No special events found.",
       })
     }
     return specialEvents
