@@ -28,7 +28,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         updatedAt: new Date(recipe.updatedAt),
       }));
     } else {
-      state.eventType = undefined;
+      correspondingRecipes.value = [];
     }
   } catch (error) {
     console.log(error)
