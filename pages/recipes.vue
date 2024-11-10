@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, onBeforeUnmount } from 'vue';
 import { useFetch } from '#app';
-import { RecipeTypes, type Recipes } from '@prisma/client';
+import { type Recipes } from '@prisma/client';
+import {
+  difficulty,
+  budget,
+  category
+} from '~/constants';
 
 const writtenRecipe = ref('');
 const correspondingRecipes = ref<Recipes[]>([]);
@@ -65,14 +70,6 @@ const resetFilters = () => {
   selectedDifficulty.value = [];
   selectedBudget.value = [];
 };
-
-const category: RecipeTypes[] = [
-  "PLAT",
-  "DESSERT"
-];
-
-const difficulty = ['très facile', 'facile', 'moyenne']; // TODO: Add difficulties if found
-const budget = ['bon marché', "moyen", "assez cher"]; // TODO: Add budget if found
 
 const selectedCategory = ref<string[]>([]);
 const selectedDifficulty = ref<string[]>([]);
