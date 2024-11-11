@@ -2,7 +2,8 @@
 import { type Recipes } from '@prisma/client';
 import { useFetch } from 'nuxt/app';
 import { useRoute, useRouter } from 'vue-router';
-import { previousRoute } from '../../../../utils/previousRoute';
+import { previousRoute } from '@/utils/previousRoute';
+import { firstCharacterToUppercase } from '@/utils/textFormatting';
 
 const route = useRoute();
 const router = useRouter();
