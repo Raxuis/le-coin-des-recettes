@@ -6,6 +6,8 @@ import { searchSpecialEventsRecipes } from '../validation/schemas';
 import { SPECIAL_EVENTS } from '~/constants';
 import { useFetch } from '#app';
 import {type Recipes} from '@prisma/client';
+import { onBeforeRouteLeave } from 'vue-router';
+import { previousRoute } from '../utils/previousRoute';
 
 type Schema = z.output<typeof searchSpecialEventsRecipes>;
 const correspondingRecipes = ref<Recipes[]>([]);
@@ -37,6 +39,11 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     console.log(error)
   }
 }
+
+onBeforeRouteLeave((to, from, next) => {
+  previousRoute.value = from.fullPath;
+  next();
+});
 </script>
 
 <template>
@@ -60,7 +67,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       <template #header>
         <div class="flex flex-col items-center justify-center space-y-2">
           <div class="flex flex-col items-center justify-center">
-            <p class="text-lg">{{ recipe.title }}</p>
+            <NuxtLink class="text-lg underline underline-ofset-2" :to="`/recipe/dish/${recipe.slug}`">{{ recipe.title }}</NuxtLink>
             <p class="text-sm text-gray-500">{{ firstCharacterToUppercase(recipe.type.toLowerCase()) }}</p>
           </div>
           <div class="flex justify-center w-full gap-4 cursor-default">

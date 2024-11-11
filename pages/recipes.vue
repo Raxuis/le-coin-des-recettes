@@ -7,6 +7,8 @@ import {
   budget,
   category
 } from '~/constants';
+import { onBeforeRouteLeave } from 'vue-router';
+
 
 const writtenRecipe = ref('');
 const correspondingRecipes = ref<Recipes[]>([]);
@@ -91,6 +93,11 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', handleKeyDown);
 });
+
+onBeforeRouteLeave((to, from, next) => {
+  previousRoute.value = from.fullPath;
+  next();
+});
 </script>
 
 <template>
@@ -98,7 +105,7 @@ onBeforeUnmount(() => {
     <UInput color="persian-red" size="lg" type="text" variant="outline" placeholder="Votre recette..." v-model="writtenRecipe" class="w-full" icon="arcticons:recipe-keeper"/>
     <div class="flex max-sm:space-y-2 space-x-0 sm:space-x-8 max-sm:flex-col">
       <UDropdown :items="items" :popper="{ placement: 'bottom-start' }">
-        <UButton color="white" label="Filtrer" trailing-icon="material-symbols:filter-alt-outline" />
+        <UButton color="white" label="Filtrer" trailing-icon="material-symbols:filter-alt-outline" class="font-extrabold" />
       </UDropdown>
       <div class="flex flex-grow space-x-0 sm:space-x-2 min-w-0 max-sm:space-y-1 max-sm:flex-col">
         <USelectMenu
@@ -144,7 +151,7 @@ onBeforeUnmount(() => {
             <template #header>
               <div class="flex flex-col items-center justify-center space-y-2">
                 <div class="flex flex-col items-center justify-center">
-                  <p class="text-lg">{{ recipe.title }}</p>
+                  <NuxtLink class="text-lg underline underline-ofset-2" :to="`/recipe/dish/${recipe.slug}`">{{ recipe.title }}</NuxtLink>
                   <p class="text-sm text-gray-500">{{ firstCharacterToUppercase(recipe.type.toLowerCase()) }}</p>
                 </div>
                 <div class="flex justify-center w-full gap-4 cursor-default">
@@ -163,10 +170,6 @@ onBeforeUnmount(() => {
                 </div>
               </div>
             </template>
-            <NuxtLink class="underline underline-offset-2 inline-flex gap-1 group" :to="`/recipe/dish/${recipe.slug}`">
-              <p>En savoir plus</p>
-              <UIcon name="lucide:arrow-up-right" class="size-5 mt-1 group-hover:translate-x-1 duration-300" />
-            </NuxtLink>
             <template #footer>
               <div class="flex justify-between px-2">
                 <UTooltip text="Difficulté" :popper="{ placement: 'top' }">
