@@ -4,7 +4,7 @@ import type { FormSubmitEvent } from '#ui/types'
 import { z } from 'zod';
 import { searchSpecialEventsRecipes } from '../validation/schemas';
 import { formatEventType, firstCharacterToUppercase } from '../utils/textFormatting';
-import { SPECIAL_EVENTS } from '~/constants';
+import { SPECIAL_EVENTS } from '@/constants';
 import { useFetch } from '#app';
 import {type Recipes} from '@prisma/client';
 import { onBeforeRouteLeave } from 'vue-router';

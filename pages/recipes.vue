@@ -6,7 +6,7 @@ import {
   difficulty,
   budget,
   category
-} from '~/constants';
+} from '@/constants';
 import { onBeforeRouteLeave } from 'vue-router';
 import { firstCharacterToUppercase } from '../utils/textFormatting';
 

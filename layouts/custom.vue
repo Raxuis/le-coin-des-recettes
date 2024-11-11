@@ -18,6 +18,9 @@ const links = [{
 }, {
   label: 'Recettes d’événement',
   to: '/special-events-recipes'
+}, {
+  label: 'Communauté',
+  to: '/community'
 }]
 
 const { data, signOut } = useAuth()
