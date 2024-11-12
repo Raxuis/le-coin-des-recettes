@@ -40,125 +40,86 @@ var client_1 = require("@prisma/client");
 var prisma = new client_1.PrismaClient();
 var recipesData = [
     {
-        "title": "Rôti de boeuf aux légumes",
-        author: "Auteur inconnu",
+        "title": "Doigts de sorcière ensanglantés",
         "type": "PLAT",
         "people": 6,
-        "slug": "roti-de-boeuf-aux-legumes",
+        "slug": "doigts-de-sorciere-ensanglantes",
+        "author": "Chef Halloween",
         "ingredients": [
-            "1,5 kg de rôti de boeuf",
-            "4 carottes",
-            "4 pommes de terre",
-            "2 oignons",
-            "3 gousses d'ail",
-            "1 bouquet garni",
-            "Huile d'olive",
-            "Sel",
-            "Poivre"
+            "1 pâte feuilletée",
+            "12 saucisses de Strasbourg",
+            "Amandes effilées",
+            "Ketchup pour le sang"
         ],
         "steps": [
-            "Préchauffer le four à 200°C.",
-            "Éplucher et couper les carottes et les pommes de terre en morceaux.",
-            "Dans un plat allant au four, disposer les légumes, les oignons émincés et l'ail en chemise.",
-            "Arroser d'huile d'olive, saler et poivrer.",
-            "Poser le rôti sur les légumes, ajouter le bouquet garni.",
-            "Enfourner pendant 50 minutes, en retournant le rôti à mi-cuisson."
-        ],
-        "preparationTime": 20,
-        "restingTime": 0,
-        "cookingTime": 50,
-        "totalTime": 70,
-        "difficulty": "Moyen",
-        "budget": "Élevé",
-        "specialEvent": "REPAS_FAMILLE",
-        "creatorId": null,
-        createdAt: new Date("2024-11-05T13:40:00.000Z"),
-        updatedAt: new Date("2024-11-05T13:40:00.000Z")
-    },
-    {
-        "title": "Gratin dauphinois",
-        author: "Auteur inconnu",
-        "type": "PLAT",
-        "people": 6,
-        "slug": "gratin-dauphinois",
-        "ingredients": [
-            "1 kg de pommes de terre",
-            "50 cl de crème fraîche",
-            "2 gousses d'ail",
-            "30g de beurre",
-            "Sel",
-            "Poivre",
-            "Noix de muscade"
-        ],
-        "steps": [
-            "Préchauffer le four à 160°C.",
-            "Éplucher et couper les pommes de terre en fines rondelles.",
-            "Frotter un plat à gratin avec une gousse d'ail, puis beurrer le fond.",
-            "Disposer les pommes de terre en couches dans le plat.",
-            "Verser la crème, saler, poivrer et ajouter une pincée de noix de muscade.",
-            "Cuire au four pendant 1h30."
-        ],
-        "preparationTime": 15,
-        "restingTime": 0,
-        "cookingTime": 90,
-        "totalTime": 105,
-        "difficulty": "Facile",
-        "budget": "Bon marché",
-        "specialEvent": "REPAS_FAMILLE",
-        "creatorId": null,
-        createdAt: new Date("2024-11-05T13:40:00.000Z"),
-        updatedAt: new Date("2024-11-05T13:40:00.000Z")
-    },
-    {
-        "title": "Poulet rôti au four",
-        author: "Auteur inconnu",
-        "type": "PLAT",
-        "people": 4,
-        "slug": "poulet-roti-au-four",
-        "ingredients": [
-            "1 poulet entier",
-            "50g de beurre",
-            "4 branches de thym",
-            "Sel",
-            "Poivre"
-        ],
-        "steps": [
-            "Préchauffer le four à 200°C.",
-            "Enduire le poulet de beurre ramolli, saler et poivrer.",
-            "Insérer le thym dans la cavité du poulet.",
-            "Placer le poulet dans un plat et enfourner pendant 1 heure en l'arrosant régulièrement de son jus.",
-            "Laisser reposer 10 minutes avant de découper."
+            "Préchauffe le four à 180°C.",
+            "Enroule une bande de pâte feuilletée autour de chaque saucisse, en laissant un bout découvert pour former l'ongle.",
+            "Place une amande effilée au bout de chaque saucisse pour imiter un ongle.",
+            "Fais cuire au four pendant 15 minutes jusqu'à ce que la pâte soit dorée.",
+            "Sers avec du ketchup pour un effet ‘ensanglanté’."
         ],
         "preparationTime": 10,
-        "restingTime": 10,
-        "cookingTime": 60,
-        "totalTime": 80,
+        "restingTime": 0,
+        "cookingTime": 15,
+        "totalTime": 25,
         "difficulty": "Facile",
         "budget": "Bon marché",
-        "specialEvent": "REPAS_FAMILLE",
         "creatorId": null,
-        createdAt: new Date("2024-11-05T13:40:00.000Z"),
-        updatedAt: new Date("2024-11-05T13:40:00.000Z")
+        "createdAt": new Date("2024-11-05T13:40:00.000Z"),
+        "updatedAt": new Date("2024-11-05T13:40:00.000Z"),
+        "specialEvent": "HALLOWEEN"
     },
     {
-        "title": "Gâteau au chocolat fondant",
-        author: "Auteur inconnu",
-        "type": "DESSERT",
-        "people": 8,
-        "slug": "gateau-au-chocolat-fondant",
+        "title": "Pizza momies",
+        "type": "PLAT",
+        "people": 4,
+        "slug": "pizza-momies",
+        "author": "Chef Halloween",
         "ingredients": [
-            "200g de chocolat noir",
-            "150g de beurre",
-            "150g de sucre",
-            "3 œufs",
-            "50g de farine"
+            "4 pains pita",
+            "Sauce tomate",
+            "Tranches de fromage",
+            "Olives noires coupées en rondelles"
         ],
         "steps": [
-            "Préchauffer le four à 180°C.",
-            "Faire fondre le chocolat avec le beurre au bain-marie.",
-            "Battre les œufs avec le sucre jusqu'à blanchiment.",
-            "Ajouter le chocolat fondu et la farine au mélange.",
-            "Verser la préparation dans un moule et cuire 20 minutes."
+            "Préchauffe le four à 200°C.",
+            "Étale de la sauce tomate sur chaque pain pita.",
+            "Dispose les tranches de fromage en bandes pour imiter les bandelettes de momie.",
+            "Place des rondelles d'olives pour les yeux.",
+            "Fais cuire au four pendant 10 minutes."
+        ],
+        "preparationTime": 5,
+        "restingTime": 0,
+        "cookingTime": 10,
+        "totalTime": 15,
+        "difficulty": "Facile",
+        "budget": "Bon marché",
+        "creatorId": null,
+        "createdAt": new Date("2024-11-05T13:40:00.000Z"),
+        "updatedAt": new Date("2024-11-05T13:40:00.000Z"),
+        "specialEvent": "HALLOWEEN"
+    },
+    {
+        "title": "Cupcakes citrouille d’Halloween",
+        "type": "DESSERT",
+        "people": 6,
+        "slug": "cupcakes-citrouille-halloween",
+        "author": "Chef Halloween",
+        "ingredients": [
+            "150g de sucre",
+            "2 œufs",
+            "100g de beurre fondu",
+            "120ml de lait",
+            "200g de farine",
+            "1 cuillère à café de levure",
+            "Colorant orange pour glaçage",
+            "Pâte d’amande verte pour la décoration"
+        ],
+        "steps": [
+            "Préchauffe le four à 180°C.",
+            "Mélange le sucre, les œufs, le beurre fondu, le lait, la farine et la levure jusqu’à obtenir une pâte lisse.",
+            "Verse la pâte dans des moules à cupcakes et fais cuire 15-20 minutes.",
+            "Laisse refroidir, puis décore avec du glaçage coloré en orange et ajoute une tige en pâte d’amande verte pour imiter une citrouille."
         ],
         "preparationTime": 15,
         "restingTime": 0,
@@ -166,43 +127,39 @@ var recipesData = [
         "totalTime": 35,
         "difficulty": "Facile",
         "budget": "Moyen",
-        "specialEvent": "REPAS_FAMILLE",
         "creatorId": null,
-        createdAt: new Date("2024-11-05T13:40:00.000Z"),
-        updatedAt: new Date("2024-11-05T13:40:00.000Z")
+        "createdAt": new Date("2024-11-05T13:40:00.000Z"),
+        "updatedAt": new Date("2024-11-05T13:40:00.000Z"),
+        "specialEvent": "HALLOWEEN"
     },
     {
-        "title": "Quiche lorraine",
-        author: "Auteur inconnu",
-        "type": "PLAT",
-        "people": 6,
-        "slug": "quiche-lorraine",
+        "title": "Fantômes en meringue",
+        "type": "DESSERT",
+        "people": 4,
+        "slug": "fantomes-meringue",
+        "author": "Chef Halloween",
         "ingredients": [
-            "1 pâte brisée",
-            "200g de lardons",
-            "3 œufs",
-            "20 cl de crème fraîche",
-            "Sel",
-            "Poivre",
-            "Noix de muscade"
+            "2 blancs d’œufs",
+            "100g de sucre",
+            "Pépites de chocolat pour les yeux"
         ],
         "steps": [
-            "Préchauffer le four à 180°C.",
-            "Faire revenir les lardons dans une poêle.",
-            "Dans un bol, battre les œufs avec la crème, le sel, le poivre et la noix de muscade.",
-            "Étaler la pâte dans un moule, ajouter les lardons et verser la préparation.",
-            "Enfourner pendant 30 minutes."
+            "Préchauffe le four à 100°C.",
+            "Monte les blancs en neige en ajoutant le sucre progressivement jusqu'à obtenir une meringue ferme.",
+            "Utilise une poche à douille pour former des petits fantômes sur une plaque de cuisson.",
+            "Ajoute des pépites de chocolat pour faire les yeux.",
+            "Fais cuire pendant 1h30 à 100°C jusqu'à ce que les meringues soient sèches."
         ],
-        "preparationTime": 10,
+        "preparationTime": 15,
         "restingTime": 0,
-        "cookingTime": 30,
-        "totalTime": 40,
+        "cookingTime": 90,
+        "totalTime": 105,
         "difficulty": "Facile",
         "budget": "Bon marché",
-        "specialEvent": "REPAS_FAMILLE",
         "creatorId": null,
-        createdAt: new Date("2024-11-05T13:40:00.000Z"),
-        updatedAt: new Date("2024-11-05T13:40:00.000Z")
+        "createdAt": new Date("2024-11-05T13:40:00.000Z"),
+        "updatedAt": new Date("2024-11-05T13:40:00.000Z"),
+        "specialEvent": "HALLOWEEN"
     }
 ];
 function main() {
