@@ -12,6 +12,9 @@ export default defineEventHandler(async (event) => {
     where: {
       email
     },
+    include: {
+      recipes: true,
+    },
   });
 
   if (!user) throw createError({ statusCode: 500, statusMessage: 'An error occurred, try again.' });
