@@ -55,10 +55,12 @@ const router = useRouter()
             />
         </li>
         <li v-if="data">
-          <UAvatar
-          :src="data.user?.image!"
-          :alt="data.user?.name!"
-          />
+          <NuxtLink to="/profile">
+            <UAvatar
+            :src="data.user?.image!"
+            :alt="data.user?.name!"
+            />
+          </NuxtLink>
         </li>
         <li v-if="data">
         <UButton
