@@ -100,6 +100,16 @@ onBeforeRouteLeave((to, from, next) => {
   previousRoute.value = from.fullPath;
   next();
 });
+
+const shareRecipe = (slug: string, title?:string) => {
+  const url = window.location.href;
+  const shareUrl = `${url}recipe/${slug}`;
+  navigator.share({
+    title: 'Le coin des recettes.',
+    text: `${"Recette de " + title + "." || "Recette partagée avec vous."}`,
+    url: shareUrl,
+  });
+};
 </script>
 
 <template>
@@ -149,7 +159,10 @@ onBeforeRouteLeave((to, from, next) => {
           <p class="text-lg">Aucune recette ne correspond à votre recherche</p>
         </div>
         <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <UCard v-for="recipe in (correspondingRecipes.length ? correspondingRecipes : (data ?? [])).slice(0, 30)" :key="recipe.id">
+          <UCard v-for="recipe in (correspondingRecipes.length ? correspondingRecipes : (data ?? [])).slice(0, 30)" :key="recipe.id" class="relative">
+            <div class="absolute top-4 right-4 flex items-center justify-center text-white hover:text-persian-red-300 transition-colors text-sm cursor-pointer" @click="shareRecipe(recipe.slug ?? '', recipe.title)">
+              <UIcon name="material-symbols-light:share" class="w-4 h-4" />
+            </div>
             <template #header>
               <div class="flex flex-col items-center justify-center space-y-2">
                 <div class="flex flex-col items-center justify-center">
