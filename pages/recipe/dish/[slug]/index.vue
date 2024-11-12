@@ -47,8 +47,8 @@ function goBack() {
       <p class="text-sm" v-if="data?.people && data?.people !== 0">Recette pour <span class="font-extrabold">{{ data?.people }} personnes</span>.</p>
       <p class="text-lg">Ingrédients :</p>
       <ul class="list-none list-inside space-y-1">
-        <li v-for="ingredient in data?.ingredients" :key="ingredient" class="before:content-[attr(before)]" before="- ">
-          {{ firstCharacterToUppercase(ingredient) }}
+        <li v-for="ingredient in data?.ingredients" :key="ingredient">
+          - {{ firstCharacterToUppercase(ingredient) }}
         </li>
       </ul>
       <hr />
