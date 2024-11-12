@@ -34,6 +34,7 @@
     "@iconify-json/material-symbols-light": "^1.2.6",
     "@iconify-json/mdi": "^1.2.1",
     "@iconify-json/ph": "^1.2.1",
+    "@iconify-json/tdesign": "^1.2.4",
     "@nuxtjs/google-fonts": "^3.2.0",
     "@nuxtjs/tailwindcss": "^6.12.2",
     "@types/node": "^22.8.1",

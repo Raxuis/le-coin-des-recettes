@@ -75,6 +75,9 @@ importers:
       '@iconify-json/ph':
         specifier: ^1.2.1
         version: 1.2.1
+      '@iconify-json/tdesign':
+        specifier: ^1.2.4
+        version: 1.2.4
       '@nuxtjs/google-fonts':
         specifier: ^3.2.0
         version: 3.2.0(magicast@0.3.5)(rollup@4.24.3)
@@ -749,6 +752,9 @@ packages:
 
   '@iconify-json/ph@1.2.1':
     resolution: {integrity: sha512-x0DNfwWrS18dbsBYOq3XGiZnGz4CgRyC+YSl/TZvMQiKhIUl1woWqUbMYqqfMNUBzjyk7ulvaRovpRsIlqIf8g==}
+
+  '@iconify-json/tdesign@1.2.4':
+    resolution: {integrity: sha512-8owyTzhfk/uvk14/FMbLUIXuHMAUHIHBNUHIFAPfAlAp75b/23+tbhl1RdpzPl5Uu7aydksPm99Ve90l+YrloQ==}
 
   '@iconify/collections@1.0.476':
     resolution: {integrity: sha512-CHErIMzMRq1zWnGsSeWFu3o1fwIRg/dLQwSVlmmUFr8k7pJEsD5HFQyW79u1YcEjUWa1m50/qzz0SCcAZUK6Tw==}
@@ -4708,6 +4714,10 @@ snapshots:
       '@iconify/types': 2.0.0
 
   '@iconify-json/ph@1.2.1':
+    dependencies:
+      '@iconify/types': 2.0.0
+
+  '@iconify-json/tdesign@1.2.4':
     dependencies:
       '@iconify/types': 2.0.0
 

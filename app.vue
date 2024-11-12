@@ -7,4 +7,5 @@ const layout = "custom";
   <NuxtLayout :name="layout">
     <NuxtPage />
   </NuxtLayout>
+  <UNotifications />
 </template>

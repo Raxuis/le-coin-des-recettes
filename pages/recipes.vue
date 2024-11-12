@@ -15,6 +15,7 @@ import { firstCharacterToUppercase } from '../utils/textFormatting';
 const writtenRecipe = ref('');
 const correspondingRecipes = ref<Recipes[]>([]);
 const { data, status } = useFetch<Recipes[]>('/api/recipes');
+const toast = useToast();
 
 const items = [
   [{
@@ -101,15 +102,46 @@ onBeforeRouteLeave((to, from, next) => {
   next();
 });
 
-const shareRecipe = (slug: string, title?:string) => {
-  const url = window.location.href;
+interface ShareProps {
+  slug: string,
+  title?:string,
+  action: "shareToSocial" | "copyToClipboard"
+}
+
+const shareRecipe = async({slug, title, action}:ShareProps) => {
+  try {
+    const url = window.location.href;
   const shareUrl = `${url}recipe/${slug}`;
-  navigator.share({
-    title: 'Le coin des recettes.',
-    text: `${"Recette de " + title + "." || "Recette partagée avec vous."}`,
-    url: shareUrl,
-  });
-};
+    if (action === 'shareToSocial' && navigator.share) {
+      await navigator.share({
+      title: 'Le coin des recettes.',
+      text: `${"Recette de " + title + "." || "Recette partagée avec vous."}`,
+      url: shareUrl,
+    });
+} else {
+  await navigator.clipboard.writeText(`${"Recette de " + title + " : " + slug || "Recette partagée avec vous."}`);
+}
+  toast.add({
+    title: 'Copié avec succès !',
+    description: 'Pourquoi pas partager cette recette maintenant. 🌮',
+    icon: 'material-symbols:content-copy',
+    color: 'green'
+    })
+} catch {
+  toast.add({
+      title: 'Une erreur est survenue ! 😕',
+      description: 'Veuillez réessayer...',
+      icon: 'tdesign:error-triangle',
+      actions: [{
+        label: 'Réessayer',
+        color: 'white',
+        click: () => {
+          shareRecipe({ slug, title, action });
+        }
+      }],
+      color: 'red',
+    })
+}};
 </script>
 
 <template>
@@ -160,8 +192,9 @@ const shareRecipe = (slug: string, title?:string) => {
         </div>
         <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <UCard v-for="recipe in (correspondingRecipes.length ? correspondingRecipes : (data ?? [])).slice(0, 30)" :key="recipe.id" class="relative">
-            <div class="absolute top-4 right-4 flex items-center justify-center text-white hover:text-persian-red-300 transition-colors text-sm cursor-pointer" @click="shareRecipe(recipe.slug ?? '', recipe.title)">
-              <UIcon name="material-symbols-light:share" class="w-4 h-4" />
+            <div class="absolute top-4 right-4 flex gap-1 items-center justify-center text-sm cursor-pointer">
+              <UIcon name="material-symbols-light:content-copy" class="size-5 text-white hover:text-persian-red-300 transition-colors" @click="shareRecipe({ slug: recipe.slug ?? '', title: recipe.title, action: 'copyToClipboard' })" />
+              <UIcon name="material-symbols-light:share" class="size-5 text-white hover:text-persian-red-300 transition-colors" @click="shareRecipe({ slug: recipe.slug ?? '', title: recipe.title, action: 'shareToSocial' })" />
             </div>
             <template #header>
               <div class="flex flex-col items-center justify-center space-y-2">
