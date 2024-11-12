@@ -9,6 +9,7 @@ if (email) {
     query: { email }
   }));
 }
+console.log(data.value);
 </script>
 
 <template>
@@ -16,7 +17,7 @@ if (email) {
     <h1>Profile</h1>
     <p v-if="status === 'error'">{{ error }}</p>
     <div class="flex justify-center mt-20" v-if="status === 'success'">
-    <UCard class="w-full max-w-sm">
+    <UCard class="w-full max-w-md">
       <template #header>
         <div class="flex relative bg-gray-100 hover:bg-persian-red-400 hover:text-white rounded-full transition-colors w-16 h-16 cursor-default m-auto">
           <img
@@ -36,12 +37,14 @@ if (email) {
           </div>
           <div class="flex flex-col gap-1" v-if="data.recipes">
             <h2 class="text-xl font-bold">Recipes</h2>
-            <p class="text-sm">
-              <NuxtLink to="/recipes">
-                {{ data.recipes }}
-              </NuxtLink>
-            </p>
-          </div>
+            <ul>
+              <li v-for="recipe in data.recipes" :key="recipe.slug">
+                <NuxtLink :to="`/recipe/dish/${recipe.slug}`">
+                  - {{ recipe.title }}
+                </NuxtLink>
+              </li>
+            </ul>
+            </div>
           </div>
           </template>
       <template #footer>
