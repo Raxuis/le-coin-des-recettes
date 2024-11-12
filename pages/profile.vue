@@ -19,7 +19,14 @@ if (email) {
     <UCard class="w-full max-w-sm">
       <template #header>
         <div class="flex justify-center items-center">
-          <img :src="data.image" alt="avatar" class="w-16 h-16 rounded-full">
+          <UAvatar
+            :src="data.image!"
+            :alt="data.name.charAt(0)"
+            onerror="this.onerror=null; ; this.remove();"
+            class="bg-gray-100 hover:bg-persian-red-400 hover:text-white rounded-full transition-colors w-16 h-16 cursor-default"
+            >
+            {{ data.name.charAt(0) }}
+          </UAvatar>
         </div>
       </template>
       <template #default>

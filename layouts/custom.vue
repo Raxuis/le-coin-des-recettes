@@ -58,8 +58,12 @@ const router = useRouter()
           <NuxtLink to="/profile">
             <UAvatar
             :src="data.user?.image!"
-            :alt="data.user?.name!"
-            />
+            :alt="data.user?.name.charAt(0)"
+            onerror="this.onerror=null; ; this.remove();"
+            class="bg-gray-100 hover:bg-persian-red-400 hover:text-white rounded-full transition-colors"
+            >
+            {{ data.user?.name.charAt(0) }}
+          </UAvatar>
           </NuxtLink>
         </li>
         <li v-if="data">
