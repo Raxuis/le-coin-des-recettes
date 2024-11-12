@@ -43,7 +43,7 @@ const router = useRouter()
           </NuxtLink>
         </li>
       </div>
-      <div class="flex gap-2 items-center justify-center w-full">
+      <div class="flex gap-2 items-center justify-center max-sm:w-full">
         <li>
           <UButton
             :icon="isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'"
