@@ -23,9 +23,9 @@ if (email) {
             :src="data.image!"
             :alt="data.name.charAt(0)"
             onerror="this.onerror=null; ; this.remove();"
-            class="bg-gray-100 hover:bg-persian-red-400 hover:text-white rounded-full transition-colors w-16 h-16 cursor-default"
+            class="relative bg-gray-100 hover:bg-persian-red-400 hover:text-white rounded-full transition-colors w-16 h-16 cursor-default"
             >
-            {{ data.name.charAt(0) }}
+            <p class="absolute -z-10"> {{ data.name.charAt(0) }}</p>
           </UAvatar>
         </div>
       </template>
