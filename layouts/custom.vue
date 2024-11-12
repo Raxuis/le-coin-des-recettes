@@ -43,7 +43,7 @@ const router = useRouter()
           </NuxtLink>
         </li>
       </div>
-      <div class="flex gap-2 items-center">
+      <div class="flex gap-2 items-center justify-center w-full">
         <li>
           <UButton
             :icon="isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'"
@@ -57,12 +57,12 @@ const router = useRouter()
         <li v-if="data">
           <NuxtLink to="/profile" class="flex relative bg-gray-100 hover:bg-persian-red-400 hover:text-white rounded-full transition-colors cursor-default">
           <UAvatar
-            :src="data.user.image!"
-            :alt="data.user.name.charAt(0)"
+            :src="data.user?.image!"
+            :alt="data.user?.name!.charAt(0)"
             onerror="this.onerror=null; ; this.remove();"
             class="z-10"
           />
-          <p class="z-5 absolute inset-0 flex justify-center items-center">{{ data.user.name.charAt(0) }}</p>
+          <p class="z-5 absolute inset-0 flex justify-center items-center">{{ data.user?.name!.charAt(0) }}</p>
           </NuxtLink>
         </li>
         <li v-if="data">
