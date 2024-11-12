@@ -28,7 +28,7 @@ if (email) {
             <h2 class="text-xl font-bold">{{ data.name }}</h2>
             <p class="text-sm">{{ data.email }}</p>
           </div>
-          <div class="flex flex-col gap-1">
+          <div class="flex flex-col gap-1" v-if="data.recipes">
             <h2 class="text-xl font-bold">Recipes</h2>
             <p class="text-sm">
               <NuxtLink to="/recipes">
