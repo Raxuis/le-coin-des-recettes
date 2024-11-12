@@ -18,15 +18,14 @@ if (email) {
     <div class="flex justify-center mt-20" v-if="status === 'success'">
     <UCard class="w-full max-w-sm">
       <template #header>
-        <div class="flex justify-center items-center">
-          <UAvatar
+        <div class="flex relative bg-gray-100 hover:bg-persian-red-400 hover:text-white rounded-full transition-colors w-16 h-16 cursor-default m-auto">
+          <img
             :src="data.image!"
             :alt="data.name.charAt(0)"
             onerror="this.onerror=null; ; this.remove();"
-            class="relative bg-gray-100 hover:bg-persian-red-400 hover:text-white rounded-full transition-colors w-16 h-16 cursor-default"
-            >
-            <p class="absolute -z-10"> {{ data.name.charAt(0) }}</p>
-          </UAvatar>
+            class="z-10 size-full rounded-full"
+          />
+          <p class="z-5 absolute inset-0 flex justify-center items-center">{{ data.name.charAt(0) }}</p>
         </div>
       </template>
       <template #default>
