@@ -70,7 +70,7 @@ onBeforeRouteLeave((to, from, next) => {
         <template #header>
           <div class="flex flex-col items-center justify-center space-y-2">
             <div class="flex flex-col items-center justify-center">
-              <NuxtLink class="text-lg underline underline-ofset-2" :to="`/recipe/dish/${recipe.slug}`">{{ recipe.title }}</NuxtLink>
+              <NuxtLink class="text-lg underline underline-ofset-2" :to="`/recipe/${recipe.slug}`">{{ recipe.title }}</NuxtLink>
               <p class="text-sm text-gray-500">{{ firstCharacterToUppercase(recipe.type.toLowerCase()) }}</p>
             </div>
             <div class="flex justify-center w-full gap-4 cursor-default">

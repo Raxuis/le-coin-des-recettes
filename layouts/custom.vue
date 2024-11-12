@@ -55,7 +55,7 @@ const router = useRouter()
             />
         </li>
         <li v-if="data">
-          <NuxtLink to="/profile" class="flex relative bg-gray-100 hover:bg-persian-red-400 hover:text-white rounded-full transition-colors cursor-default">
+          <NuxtLink to="/profile" class="flex relative bg-gray-100 hover:bg-persian-red-400 hover:text-white rounded-full transition-colors">
           <UAvatar
             :src="data.user?.image!"
             :alt="data.user?.name!.charAt(0)"

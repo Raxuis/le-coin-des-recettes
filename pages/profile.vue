@@ -39,7 +39,7 @@ console.log(data.value);
             <h2 class="text-xl font-bold">Recipes</h2>
             <ul>
               <li v-for="recipe in data.recipes" :key="recipe.slug">
-                <NuxtLink :to="`/recipe/dish/${recipe.slug}`">
+                <NuxtLink :to="`/recipe/${recipe.slug}`">
                   - {{ recipe.title }}
                 </NuxtLink>
               </li>
