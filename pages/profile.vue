@@ -36,7 +36,7 @@ console.log(data.value);
             <p class="text-sm">{{ data.email }}</p>
           </div>
           <div class="flex flex-col gap-1" v-if="data.recipes">
-            <h2 class="text-xl font-bold">Recipes</h2>
+            <h2 class="text-xl font-bold">Recettes</h2>
             <ul>
               <li v-for="recipe in data.recipes" :key="recipe.slug">
                 <NuxtLink :to="`/recipe/${recipe.slug}`">
@@ -50,7 +50,7 @@ console.log(data.value);
       <template #footer>
         <div class="flex justify-center items-center">
           <UButton class="w-full block justify-center p-2" color="red" @click="signOut">
-            Sign out
+            Se déconnecter
           </UButton>
         </div>
       </template>
