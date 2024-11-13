@@ -1,14 +1,9 @@
 <script lang="ts" setup>
 const {data: authDatas, signOut} = useAuth();
 
-const email = authDatas.value?.user?.email;
-
-let data, status, error;
-if (email) {
-  ({data, status, error} = await useFetch('/api/profile', {
-    query: {email}
-  }));
-}
+const {data, status, error} = await useFetch('/api/profile', {
+  query: {email: authDatas.value?.user?.email}
+});
 
 const handleSignOut = async () => {
   await signOut();
