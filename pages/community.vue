@@ -3,6 +3,9 @@ import type {FormSubmitEvent} from '#ui/types'
 import {z} from 'zod';
 import {budget, category, difficulty, SPECIAL_EVENTS} from '@/constants';
 import {newRecipe} from '@/validation/schemas';
+import {useAuth} from "#imports";
+
+const {data: userDatas} = useAuth();
 
 const isOpen = ref(false);
 
@@ -29,8 +32,25 @@ const totalTime = computed(() => {
 });
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  console.log(event.data);
-  console.log(totalTime.value);
+  try {
+    const userInfos = await useFetch('/api/profile', {query: {email: userDatas?.value?.user?.email}});
+
+    const {name, id} = userInfos.data.value;
+
+    const newRecipe = {
+      ...event.data,
+      author: name,
+      creatorId: id,
+      totalTime: totalTime.value,
+    };
+    const response = await useFetch('/api/new-recipe', {
+      method: 'POST',
+      body: JSON.stringify(newRecipe)
+    })
+    console.log(response);
+  } catch (error) {
+    console.error(error);
+  }
 }
 </script>
 
