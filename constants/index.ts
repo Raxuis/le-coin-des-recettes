@@ -1,5 +1,3 @@
-import type { RecipeTypes } from "@prisma/client";
-
 export const SPECIAL_EVENTS = [
   'HALLOWEEN',
   'NOEL',
@@ -9,11 +7,19 @@ export const SPECIAL_EVENTS = [
   'REPAS_FAMILLE',
 ] as const;
 
-export const difficulty = ['très facile', 'facile', 'moyenne']; // TODO: Add difficulties if found
+export const difficulty = [
+  'très facile',
+  'facile',
+  'moyenne'
+] as const; // TODO: Add difficulties if found
 
-export const budget = ['bon marché', "moyen", "assez cher"]; // TODO: Add budget if found
+export const budget = [
+  'bon marché',
+  "moyen",
+  "assez cher"
+] as const; // TODO: Add budget if found
 
-export const category: RecipeTypes[] = [
+export const category = [
   "PLAT",
   "DESSERT"
-];
+] as const;

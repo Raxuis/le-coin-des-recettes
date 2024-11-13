@@ -23,6 +23,7 @@ model Recipes {
   // image       String?
   // sourceUrl   String?
   title           String         @unique
+  description     String?
   type            RecipeTypes
   people          Int?
   slug            String?        @unique

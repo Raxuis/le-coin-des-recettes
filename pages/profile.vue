@@ -9,7 +9,11 @@ if (email) {
     query: { email }
   }));
 }
-console.log(data.value);
+console.log(authDatas);
+console.log(status);
+const handleSignOut = async() => {
+  await signOut();
+};
 </script>
 
 <template>
@@ -17,7 +21,11 @@ console.log(data.value);
     <h1>Profile</h1>
     <p v-if="status === 'error'">{{ error }}</p>
     <div class="flex justify-center mt-20" v-if="status === 'success'">
-    <UCard class="w-full max-w-md">
+      <div class="flex flex-col items-center justify-center space-y-4" v-if="!data">
+        <p>Vous n'êtes pas connecté, veuillez vous connecter pour accéder à votre profil.</p>
+        <UButton href="/auth/signIn" color="white" label="Se connecter" trailing-icon="material-symbols:login" />
+      </div>
+    <UCard class="w-full max-w-md" v-else>
       <template #header>
         <div class="flex relative bg-gray-100 hover:bg-persian-red-400 text-persian-red-400 hover:text-white rounded-full transition-colors w-16 h-16 cursor-default m-auto">
           <img
@@ -49,7 +57,7 @@ console.log(data.value);
           </template>
       <template #footer>
         <div class="flex justify-center items-center">
-          <UButton class="w-full block justify-center p-2" color="red" @click="signOut">
+          <UButton class="w-full block justify-center p-2" color="red" @click="handleSignOut">
             Se déconnecter
           </UButton>
         </div>
