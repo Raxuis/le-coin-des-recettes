@@ -19,7 +19,7 @@ console.log(data.value);
     <div class="flex justify-center mt-20" v-if="status === 'success'">
     <UCard class="w-full max-w-md">
       <template #header>
-        <div class="flex relative bg-gray-100 hover:bg-persian-red-400 hover:text-white rounded-full transition-colors w-16 h-16 cursor-default m-auto">
+        <div class="flex relative bg-gray-100 hover:bg-persian-red-400 text-persian-red-400 hover:text-white rounded-full transition-colors w-16 h-16 cursor-default m-auto">
           <img
             :src="data.image!"
             :alt="data.name.charAt(0)"
