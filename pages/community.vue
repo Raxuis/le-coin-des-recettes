@@ -84,10 +84,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
             />
           </UFormGroup>
 
-          <UFormGroup label="Nombre de personnes" name="people">
-            <UInput type="number" v-model="state.people" placeholder="Nombre de personnes" name="people" />
-          </UFormGroup>
-
           <UFormGroup label="Ingrédients" name="ingredients">
             <UInput v-model="state.ingredients" placeholder="Liste des ingrédients séparés par des virgules" name="ingredients" />
           </UFormGroup>
@@ -96,17 +92,24 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
             <UInput v-model="state.steps" placeholder="Liste des étapes séparées par des points-virgules" name="steps" />
           </UFormGroup>
 
-          <UFormGroup label="Temps de préparation" name="preparationTime">
-            <UInput type="number" v-model="state.preparationTime" placeholder="Temps de préparation (en minutes)" name="preparationTime" required />
-          </UFormGroup>
+          <div class="grid grid-cols-2 gap-4">
+            <UFormGroup label="Nombre de personnes" name="people">
+              <UInput type="number" v-model="state.people" placeholder="Nombre de personnes" name="people" />
+            </UFormGroup>
 
-          <UFormGroup label="Temps de repos" name="restingTime">
-            <UInput type="number" v-model="state.restingTime" placeholder="Temps de repos (en minutes)" name="restingTime" />
-          </UFormGroup>
+            <UFormGroup label="Temps de préparation (min)" name="preparationTime">
+              <UInput type="number" v-model="state.preparationTime" placeholder="Temps de préparation" name="preparationTime" required />
+            </UFormGroup>
+          </div>
 
-          <UFormGroup label="Temps de cuisson" name="cookingTime">
-            <UInput type="number" v-model="state.cookingTime" placeholder="Temps de cuisson (en minutes)" name="cookingTime" required />
-          </UFormGroup>
+          <div class="grid grid-cols-2 gap-4">
+            <UFormGroup label="Temps de repos (min)" name="restingTime">
+              <UInput type="number" v-model="state.restingTime" placeholder="Temps de repos" name="restingTime" />
+            </UFormGroup>
+            <UFormGroup label="Temps de cuisson (min)" name="cookingTime">
+              <UInput type="number" v-model="state.cookingTime" placeholder="Temps de cuisson" name="cookingTime" required />
+            </UFormGroup>
+          </div>
 
           <UFormGroup label="Difficulté" name="difficulty">
             <USelectMenu
@@ -147,7 +150,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       </div>
 
       <template #footer>
-        <Placeholder class="h-8" />
+        <p class="text-center text-xs">Votre nom sera visible par tous les membres de la communauté.</p>
       </template>
     </UCard>
   </USlideover>
