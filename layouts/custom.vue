@@ -36,14 +36,14 @@ const router = useRouter()
         <p class="text-xl sm:text-2xl text-masala-900 hover:text-persian-red-800 dark:text-white transition-colors">Le Coin des Recettes</p>
       </a>
       <ul class="flex gap-2 items-center flex-wrap">
-        <div class="flex items-center divide-x divide-masala-900 dark:divide-white">
+        <div class="flex items-center divide-x divide-masala-900 dark:divide-white flex-wrap justify-center max-lg:w-full">
         <li v-for="link in links" :key="link.label" class="list-none text-masala-900 hover:text-persian-red-800 dark:text-white dark:hover:text-persian-red-400 transition-colors px-2">
           <NuxtLink :to=link.to>
             {{ link.label }}
           </NuxtLink>
         </li>
       </div>
-      <div class="flex gap-2 items-center justify-center max-sm:w-full">
+      <div class="flex gap-2 items-center justify-center max-lg:w-full">
         <li>
           <UButton
             :icon="isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'"
