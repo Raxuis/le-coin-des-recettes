@@ -9,3 +9,7 @@ export function formatEventType(eventType: string): string {
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 }
+
+export function parseList(input: string) {
+  return input.split(',').map(item => item.trim()).filter(item => item !== '');
+}

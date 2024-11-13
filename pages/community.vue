@@ -4,6 +4,7 @@ import {z} from 'zod';
 import {budget, category, difficulty, SPECIAL_EVENTS} from '@/constants';
 import {newRecipe} from '@/validation/schemas';
 import {useAuth} from "#imports";
+import {parseList} from "~/utils/textFormatting";
 
 const {data: userDatas} = useAuth();
 
@@ -13,7 +14,7 @@ type Schema = z.output<typeof newRecipe>;
 
 const state = reactive({
   title: '',
-  eventType: '',
+  type: '',
   people: 0,
   ingredients: '',
   steps: '',
@@ -31,6 +32,7 @@ const totalTime = computed(() => {
   return state.preparationTime + state.restingTime + state.cookingTime;
 });
 
+
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   try {
     const userInfos = await useFetch('/api/profile', {query: {email: userDatas?.value?.user?.email}});
@@ -39,7 +41,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
     const newRecipe = {
       ...event.data,
-      type: event.data.eventType,
+      ingredients: parseList(event.data.ingredients),
+      steps: parseList(event.data.steps),
       author: name,
       creatorId: id,
       totalTime: totalTime.value,
@@ -93,17 +96,17 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
               <UInput v-model="state.title" placeholder="Nom de la recette" name="title" required/>
             </UFormGroup>
 
-            <UFormGroup label="Slug (optionnel)" name="slug">
+            <UFormGroup label="Slug" name="slug">
               <UInput type="input" v-model="state.slug" placeholder="Slug (/slug)" name="slug" required/>
             </UFormGroup>
 
-            <UFormGroup label="Catégorie de recette" name="eventType">
+            <UFormGroup label="Catégorie de recette" name="type">
               <USelectMenu
                   label="Choisissez une catégorie"
-                  name="eventType"
+                  name="type"
                   :options="Array.from(category)"
                   placeholder="Sélectionnez une catégorie"
-                  v-model="state.eventType"
+                  v-model="state.type"
               />
             </UFormGroup>
 
@@ -150,7 +153,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
               <UFormGroup label="Budget" name="budget">
                 <USelectMenu
                     label="Choisissez un budget"
-                    name="eventType"
+                    name="budget"
                     :options="Array.from(budget)"
                     v-model="state.budget"
                     required

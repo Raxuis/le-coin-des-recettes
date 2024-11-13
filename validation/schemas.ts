@@ -9,7 +9,7 @@ export const searchSpecialEventsRecipes = z.object({
 
 export const newRecipe = z.object({
     title: z.string().min(1, {message: "Le titre est nécessaire."}).max(100, {message: "Doucement sur le titre..."}).trim(),
-    eventType: z.enum(category, {message: "La catégorie est nécessaire."}),
+    type: z.enum(category, {message: "La catégorie est nécessaire."}),
     people: z.number({message: "Le nombre de personnes est requis."}).min(0, {message: "Doit être supérieur à 0."}),
     ingredients: z.string().min(1, {message: "Au moins un ingrédient est nécessaire."}),
     steps: z.string().min(1, {message: "Au moins une étape est nécessaire."}),
@@ -23,7 +23,6 @@ export const newRecipe = z.object({
         .string()
         .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, {
             message: "Le slug doit être en minuscules, sans espaces, et peut contenir des tirets (e.g., mon-slug-de-recette).",
-        })
-        .optional(),
+        }),
 });
 
