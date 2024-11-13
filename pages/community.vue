@@ -9,7 +9,6 @@ type Schema = z.output<typeof newRecipe>;
 
   const state = reactive({
   title: '',
-  description: '',
   eventType: '',
   people: 0,
   ingredients: '',
@@ -46,7 +45,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       </p>
     </div>
   </div>
-  <USlideover v-model="isOpen">
+  <USlideover v-model="isOpen" class="overflow-y-auto">
     <UCard
       class="flex flex-col flex-1"
       :ui="{ body: { base: 'flex-1' }, ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }"
@@ -70,10 +69,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
             <UInput type="input" v-model="state.slug" placeholder="Slug (/slug)" name="slug" required />
           </UFormGroup>
 
-          <UFormGroup label="Description (optionnel)" name="description">
-            <UInput v-model="state.description" placeholder="Description" name="description" required />
-          </UFormGroup>
-
           <UFormGroup label="Catégorie de recette" name="eventType">
             <USelectMenu
               label="Choisissez une catégorie"
@@ -92,7 +87,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
             <UInput v-model="state.steps" placeholder="Liste des étapes séparées par des points-virgules" name="steps" />
           </UFormGroup>
 
-          <div class="grid grid-cols-2 gap-4">
             <UFormGroup label="Nombre de personnes" name="people">
               <UInput type="number" v-model="state.people" placeholder="Nombre de personnes" name="people" />
             </UFormGroup>
@@ -100,7 +94,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
             <UFormGroup label="Temps de préparation (min)" name="preparationTime">
               <UInput type="number" v-model="state.preparationTime" placeholder="Temps de préparation" name="preparationTime" required />
             </UFormGroup>
-          </div>
 
           <div class="grid grid-cols-2 gap-4">
             <UFormGroup label="Temps de repos (min)" name="restingTime">
@@ -111,27 +104,27 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
             </UFormGroup>
           </div>
 
-          <UFormGroup label="Difficulté" name="difficulty">
-            <USelectMenu
-              label="Choisissez une difficulté"
-              name="difficulty"
-              :options="Array.from(difficulty)"
-              placeholder="Sélectionnez un événement"
-              v-model="state.difficulty"
-              required
-            />
-          </UFormGroup>
+          <div class="grid grid-cols-2 gap-4">
+            <UFormGroup label="Difficulté" name="difficulty">
+              <USelectMenu
+                label="Choisissez une difficulté"
+                name="difficulty"
+                :options="Array.from(difficulty)"
+                v-model="state.difficulty"
+                required
+              />
+            </UFormGroup>
 
-          <UFormGroup label="Budget" name="budget">
-            <USelectMenu
-              label="Choisissez un budget"
-              name="eventType"
-              :options="Array.from(budget)"
-              placeholder="Sélectionnez un événement"
-              v-model="state.budget"
-              required
-            />
-          </UFormGroup>
+            <UFormGroup label="Budget" name="budget">
+              <USelectMenu
+                label="Choisissez un budget"
+                name="eventType"
+                :options="Array.from(budget)"
+                v-model="state.budget"
+                required
+              />
+            </UFormGroup>
+          </div>
 
           <UFormGroup label="Évènement spécial (optionnel)" name="specialEvent">
             <USelectMenu

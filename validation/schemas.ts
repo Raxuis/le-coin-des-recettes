@@ -13,7 +13,6 @@ export const newRecipe = z.object({
   }).max(100, {
     "message": "Doucement sur le titre..."
   }).trim(),
-  description: z.string().optional(),
   eventType: z.enum(category, {
     "message": "La catégorie est nécessaire."
   }),
