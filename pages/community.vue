@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '#ui/types'
 import { z } from 'zod';
-import { category, SPECIAL_EVENTS } from '~/constants';
+import { budget, category, difficulty, SPECIAL_EVENTS } from '~/constants';
 import { newRecipe } from '~/validation/schemas';
 const isOpen = ref(false);
 
@@ -62,6 +62,10 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
             <UInput v-model="state.title" placeholder="Nom de la recette" name="title" required />
           </UFormGroup>
 
+          <UFormGroup label="Description" name="description">
+            <UInput v-model="state.description" placeholder="Description" name="description" required />
+          </UFormGroup>
+
           <UFormGroup label="Catégorie de recette" name="eventType">
             <USelectMenu
               label="Choisissez une catégorie"
@@ -70,10 +74,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
               placeholder="Sélectionnez une catégorie"
               v-model="state.eventType"
             />
-          </UFormGroup>
-
-          <UFormGroup label="Description" name="description">
-            <UInput v-model="state.description" placeholder="Description" name="description" required />
           </UFormGroup>
 
           <UFormGroup label="Nombre de personnes" name="people">
@@ -101,11 +101,25 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           </UFormGroup>
 
           <UFormGroup label="Difficulté" name="difficulty">
-            <UInput v-model="state.difficulty" placeholder="Difficulté (Facile, Moyen, Difficile)" name="difficulty" required />
+            <USelectMenu
+              label="Choisissez une difficulté"
+              name="eventType"
+              :options="Array.from(difficulty)"
+              placeholder="Sélectionnez un événement"
+              v-model="state.eventType"
+              required
+            />
           </UFormGroup>
 
           <UFormGroup label="Budget" name="budget">
-            <UInput v-model="state.budget" placeholder="Budget (Faible, Moyen, Élevé)" name="budget" required />
+            <USelectMenu
+              label="Choisissez un budget"
+              name="eventType"
+              :options="Array.from(budget)"
+              placeholder="Sélectionnez un événement"
+              v-model="state.eventType"
+              required
+            />
           </UFormGroup>
 
           <UFormGroup label="Évènement spécial" name="specialEvent">
