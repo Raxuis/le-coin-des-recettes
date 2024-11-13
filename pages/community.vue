@@ -39,6 +39,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
     const newRecipe = {
       ...event.data,
+      type: event.data.eventType,
       author: name,
       creatorId: id,
       totalTime: totalTime.value,
