@@ -23,11 +23,14 @@ type Schema = z.output<typeof newRecipe>;
   slug: '',
 });
 
-
-//TO THINK: totalTime
+// 👇 Calculating totalTime from preparationTime, restingTime, cookingTime with computed (similar to useEffect)
+const totalTime = computed(() => {
+  return state.preparationTime + state.restingTime + state.cookingTime;
+});
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   console.log(event.data);
+  console.log(totalTime.value);
 }
 </script>
 
