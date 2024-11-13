@@ -12,6 +12,8 @@ export default defineEventHandler(async (event) => {
     }
 
     const {
+        author,
+        creatorId,
         title,
         type,
         people,
@@ -26,19 +28,6 @@ export default defineEventHandler(async (event) => {
         slug,
         totalTime,
     } = body;
-    console.log(title,
-        type,
-        people,
-        ingredients,
-        steps,
-        preparationTime,
-        restingTime,
-        cookingTime,
-        difficulty,
-        budget,
-        specialEvent,
-        slug,
-        totalTime);
 
     try {
         if (!title || !type || !people || !ingredients || !steps || !preparationTime || !cookingTime || !difficulty || !budget || !slug) {
@@ -51,6 +40,8 @@ export default defineEventHandler(async (event) => {
         // Création de la recette dans la base de données
         const newRecipe = await prisma.recipes.create({
             data: {
+                author,
+                creatorId,
                 title,
                 type,
                 people,

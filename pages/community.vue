@@ -9,6 +9,7 @@ import {parseList} from "~/utils/textFormatting";
 const {data: userDatas} = useAuth();
 
 const isOpen = ref(false);
+const toast = useToast();
 
 type Schema = z.output<typeof newRecipe>;
 
@@ -52,8 +53,26 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       body: JSON.stringify(newRecipe)
     })
     console.log(response);
-  } catch (error) {
-    console.error(error);
+    if (response.status.value === "success") {
+      isOpen.value = false;
+      toast.add({
+        title: 'Félicitations',
+        description: 'Vous avez créé une recette !',
+        icon: 'material-symbols:content-copy',
+        color: 'green'
+      })
+    }
+  } catch {
+    toast.add({
+      title: 'Une erreur est survenue ! 😕',
+      description: 'Veuillez réessayer...',
+      icon: 'tdesign:error-triangle',
+      actions: [{
+        label: 'Réessayer',
+        color: 'white',
+      }],
+      color: 'red',
+    })
   }
 }
 </script>
