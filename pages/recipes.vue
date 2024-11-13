@@ -192,11 +192,11 @@ const shareRecipe = async({slug, title, action}:ShareProps) => {
         </div>
         <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <UCard v-for="recipe in (correspondingRecipes.length ? correspondingRecipes : (data ?? [])).slice(0, 30)" :key="recipe.id" class="relative">
-            <div class="absolute top-4 right-4 flex gap-1 items-center justify-center text-sm cursor-pointer">
+            <template #header>
+              <div class="absolute top-4 right-4 flex gap-1 items-center justify-center text-sm cursor-pointer">
               <UIcon name="material-symbols-light:content-copy" class="size-5 text-white hover:text-persian-red-300 transition-colors" @click="shareRecipe({ slug: recipe.slug ?? '', title: recipe.title, action: 'copyToClipboard' })" />
               <UIcon name="material-symbols-light:share" class="size-5 text-white hover:text-persian-red-300 transition-colors" @click="shareRecipe({ slug: recipe.slug ?? '', title: recipe.title, action: 'shareToSocial' })" />
             </div>
-            <template #header>
               <div class="flex flex-col items-center justify-center space-y-2">
                 <div class="flex flex-col items-center justify-center">
                   <NuxtLink class="text-lg underline underline-ofset-2" :to="`/recipe/${recipe.slug}`">{{ recipe.title }}</NuxtLink>
