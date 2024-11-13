@@ -63,11 +63,11 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
             <UInput v-model="state.title" placeholder="Nom de la recette" name="title" required />
           </UFormGroup>
 
-          <UFormGroup label="Slug" name="slug">
+          <UFormGroup label="Slug (optionnel)" name="slug">
             <UInput type="input" v-model="state.slug" placeholder="Slug (/slug)" name="slug" required />
           </UFormGroup>
 
-          <UFormGroup label="Description" name="description">
+          <UFormGroup label="Description (optionnel)" name="description">
             <UInput v-model="state.description" placeholder="Description" name="description" required />
           </UFormGroup>
 
@@ -127,7 +127,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
             />
           </UFormGroup>
 
-          <UFormGroup label="Évènement spécial" name="specialEvent">
+          <UFormGroup label="Évènement spécial (optionnel)" name="specialEvent">
             <USelectMenu
               label="Choisissez un évènement"
               name="specialEvent"
