@@ -108,8 +108,8 @@ interface ShareProps {
 }
 
 const shareRecipe = async ({slug, title, action}: ShareProps) => {
-    const url = window.location.origin;
-    const shareUrl = `${url}/recipe/${slug}`;
+  const url = window.location.origin;
+  const shareUrl = `${url}/recipe/${slug}`;
   try {
     if (action === 'shareToSocial' && navigator.share) {
       await navigator.share({

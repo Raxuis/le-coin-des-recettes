@@ -3,10 +3,17 @@ import type {FormSubmitEvent} from '#ui/types'
 import {z} from 'zod';
 import {budget, category, difficulty, SPECIAL_EVENTS} from '@/constants';
 import {newRecipe} from '@/validation/schemas';
-import {useAuth} from "#imports";
+import {firstCharacterToUppercase, previousRoute, useAuth} from "#imports";
 import {parseList} from "~/utils/textFormatting";
+import {useFetch} from "#app";
+import type {Recipes} from "@prisma/client";
+import {onBeforeRouteLeave} from "#vue-router";
 
 const {data: userDatas} = useAuth();
+
+const {data, status} = useFetch<Recipes[]>('/api/community-recipes');
+console.log(status);
+console.log(data.value);
 
 const isOpen = ref(false);
 const toast = useToast();
@@ -38,7 +45,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   try {
     const userInfos = await useFetch('/api/profile', {query: {email: userDatas?.value?.user?.email}});
 
-    const {name, id} = userInfos.data.value;
+    const {name, id}: any = userInfos.data.value;
 
     const newRecipe = {
       ...event.data,
@@ -75,6 +82,10 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     })
   }
 }
+onBeforeRouteLeave((to, from, next) => {
+  previousRoute.value = from.fullPath;
+  next();
+});
 </script>
 
 <template>
@@ -202,5 +213,64 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         </template>
       </UCard>
     </USlideover>
+    <div class="grid grid-cols-2 gap-4 mt-10">
+      <UCard v-for="recipe in data" :key="recipe.id" class="relative">
+        <template #header>
+          <div class="absolute top-4 right-4 flex gap-1 items-center justify-center text-sm cursor-pointer">
+            <UIcon name="material-symbols-light:content-copy"
+                   class="size-5 text-white hover:text-persian-red-300 transition-colors"
+                   @click="shareRecipe({ slug: recipe.slug ?? '', title: recipe.title, action: 'copyToClipboard' })"/>
+            <UIcon name="material-symbols-light:share"
+                   class="size-5 text-white hover:text-persian-red-300 transition-colors"
+                   @click="shareRecipe({ slug: recipe.slug ?? '', title: recipe.title, action: 'shareToSocial' })"/>
+          </div>
+          <div class="flex flex-col items-center justify-center space-y-2">
+            <div class="flex flex-col items-center justify-center">
+              <NuxtLink class="text-lg underline underline-ofset-2" :to="`/recipe/${recipe.slug}`">{{
+                  recipe.title
+                }}
+              </NuxtLink>
+              <p class="text-sm text-gray-500">{{ firstCharacterToUppercase(recipe.type.toLowerCase()) }}</p>
+            </div>
+            <div class="flex justify-center w-full gap-4 cursor-default">
+              <UTooltip text="Temps de préparation" :popper="{ placement: 'top' }">
+                <UBadge color="norway" variant="subtle" class="inline-flex gap-2">
+                  <UIcon name="material-symbols:concierge-rounded" class="size-5"/>
+                  {{ recipe.preparationTime }}min
+                </UBadge>
+              </UTooltip>
+              <UTooltip text="Temps de cuisson" :popper="{ placement: 'top' }">
+                <UBadge color="serenade" variant="subtle" class="inline-flex gap-2">
+                  <UIcon name="ph:cooking-pot-fill" class="size-5"/>
+                  {{ recipe.cookingTime }}min
+                </UBadge>
+              </UTooltip>
+              <UTooltip text="Temps de repos" :popper="{ placement: 'top' }">
+                <UBadge color="mercury" variant="subtle" class="inline-flex gap-2">
+                  <UIcon name="material-symbols:alarm" class="size-5"/>
+                  {{ recipe.restingTime }}min
+                </UBadge>
+              </UTooltip>
+            </div>
+          </div>
+        </template>
+        <template #footer>
+          <div class="flex justify-between px-2">
+            <UTooltip text="Difficulté" :popper="{ placement: 'top' }">
+              <UButton color="gray" class="text-serenade-500">
+                <UIcon name="mdi:chef-hat" class="size-5"/>
+                {{ firstCharacterToUppercase(recipe.difficulty) }}
+              </UButton>
+            </UTooltip>
+            <UTooltip text="Budget" :popper="{ placement: 'top' }">
+              <UButton color="gray" class="text-norway-500">
+                <UIcon name="material-symbols:money-bag-rounded" class="size-5"/>
+                {{ firstCharacterToUppercase(recipe.budget) }}
+              </UButton>
+            </UTooltip>
+          </div>
+        </template>
+      </UCard>
+    </div>
   </div>
 </template>
