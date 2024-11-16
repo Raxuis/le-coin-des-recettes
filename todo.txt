@@ -1,0 +1,1 @@
+- Refactor recipe card logic for DRY
