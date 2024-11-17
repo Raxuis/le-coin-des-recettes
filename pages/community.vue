@@ -7,12 +7,9 @@ import {parseList} from "~/utils/textFormatting";
 import {useFetch} from "#app";
 import type {Recipes} from "@prisma/client";
 import {onBeforeRouteLeave} from "#vue-router";
-
 const {data: userDatas} = useAuth();
 
-const {data, status} = useFetch<Recipes[]>('/api/community-recipes');
-console.log(status);
-console.log(data.value);
+const {data} = useFetch<Recipes[]>('/api/community-recipes');
 
 const isOpen = ref(false);
 const toast = useToast();

@@ -27,6 +27,9 @@ export default defineNuxtConfig({
     sessionRefresh: {
       enablePeriodically: true,
       enableOnWindowFocus: true,
+    },
+    auth: {
+      globalAppMiddleware: true
     }
   },
   modules: [
