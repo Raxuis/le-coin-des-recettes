@@ -60,7 +60,7 @@ onBeforeRouteLeave((to, from, next) => {
     />
     </UFormGroup>
     <UButton type="submit" :disabled="!state.eventType">
-      Submit
+      Rechercher
     </UButton>
   </UForm>
   <div v-if="correspondingRecipes.length" class="flex flex-col items-center justify-center space-y-6">

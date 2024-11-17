@@ -58,6 +58,10 @@ function goBack() {
           {{ step }}
         </li>
       </ol>
+      <div v-if="data?.creatorId">
+        <hr />
+        <p class="pt-2">Par <span class="text-serenade-600">{{data.author}}</span></p>
+      </div>
     </div>
   </div>
 </template>
