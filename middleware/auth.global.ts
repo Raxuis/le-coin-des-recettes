@@ -6,7 +6,8 @@ export default defineNuxtRouteMiddleware((to) => {
         '/about',
         '/',
         '/recipes',
-        '/special-events-recipes'
+        '/special-events-recipes',
+        '/community'
     ];
 
     const excludedNames = ['recipe-slug'];

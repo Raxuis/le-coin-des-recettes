@@ -7,6 +7,7 @@ import {parseList} from "~/utils/textFormatting";
 import {useFetch} from "#app";
 import type {Recipes} from "@prisma/client";
 import {onBeforeRouteLeave} from "#vue-router";
+
 const {data: userDatas} = useAuth();
 
 const {data} = useFetch<Recipes[]>('/api/community-recipes');
@@ -91,7 +92,9 @@ onBeforeRouteLeave((to, from, next) => {
       <p>Ici vous pouvez voir les différentes recettes proposées par la communauté.</p>
       <div
           class="select-none group cursor-pointer text-gray-700 dark:text-white grid grid-flow-col auto-cols-max justify-center bg-clip-border border-2 border-persian-red-300 border-dashed rounded-lg bg-slate-400 bg-opacity-15 hover:bg-persian-red-300 hover:bg-opacity-20 duration-300 p-8"
-          @click="isOpen = true">
+          @click="isOpen = true"
+          v-if="userDatas?.user?.email"
+      >
         <p class="flex justify-center items-center">Ajouter votre propre recette
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                stroke-linecap="round" stroke-linejoin="round"
@@ -100,9 +103,20 @@ onBeforeRouteLeave((to, from, next) => {
           </svg>
         </p>
       </div>
+      <NuxtLink
+          class="select-none group cursor-pointer text-gray-700 dark:text-white
+          grid grid-flow-col auto-cols-max justify-center bg-clip-border border-2 border-persian-red-300
+          border-dashed rounded-lg bg-slate-400 bg-opacity-15 hover:bg-persian-red-300 hover:bg-opacity-20
+          duration-300 p-8"
+          v-else
+          to="/auth/signIn"
+      >
+        <p class="flex justify-center items-center">Vous devez être connecté pour créer votre propre recette.</p>
+      </NuxtLink>
     </div>
 
-    <NewRecipeSlideOver :isOpen="isOpen" :formState="state" :onSubmit="onSubmit" @update:isOpen="(value) => isOpen = value" />
+    <NewRecipeSlideOver :isOpen="isOpen" :formState="state" :onSubmit="onSubmit"
+                        @update:isOpen="(value) => isOpen = value"/>
 
     <div class="grid grid-cols-2 gap-4 mt-10">
       <UCard v-for="recipe in data" :key="recipe.id" class="relative">
