@@ -12,7 +12,7 @@ import {slugTitle} from "~/utils/titleToSlug";
 const {data: userDatas} = useAuth();
 
 const {data} = useFetch<Recipes[]>('/api/community-recipes', {
-  default: () => [],
+  default: () => [], // making data an array by default
 });
 
 const isOpen = ref(false);
@@ -125,7 +125,7 @@ onBeforeRouteLeave((to, from, next) => {
     <NewRecipeSlideOver :isOpen="isOpen" :formState="state" :onSubmit="onSubmit"
                         @update:isOpen="(value) => isOpen = value"/>
 
-    <div class="grid grid-cols-2 gap-4 mt-10">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-10">
       <UCard v-for="recipe in data" :key="recipe.id" class="relative">
         <template #header>
           <div class="absolute top-4 right-4 flex gap-1 items-center justify-center text-sm cursor-pointer">
@@ -136,9 +136,9 @@ onBeforeRouteLeave((to, from, next) => {
                    class="size-5 text-white hover:text-persian-red-300 transition-colors"
                    @click="shareRecipe({ slug: recipe.slug ?? '', title: recipe.title, action: 'shareToSocial' })"/>
           </div>
-          <div class="flex flex-col items-center justify-center space-y-2">
+          <div class="flex flex-col items-center justify-center space-y-2 max-sm:pt-4">
             <div class="flex flex-col items-center justify-center">
-              <NuxtLink class="text-lg underline underline-ofset-2" :to="`/recipe/${recipe.slug}`">{{
+              <NuxtLink class="text-lg underline underline-offset-2" :to="`/recipe/${recipe.slug}`">{{
                   recipe.title
                 }}
               </NuxtLink>
@@ -184,5 +184,9 @@ onBeforeRouteLeave((to, from, next) => {
         </template>
       </UCard>
     </div>
+  </div>
+  <div class="flex flex-col justify-center items-center py-10 sm:py-20">
+    <p v-if="userDatas?.user?.email" class="text-center">Vous souhaitez voir ceux que vous avez fait ?</p>
+    <NuxtLink class="text-serenade-200" to="/own-recipes">Cliquez ici</NuxtLink>
   </div>
 </template>
