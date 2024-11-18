@@ -11,7 +11,9 @@ import {slugTitle} from "~/utils/titleToSlug";
 
 const {data: userDatas} = useAuth();
 
-const {data} = useFetch<Recipes[]>('/api/community-recipes');
+const {data} = useFetch<Recipes[]>('/api/community-recipes', {
+  default: () => [],
+});
 
 const isOpen = ref(false);
 const toast = useToast();
@@ -52,20 +54,21 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       creatorId: id,
       totalTime: totalTime.value,
       slug: slugTitle(state.title)
-    };
+    } as Recipes;
     const response = await useFetch('/api/new-recipe', {
       method: 'POST',
       body: JSON.stringify(newRecipe)
     })
-    console.log(response);
     if (response.status.value === "success") {
-      isOpen.value = false;
       toast.add({
         title: 'Félicitations',
         description: 'Vous avez créé une recette !',
         icon: 'material-symbols:content-copy',
         color: 'green'
       })
+      isOpen.value = false;
+
+      data.value.push(newRecipe);
     } else if (response.status.value === "error") {
       toast.add({
         title: 'Erreur',
@@ -74,7 +77,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         color: 'red',
       })
     }
-  } catch () {
+  } catch {
     toast.add({
       title: 'Erreur',
       description: 'Une erreur est survenue.',
