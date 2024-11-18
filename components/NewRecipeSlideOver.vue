@@ -25,10 +25,6 @@
             <UInput v-model="formState.title" placeholder="Nom de la recette" name="title" required/>
           </UFormGroup>
 
-          <UFormGroup label="Slug" name="slug">
-            <UInput type="input" v-model="formState.slug" placeholder="Slug (/slug)" name="slug" required/>
-          </UFormGroup>
-
           <UFormGroup label="Catégorie de recette" name="type">
             <USelectMenu
                 label="Choisissez une catégorie"

@@ -1,4 +1,5 @@
-import { PrismaClient } from '@prisma/client';
+import {PrismaClient} from '@prisma/client';
+
 const prisma = new PrismaClient();
 
 export default defineEventHandler(async (event) => {
@@ -28,6 +29,19 @@ export default defineEventHandler(async (event) => {
         slug,
         totalTime,
     } = body;
+
+
+    const existingRecipe = await prisma.recipes.findUnique({
+        where: {
+            slug: slug,
+        }
+    })
+    if (existingRecipe) {
+        throw createError({
+            statusCode: 400,
+            statusMessage: "Une recette existe deja avec ce slug, veuillez changer."
+        })
+    }
 
     try {
         if (!title || !type || !people || !ingredients || !steps || !preparationTime || !cookingTime || !difficulty || !budget || !slug) {

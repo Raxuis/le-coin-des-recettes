@@ -7,6 +7,7 @@ import {parseList} from "~/utils/textFormatting";
 import {useFetch} from "#app";
 import type {Recipes} from "@prisma/client";
 import {onBeforeRouteLeave} from "#vue-router";
+import {slugTitle} from "~/utils/titleToSlug";
 
 const {data: userDatas} = useAuth();
 
@@ -29,7 +30,6 @@ const state = reactive({
   difficulty: undefined,
   budget: undefined,
   specialEvent: undefined,
-  slug: '',
 });
 
 // 👇 Calculating totalTime from preparationTime, restingTime, cookingTime with computed (similar to useEffect)
@@ -51,6 +51,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       author: name,
       creatorId: id,
       totalTime: totalTime.value,
+      slug: slugTitle(state.title)
     };
     const response = await useFetch('/api/new-recipe', {
       method: 'POST',
@@ -65,18 +66,21 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         icon: 'material-symbols:content-copy',
         color: 'green'
       })
+    } else if (response.status.value === "error") {
+      toast.add({
+        title: 'Erreur',
+        description: response.error.value?.statusMessage ?? "Erreur",
+        icon: 'material-symbols:error',
+        color: 'red',
+      })
     }
-  } catch {
+  } catch () {
     toast.add({
-      title: 'Une erreur est survenue ! 😕',
-      description: 'Veuillez réessayer...',
-      icon: 'tdesign:error-triangle',
-      actions: [{
-        label: 'Réessayer',
-        color: 'white',
-      }],
+      title: 'Erreur',
+      description: 'Une erreur est survenue.',
+      icon: 'material-symbols:error',
       color: 'red',
-    })
+    });
   }
 }
 

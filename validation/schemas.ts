@@ -19,10 +19,5 @@ export const newRecipe = z.object({
     difficulty: z.enum(difficulty, {message: "La difficulté est nécessaire."}),
     budget: z.enum(budget, {message: "Le budget est nécessaire."}),
     specialEvent: z.enum(SPECIAL_EVENTS).optional(),
-    slug: z
-        .string()
-        .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, {
-            message: "Le slug doit être en minuscules, sans espaces, et peut contenir des tirets (e.g., mon-slug-de-recette).",
-        }),
 });
 
