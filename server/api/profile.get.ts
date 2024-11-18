@@ -10,13 +10,24 @@ export default defineEventHandler(async (event) => {
 
   const user = await prisma.user.findUnique({
     where: {
-      email
+      email,
     },
-    include: {
-      recipes: true,
+    select: {
+      email: true,
+      name: true,
+      image: true,
+      recipes: {
+        take: 5,
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+        },
+      },
     },
   });
 
   if (!user) throw createError({ statusCode: 500, statusMessage: 'An error occurred, try again.' });
+
   return user;
 });

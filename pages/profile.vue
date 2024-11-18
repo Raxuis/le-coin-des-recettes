@@ -47,6 +47,12 @@ const handleSignOut = async () => {
                   </NuxtLink>
                 </li>
               </ul>
+              <p class="text-sm text-gray-500">
+                Ce ne sont que vos 5 dernières recettes.
+              </p>
+              <UButton size="sm" color="serenade" @click="handleSignOut" class="w-1/3 block mt-2">
+                Mes recettes
+              </UButton>
             </div>
           </div>
         </template>
