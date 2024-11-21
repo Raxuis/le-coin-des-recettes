@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+import {useRouter} from "vue-router";
+
+const router = useRouter();
 const {data: authDatas, signOut} = useAuth();
 
 const {data, status, error} = await useFetch('/api/profile', {
@@ -50,7 +53,7 @@ const handleSignOut = async () => {
               <p class="text-sm text-gray-500">
                 Ce ne sont que vos 5 dernières recettes.
               </p>
-              <UButton size="sm" color="serenade" @click="handleSignOut" class="w-1/3 block mt-2">
+              <UButton size="sm" color="serenade" class="w-1/3 block mt-2" @click="router.push('/own-recipes')">
                 Mes recettes
               </UButton>
             </div>
