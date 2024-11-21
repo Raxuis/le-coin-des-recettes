@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref, watch, onMounted, onBeforeUnmount} from 'vue';
+import {ref, computed, watch, onMounted, onBeforeUnmount} from 'vue';
 import {useFetch} from '#app';
 import {type Recipes} from '@prisma/client';
 import {
@@ -13,8 +13,46 @@ import {firstCharacterToUppercase} from '@/utils/textFormatting';
 
 const writtenRecipe = ref('');
 const correspondingRecipes = ref<Recipes[]>([]);
+
 const {data, status} = useFetch<Recipes[]>('/api/recipes');
 
+const currentPage = ref(1);
+const recipesPerPage = 30;
+
+const totalPages = computed(() => {
+  return Math.ceil((correspondingRecipes.value.length) / recipesPerPage);
+});
+
+const paginatedRecipes = computed(() => {
+  const start = (currentPage.value - 1) * recipesPerPage;
+  const end = start + recipesPerPage;
+  return correspondingRecipes.value.slice(start, end);
+});
+
+watchEffect(() => {
+  if (status.value === 'success' && data.value) {
+    correspondingRecipes.value = data.value;
+  }
+});
+
+watchEffect(() => {
+  console.log('Corresponding Recipes:', correspondingRecipes.value);
+  console.log('Paginated Recipes:', paginatedRecipes.value);
+});
+
+
+
+const goToPreviousPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+  }
+};
+
+const goToNextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++;
+  }
+};
 
 const items = [
   [{
@@ -51,23 +89,25 @@ const searchRecipes = () => {
   if (data.value) {
     correspondingRecipes.value = data.value.filter((r) => {
       const matchesTitle = r.title.toLowerCase().includes(writtenRecipe.value.toLowerCase());
-
       const matchesCategory = selectedCategory.value.length
           ? selectedCategory.value.includes(r.type)
           : true;
-
       const matchesDifficulty = selectedDifficulty.value.length
           ? selectedDifficulty.value.includes(r.difficulty)
           : true;
-
       const matchesBudget = selectedBudget.value.length
           ? selectedBudget.value.includes(r.budget)
           : true;
 
       return matchesTitle && matchesCategory && matchesDifficulty && matchesBudget;
     });
+
+    // Resetting pagination
+    currentPage.value = 1;
   }
 };
+
+
 
 const resetFilters = () => {
   selectedCategory.value = [];
@@ -153,9 +193,8 @@ onBeforeRouteLeave((to, from, next) => {
           <p class="text-lg">Aucune recette ne correspond à votre recherche</p>
         </div>
         <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <UCard v-for="recipe in (correspondingRecipes.length ? correspondingRecipes : (data ?? [])).slice(0, 30)"
-                 :key="recipe.id" class="relative">
-            <template #header>
+          <UCard v-for="(recipe, index) in paginatedRecipes" :key="recipe.id || index" class="relative">
+          <template #header>
               <div class="absolute top-4 right-4 flex gap-1 items-center justify-center text-sm cursor-pointer">
                 <UIcon name="material-symbols-light:content-copy"
                        class="size-5 text-white hover:text-persian-red-300 transition-colors"
@@ -211,6 +250,23 @@ onBeforeRouteLeave((to, from, next) => {
               </div>
             </template>
           </UCard>
+        </div>
+        <div class="flex justify-between items-center mt-4" v-if="correspondingRecipes.length">
+          <button
+              :disabled="currentPage === 1"
+              @click="goToPreviousPage"
+              class="bg-persian-red text-white px-4 py-2 rounded disabled:opacity-50"
+          >
+            Précédent
+          </button>
+          <p>Page {{ currentPage }} / {{ totalPages }}</p>
+          <button
+              :disabled="currentPage === totalPages || totalPages === 0"
+              @click="goToNextPage"
+              class="bg-persian-red text-white px-4 py-2 rounded disabled:opacity-50"
+          >
+            Suivant
+          </button>
         </div>
       </div>
     </div>
