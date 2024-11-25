@@ -9,6 +9,8 @@ import {newRecipe} from "~/validation/schemas";
 import {useFetch} from "#app";
 import {slugTitle} from "~/utils/titleToSlug";
 import type {Recipes} from "@prisma/client";
+import {onBeforeRouteLeave} from "#vue-router";
+import {previousRoute} from "~/utils/previousRoute";
 
 let isSaving = false;
 const {data: authDatas} = useAuth();
@@ -156,6 +158,10 @@ const deleteRecipeFromId = async (recipeId: string) => {
     loading.value = false;
   }
 };
+onBeforeRouteLeave((to, from, next) => {
+  previousRoute.value = from.fullPath;
+  next();
+});
 </script>
 
 
