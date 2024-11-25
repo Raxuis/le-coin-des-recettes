@@ -186,7 +186,7 @@ onBeforeRouteLeave((to, from, next) => {
     </div>
   </div>
   <div class="flex flex-col justify-center items-center py-10 sm:py-20">
-    <p v-if="userDatas?.user?.email" class="text-center">Vous souhaitez voir ceux que vous avez fait ?</p>
-    <NuxtLink class="text-serenade-200" to="/own-recipes">Cliquez ici</NuxtLink>
+    <p v-if="userDatas?.user?.email" class="text-center">Vous souhaitez voir celles que vous avez fait ?</p>
+    <NuxtLink class="text-serenade-700 dark:text-serenade-200" to="/own-recipes">Cliquez ici</NuxtLink>
   </div>
 </template>
