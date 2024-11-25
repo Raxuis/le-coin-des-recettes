@@ -46,7 +46,7 @@ export default defineEventHandler(async (event) => {
             slug: slug,
         }
     })
-    if (existingRecipe && existingRecipe.id !== id ) {
+    if (existingRecipe && existingRecipe.id !== id) {
         throw createError({
             statusCode: 400,
             statusMessage: "Une recette existe deja avec ce slug, veuillez changer."
@@ -63,7 +63,7 @@ export default defineEventHandler(async (event) => {
 
         const newRecipe = await prisma.recipes.update({
             where: {
-                slug: slug,
+                id
             },
             data: {
                 author,

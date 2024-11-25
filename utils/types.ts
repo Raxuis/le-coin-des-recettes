@@ -22,4 +22,5 @@ export interface UpdateOwnRecipesDatas {
     restingTime: number,
     ingredients: string[],
     steps: string[],
+    specialEvent: string | undefined,
 }

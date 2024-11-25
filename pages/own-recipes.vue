@@ -10,6 +10,7 @@ import {useFetch} from "#app";
 import {slugTitle} from "~/utils/titleToSlug";
 import type {Recipes} from "@prisma/client";
 
+let isSaving = false;
 const {data: authDatas} = useAuth();
 const recipes = ref<OwnRecipesDatas[]>([]);
 const loading = ref(false);
@@ -45,6 +46,7 @@ const fetchRecipes = async () => {
       ...recipe,
       ingredients: recipe.ingredients.join(', '),
       steps: recipe.steps.join(', '),
+      specialEvent: recipe.specialEvent || undefined,
     }));
   }
 };
@@ -60,8 +62,13 @@ const openModal = (recipe: OwnRecipesDatas) => {
   });
 };
 
+const closeModal = () => {
+  modal.close();
+}
+
 const saveRecipe = async (updatedRecipe: Schema) => {
-  console.log("updating recipe", updatedRecipe);
+  if (isSaving) return; // to fix issue due to the verification with specialEvent
+  isSaving = true;
   try {
     loading.value = true;
     const userInfos = await useFetch('/api/profile', {query: {email: authDatas.value?.user?.email}});
@@ -92,8 +99,9 @@ const saveRecipe = async (updatedRecipe: Schema) => {
           icon: 'material-symbols:check-circle',
           color: 'norway',
         });
-        const index = recipes.value.findIndex((r) => r.slug === titleToSlug);
+        const index = recipes.value.findIndex((r) => r.id === updatedRecipeWithAddedValues.id);
         if (index !== -1) recipes.value[index] = {...recipes.value[index], ...updatedRecipe};
+        closeModal();
       } else {
         toast.add({
           title: 'Erreur',
@@ -109,6 +117,7 @@ const saveRecipe = async (updatedRecipe: Schema) => {
     console.error('Erreur lors de la mise à jour :', error);
   } finally {
     loading.value = false;
+    isSaving = false;
   }
 };
 
