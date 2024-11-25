@@ -8,3 +8,8 @@ export function slugTitle(title: string): string {
         .replace(/--+/g, '-')
         .replace(/^-+|-+$/g, '');
 }
+
+export function slugTitleWithTimeStamp(title: string): string {
+    const timestamp = Date.now();
+    return slugTitle(title) + '-' + timestamp;
+}

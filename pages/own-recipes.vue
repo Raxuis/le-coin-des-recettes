@@ -7,7 +7,7 @@ import EditModal from "~/components/EditModal.vue";
 import {z} from "zod";
 import {newRecipe} from "~/validation/schemas";
 import {useFetch} from "#app";
-import {slugTitle} from "~/utils/titleToSlug";
+import {slugTitleWithTimeStamp} from "~/utils/titleToSlug";
 import type {Recipes} from "@prisma/client";
 import {onBeforeRouteLeave} from "#vue-router";
 import {previousRoute} from "~/utils/previousRoute";
@@ -77,7 +77,7 @@ const saveRecipe = async (updatedRecipe: Schema) => {
 
     if (userInfos.data.value) {
       const {name, id}: { name: string; id: string } = userInfos.data.value;
-      const titleToSlug = slugTitle(updatedRecipe.title);
+      const titleToSlug = slugTitleWithTimeStamp(updatedRecipe.title);
 
       const updatedRecipeWithAddedValues = {
         ...updatedRecipe,

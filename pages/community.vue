@@ -7,7 +7,7 @@ import {parseList} from "~/utils/textFormatting";
 import {useFetch} from "#app";
 import type {Recipes} from "@prisma/client";
 import {onBeforeRouteLeave} from "#vue-router";
-import {slugTitle} from "~/utils/titleToSlug";
+import {slugTitleWithTimeStamp} from "~/utils/titleToSlug";
 
 const {data: userDatas} = useAuth();
 
@@ -53,7 +53,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       author: name,
       creatorId: id,
       totalTime: totalTime.value,
-      slug: slugTitle(state.title)
+      slug: slugTitleWithTimeStamp(state.title)
     } as Recipes;
     const response = await useFetch('/api/new-recipe', {
       method: 'POST',
@@ -125,7 +125,7 @@ onBeforeRouteLeave((to, from, next) => {
     <NewRecipeSlideOver :isOpen="isOpen" :formState="state" :onSubmit="onSubmit"
                         @update:isOpen="(value) => isOpen = value"/>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-10">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-10">
       <UCard v-for="recipe in data" :key="recipe.id" class="relative">
         <template #header>
           <div class="absolute top-4 right-4 flex gap-1 items-center justify-center text-sm cursor-pointer">
