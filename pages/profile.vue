@@ -53,9 +53,14 @@ const handleSignOut = async () => {
               <p class="text-sm text-gray-500">
                 Ce ne sont que vos 5 dernières recettes.
               </p>
-              <UButton size="sm" color="serenade" class="w-1/3 block mt-2" @click="router.push('/own-recipes')">
+              <div class="grid grid-cols-2 space-x-4 mt-2">
+              <UButton size="sm" color="serenade" class="col-span-1 block" @click="router.push('/own-recipes')">
                 Mes recettes
               </UButton>
+                <UButton size="sm" color="norway" class="col-span-1 block" @click="router.push('/shopping-list')">
+                  Ma liste de courses
+                </UButton>
+              </div>
             </div>
           </div>
         </template>
