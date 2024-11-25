@@ -179,11 +179,11 @@ onBeforeRouteLeave((to, from, next) => {
         <template #header>
           <div class="absolute top-4 right-4 flex gap-1 items-center justify-center text-sm cursor-pointer">
             <UIcon name="material-symbols:edit-outline"
-                   class="size-5 text-gray-300 dark:text-white hover:text-blue-500 opacity-0 group-hover:opacity-100 duration-300"
+                   class="size-5 text-gray-300 dark:text-white dark:hover:text-blue-500 hover:text-blue-500 opacity-0 group-hover:opacity-100 duration-300"
                    @click="openModal(recipe)"
             />
             <UIcon name="ic:baseline-delete"
-                   class="size-5 text-gray-300 dark:text-white hover:text-persian-red-500 opacity-0 group-hover:opacity-100 duration-300"
+                   class="size-5 text-gray-300 dark:text-white dark:hover:text-persian-red-500 hover:text-persian-red-500 opacity-0 group-hover:opacity-100 duration-300"
                    @click="deleteRecipeFromId(recipe.id)"
             />
           </div>
