@@ -18,7 +18,7 @@ const onSubmit = () => {
 
 <template>
   <UModal>
-    <div class="h-full">
+    <div class="p-4">
       <UForm :schema="newRecipe" :state="formState" class="w-full space-y-2" @submit.prevent="onSubmit">
         <UFormGroup label="Nom de la recette" name="title">
           <UInput v-model="formState.title" placeholder="Nom de la recette" name="title" required/>
