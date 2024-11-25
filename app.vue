@@ -8,4 +8,5 @@ const layout = "custom";
     <NuxtPage />
   </NuxtLayout>
   <UNotifications />
+  <UModals />
 </template>

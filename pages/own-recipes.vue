@@ -1,24 +1,117 @@
 <script setup lang="ts">
 import {ref} from "vue";
-import {firstCharacterToUppercase} from "~/utils/textFormatting";
+import {firstCharacterToUppercase, parseList} from "~/utils/textFormatting";
 import {type OwnRecipesDatas} from "@/utils/types";
 import {useToast} from "#ui/composables/useToast";
+import EditModal from "~/components/EditModal.vue";
+import {z} from "zod";
+import {newRecipe} from "~/validation/schemas";
+import {useFetch} from "#app";
+import {slugTitle} from "~/utils/titleToSlug";
+import type {Recipes} from "@prisma/client";
 
 const {data: authDatas} = useAuth();
 const recipes = ref<OwnRecipesDatas[]>([]);
 const loading = ref(false);
 const toast = useToast();
+const modal = useModal();
+
+type Schema = z.output<typeof newRecipe>;
+
+const state = reactive({
+  title: '',
+  type: '',
+  people: 0,
+  ingredients: '',
+  steps: '',
+  preparationTime: 0,
+  restingTime: 0,
+  cookingTime: 0,
+  difficulty: undefined,
+  budget: undefined,
+  specialEvent: undefined,
+});
+
+const totalTime = computed(() => {
+  return state.preparationTime + state.restingTime + state.cookingTime;
+});
 
 const fetchRecipes = async () => {
-  const {data, status} = await useFetch<{ recipes: OwnRecipesDatas[] }>('/api/own-recipes', {
+  const {data, status} = await useFetch<{ recipes: UpdateOwnRecipesDatas[] }>('/api/own-recipes', {
     query: {email: authDatas.value?.user?.email},
   });
   if (status.value == "success" && data.value) {
-    recipes.value = data.value.recipes;
+    recipes.value = data.value.recipes.map(recipe => ({
+      ...recipe,
+      ingredients: recipe.ingredients.join(', '),
+      steps: recipe.steps.join(', '),
+    }));
   }
 };
 
 await fetchRecipes();
+
+const openModal = (recipe: OwnRecipesDatas) => {
+  console.log("openModal", recipe);
+  Object.assign(state, {...recipe});
+  modal.open(EditModal, {
+    formState: state,
+    onSubmit: saveRecipe,
+  });
+};
+
+const saveRecipe = async (updatedRecipe: Schema) => {
+  console.log("updating recipe", updatedRecipe);
+  try {
+    loading.value = true;
+    const userInfos = await useFetch('/api/profile', {query: {email: authDatas.value?.user?.email}});
+
+    if (userInfos.data.value) {
+      const {name, id}: { name: string; id: string } = userInfos.data.value;
+      const titleToSlug = slugTitle(updatedRecipe.title);
+
+      const updatedRecipeWithAddedValues = {
+        ...updatedRecipe,
+        ingredients: parseList(updatedRecipe.ingredients),
+        steps: parseList(updatedRecipe.steps),
+        author: name,
+        creatorId: id,
+        totalTime: totalTime.value,
+        slug: titleToSlug
+      } as Recipes;
+
+      const {data, status} = await useFetch('/api/update-own-recipe', {
+        method: 'PUT',
+        body: updatedRecipeWithAddedValues,
+      });
+
+      if (status.value === 'success' && data.value?.statusCode === 201) {
+        toast.add({
+          title: 'Mis à jour',
+          description: 'La recette a été mise à jour avec succès !',
+          icon: 'material-symbols:check-circle',
+          color: 'norway',
+        });
+        const index = recipes.value.findIndex((r) => r.slug === titleToSlug);
+        if (index !== -1) recipes.value[index] = {...recipes.value[index], ...updatedRecipe};
+      } else {
+        toast.add({
+          title: 'Erreur',
+          description: data?.value?.statusMessage ?? "Erreur lors de la mise à jour !",
+          icon: 'material-symbols:error-circle-rounded-sharp',
+          color: 'red',
+        });
+      }
+    } else {
+      throw new Error("Utilisateur non trouvé.");
+    }
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour :', error);
+  } finally {
+    loading.value = false;
+  }
+};
+
 
 const deleteRecipeFromId = async (recipeId: string) => {
   loading.value = true;
@@ -71,7 +164,9 @@ const deleteRecipeFromId = async (recipeId: string) => {
         <template #header>
           <div class="absolute top-4 right-4 flex gap-1 items-center justify-center text-sm cursor-pointer">
             <UIcon name="material-symbols:edit-outline"
-                   class="size-5 text-white hover:text-blue-500 opacity-0 group-hover:opacity-100 duration-300"/>
+                   class="size-5 text-white hover:text-blue-500 opacity-0 group-hover:opacity-100 duration-300"
+                   @click="openModal(recipe)"
+            />
             <UIcon name="ic:baseline-delete"
                    class="size-5 text-white hover:text-persian-red-500 opacity-0 group-hover:opacity-100 duration-300"
                    @click="deleteRecipeFromId(recipe.id)"
