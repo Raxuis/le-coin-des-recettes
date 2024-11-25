@@ -5,7 +5,7 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 export default NuxtAuthHandler({
-  secret: useRuntimeConfig().authSecret,
+  secret: process.env.NUXT_AUTH_SECRET,
   providers: [
     //@ts-ignore  Using .default for SSR compatibility
     GoogleProvider.default({
