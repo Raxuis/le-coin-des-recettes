@@ -2,11 +2,6 @@ import {PrismaClient} from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-interface ItemProps {
-    title: string;
-    isChecked: boolean;
-}
-
 export default defineEventHandler(async (event) => {
     const {email, title, items} = await readBody(event);
 
@@ -26,7 +21,7 @@ export default defineEventHandler(async (event) => {
         const itemsArray = typeof items === 'string'
             ? items.split(',').map(item => item.trim())
             : items;
-        
+
         const shoppingList = await prisma.shoppingList.create({
             data: {
                 title,
