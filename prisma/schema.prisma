@@ -87,7 +87,7 @@ model Items {
   id             String       @id @default(cuid())
   title          String
   isChecked      Boolean      @default(false)
-  ShoppingList   ShoppingList @relation(fields: [ShoppingListId], references: [id])
+  ShoppingList   ShoppingList @relation(fields: [ShoppingListId], references: [id], onDelete: Cascade)
   ShoppingListId String
 }
 

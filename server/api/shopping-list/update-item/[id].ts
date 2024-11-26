@@ -57,9 +57,6 @@ export default defineEventHandler(async (event) => {
             data: updatedItem
         }
     } catch (error) {
-        if (error.statusCode) {
-            throw error
-        }
         throw createError({
             statusCode: 500,
             message: 'Error updating shopping list item'

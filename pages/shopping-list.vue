@@ -104,6 +104,40 @@ const updateItemCheck = async (itemId: string, isChecked: boolean) => {
   }
 };
 
+const deleteShoppingListFromId = async (id: string) => {
+  try {
+    const response = await useFetch(`/api/shopping-list/delete/${id}`, {
+      method: 'DELETE',
+      body: {
+        email: authDatas.value?.user?.email,
+      }
+    });
+
+    console.log(response);
+    if (response.data?.value?.statusCode === 200) {
+      toast.add({
+        title: "Succès",
+        description: "Liste supprimée avec succès !",
+        color: "norway",
+      });
+      if (data.value) {
+        data.value.shoppingLists = data.value.shoppingLists.filter(
+            list => list.id !== id
+        );
+      }
+    } else {
+      throw new Error(response.error.value?.statusMessage || "Erreur inconnue");
+    }
+  } catch (err) {
+    toast.add({
+      title: "Erreur",
+      description: err || "Impossible de supprimer la liste.",
+      color: "red",
+    });
+    console.error(err);
+  }
+};
+
 </script>
 
 <template>
@@ -151,8 +185,12 @@ const updateItemCheck = async (itemId: string, isChecked: boolean) => {
             <div
                 v-for="shoppingList in data.shoppingLists"
                 :key="shoppingList.id"
-                class="w-full col-span-1 flex flex-col bg-ronchi-500 rounded-md shadow-md p-6 min-w-80 min-h-40"
+                class="relative w-full col-span-1 flex flex-col bg-ronchi-500 rounded-md shadow-md p-6 min-w-80 min-h-40 group"
             >
+              <UIcon name="ic:baseline-delete"
+                     class="absolute top-5 right-5 size-5 text-gray-300 dark:text-white dark:hover:text-persian-red-500 hover:text-persian-red-500 opacity-0 group-hover:opacity-100 duration-300 cursor-pointer"
+                     @click="deleteShoppingListFromId(shoppingList.id)"
+              />
               {{ shoppingList.title }}
               <hr/>
               <ul class="flex flex-col">
