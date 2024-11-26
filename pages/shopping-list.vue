@@ -79,12 +79,26 @@ const newShoppingList = async (formData: { title: string; items: string[] }) => 
 
 const updateItemCheck = async (itemId: string, isChecked: boolean) => {
   try {
-    await useFetch(`/api/shopping-list/update-item/${itemId}`, {
+    const response = await useFetch(`/api/shopping-list/update-item/${itemId}`, {
       method: 'PATCH',
       body: {
-        isChecked
+        email: authDatas.value?.user?.email,
+        isChecked: !isChecked,
       }
     });
+    if (response.data?.value.statusCode === 200) {
+      // Searching the checkbox in the DOM
+      if (data.value) {
+        data.value.shoppingLists = data.value.shoppingLists.map(list => ({
+          ...list,
+          items: list.items.map(item =>
+              item.id === itemId
+                  ? { ...item, isChecked: !isChecked }
+                  : item
+          )
+        }));
+      }
+    }
   } catch (err) {
     console.error(err);
   }
@@ -142,8 +156,8 @@ const updateItemCheck = async (itemId: string, isChecked: boolean) => {
               {{ shoppingList.title }}
               <hr/>
               <ul class="flex flex-col">
-                <li v-for="item in shoppingList.items">
-                  <UCheckbox :label="item.title" :model-value="item.isChecked" color="ronchi" />
+                <li v-for="item in shoppingList.items" :key="item.title">
+                  <UCheckbox :label="item.title" :model-value="item.isChecked" color="ronchi" @click="updateItemCheck(item.id, item.isChecked)"/>
                 </li>
               </ul>
             </div>
