@@ -1,0 +1,48 @@
+import {PrismaClient} from "@prisma/client";
+
+const prisma = new PrismaClient();
+
+export default defineEventHandler(async (event) => {
+    const query = getQuery(event);
+
+    const {email} = query as { email: string };
+
+    if (!email) {
+        throw createError({statusCode: 400, statusMessage: "Email is required."});
+    }
+
+    const userShoppingLists = await prisma.user.findUnique({
+        where: {
+            email,
+        },
+        select: {
+            id: true,
+            email: true,
+            name: true,
+            shoppingLists: {
+                select: {
+                    id: true,
+                    title: true,
+                    createdAt: true,
+                    updatedAt: true,
+                    items: {
+                        select: {
+                            id: true,
+                            title: true,
+                            isChecked: true,
+                        },
+                    },
+                },
+            },
+        },
+    });
+
+    if (!userShoppingLists) {
+        throw createError({
+            statusCode: 500,
+            statusMessage: "An error occurred, try again.",
+        });
+    }
+
+    return userShoppingLists;
+});

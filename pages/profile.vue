@@ -15,7 +15,6 @@ const handleSignOut = async () => {
 
 <template>
   <div>
-    <h1>Profile</h1>
     <p v-if="status === 'error'">{{ error }}</p>
     <div class="flex justify-center mt-20" v-if="status === 'success'">
       <div class="flex flex-col items-center justify-center space-y-4" v-if="!data">
@@ -58,7 +57,7 @@ const handleSignOut = async () => {
                 Mes recettes
               </UButton>
                 <UButton size="sm" color="norway" class="col-span-1 block" @click="router.push('/shopping-list')">
-                  Ma liste de courses
+                  Mes listes de courses
                 </UButton>
               </div>
             </div>

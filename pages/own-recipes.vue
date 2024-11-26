@@ -3,7 +3,7 @@ import {ref} from "vue";
 import {firstCharacterToUppercase, parseList} from "~/utils/textFormatting";
 import {type OwnRecipesDatas} from "@/utils/types";
 import {useToast} from "#ui/composables/useToast";
-import EditModal from "~/components/EditModal.vue";
+import EditRecipeModal from "~/components/EditRecipeModal.vue";
 import {z} from "zod";
 import {newRecipe} from "~/validation/schemas";
 import {useFetch} from "#app";
@@ -58,7 +58,7 @@ await fetchRecipes();
 const openModal = (recipe: OwnRecipesDatas) => {
   console.log("openModal", recipe);
   Object.assign(state, {...recipe});
-  modal.open(EditModal, {
+  modal.open(EditRecipeModal, {
     formState: state,
     onSubmit: saveRecipe,
   });
