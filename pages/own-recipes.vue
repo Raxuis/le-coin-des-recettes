@@ -11,6 +11,7 @@ import {slugTitleWithTimeStamp} from "~/utils/titleToSlug";
 import type {Recipes} from "@prisma/client";
 import {onBeforeRouteLeave} from "#vue-router";
 import {previousRoute} from "~/utils/previousRoute";
+import {closeModal} from "~/utils/modal";
 
 let isSaving = false;
 const {data: authDatas} = useAuth();
@@ -63,10 +64,6 @@ const openModal = (recipe: OwnRecipesDatas) => {
     onSubmit: saveRecipe,
   });
 };
-
-const closeModal = () => {
-  modal.close();
-}
 
 const saveRecipe = async (updatedRecipe: Schema) => {
   if (isSaving) return; // to fix issue due to the verification with specialEvent

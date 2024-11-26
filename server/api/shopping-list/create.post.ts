@@ -1,4 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+import {PrismaClient} from "@prisma/client";
+
 const prisma = new PrismaClient();
 
 interface ItemProps {
@@ -7,31 +8,33 @@ interface ItemProps {
 }
 
 export default defineEventHandler(async (event) => {
-    const { email, title, items } = await readBody(event);
+    const {email, title, items} = await readBody(event);
 
     if (!email || !title) {
-        return { statusCode: 400, statusMessage: "Email ou titre manquant." };
+        return {statusCode: 400, statusMessage: "Email ou titre manquant."};
     }
 
     try {
         const user = await prisma.user.findUnique({
-            where: { email }
+            where: {email}
         });
 
         if (!user) {
-            return { statusCode: 404, statusMessage: "Utilisateur non trouvé." };
+            return {statusCode: 404, statusMessage: "Utilisateur non trouvé."};
         }
-        console.log(user);
-        console.log(items);
 
+        const itemsArray = typeof items === 'string'
+            ? items.split(',').map(item => item.trim())
+            : items;
+        
         const shoppingList = await prisma.shoppingList.create({
             data: {
                 title,
                 userId: user.id,
                 items: {
-                    create: items?.map((item:ItemProps) => ({
+                    create: itemsArray.map((item: string) => ({
                         title: item,
-                        isChecked: item.isChecked || false,
+                        isChecked: false,
                     })),
                 },
             },
@@ -41,11 +44,11 @@ export default defineEventHandler(async (event) => {
         });
 
         return {
-            statusCode: 200,
+            statusCode: 201,
             data: shoppingList
         };
     } catch (error) {
         console.error(error);
-        return { statusCode: 500, statusMessage: "Erreur lors de la création." };
+        return {statusCode: 500, statusMessage: "Erreur lors de la création."};
     }
 });

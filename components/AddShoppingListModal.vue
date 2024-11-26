@@ -22,7 +22,7 @@ const handleSubmit = () => {
 
 <template>
   <UModal>
-    <div class="h-full">
+    <div class="p-6">
       <UForm @submit.prevent="handleSubmit" class="space-y-4">
         <UFormGroup label="Titre de la liste" name="title">
           <UInput v-model="formState.title" placeholder="Nom de la liste" name="title" required />
@@ -37,7 +37,7 @@ const handleSubmit = () => {
           />
         </UFormGroup>
 
-        <UButton type="submit" color="primary" class="w-full">
+        <UButton type="submit" color="primary" class="w-full block">
           Ajouter la liste
         </UButton>
       </UForm>
