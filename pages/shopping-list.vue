@@ -83,7 +83,7 @@ const newShoppingList = async (formData: { title: string; items: string[] }) => 
 
 const updateItemQuantity = async (itemId: string, number: number) => {
   try {
-    const response = await useFetch(`/api/shopping-list/update-item/${itemId}`, {
+    const response = await useFetch(`/api/shopping-list/update-item-quantity/${itemId}`, {
       method: 'PATCH',
       body: {
         email: authDatas.value?.user?.email,

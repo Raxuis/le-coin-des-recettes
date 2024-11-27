@@ -8,7 +8,6 @@ export default defineEventHandler(async (event) => {
     try {
         const session = await getServerSession(event);
         const id = getRouterParam(event, 'id');
-        console.log("test");
         const user = await getUserCheckRouterParam(session, id);
 
 
@@ -33,7 +32,6 @@ export default defineEventHandler(async (event) => {
             })
         }
 
-        console.log(item)
 
         const updatedItem = await prisma.items.update({
             where: {id},
@@ -42,7 +40,6 @@ export default defineEventHandler(async (event) => {
                 ...(typeof body.isChecked === 'boolean' && {isChecked: body.isChecked})
             }
         })
-        console.log(updatedItem)
 
         return {
             statusCode: 200,
