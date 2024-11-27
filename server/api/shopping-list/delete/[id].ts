@@ -31,7 +31,6 @@ export default defineEventHandler(async (event) => {
         }
 
         if (shoppingList.user.email !== email) {
-            console.log("nope")
             throw createError({
                 statusCode: 403,
                 message: 'Vous n\'êtes pas autorisé à modifier cet item'
