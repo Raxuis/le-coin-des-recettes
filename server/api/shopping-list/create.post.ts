@@ -40,7 +40,7 @@ export default defineEventHandler(async (event) => {
 
         return {
             statusCode: 201,
-            data: shoppingList
+            statusMessage: shoppingList
         };
     } catch (error) {
         console.error(error);

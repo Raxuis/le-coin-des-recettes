@@ -54,15 +54,16 @@ const newShoppingList = async (formData: { title: string; items: string[] }) => 
       },
     });
 
-    if (response?.data?.value.statusCode === 201) {
+    if (response?.data?.value?.statusCode === 201) {
       toast.add({
         title: "Succès",
         description: "Liste créée avec succès !",
         color: "norway",
       });
       closeModal();
-      if (data.value && response.data.value.data) {
-        data.value.shoppingLists.push(response.data.value.data);
+      if (data.value && response.data.value.statusMessage) {
+        // previously response.data.value.data but issue with typescript
+        data.value.shoppingLists.push(response.data.value.statusMessage as ShoppingListProps);
       }
     } else {
       throw new Error(response.error.value?.statusMessage || "Erreur inconnue");
@@ -70,7 +71,7 @@ const newShoppingList = async (formData: { title: string; items: string[] }) => 
   } catch (err) {
     toast.add({
       title: "Erreur",
-      description: err || "Impossible de créer la liste.",
+      description: "Impossible de créer la liste.",
       color: "red",
     });
     console.error(err);
@@ -86,7 +87,7 @@ const updateItemCheck = async (itemId: string, isChecked: boolean) => {
         isChecked: !isChecked,
       }
     });
-    if (response.data?.value.statusCode === 200) {
+    if (response.data?.value?.statusCode === 200) {
       // Searching the checkbox in the DOM
       if (data.value) {
         data.value.shoppingLists = data.value.shoppingLists.map(list => ({
@@ -113,7 +114,6 @@ const deleteShoppingListFromId = async (id: string) => {
       }
     });
 
-    console.log(response);
     if (response.data?.value?.statusCode === 200) {
       toast.add({
         title: "Succès",
@@ -131,7 +131,7 @@ const deleteShoppingListFromId = async (id: string) => {
   } catch (err) {
     toast.add({
       title: "Erreur",
-      description: err || "Impossible de supprimer la liste.",
+      description: "Impossible de supprimer la liste.",
       color: "red",
     });
     console.error(err);
@@ -195,7 +195,11 @@ const deleteShoppingListFromId = async (id: string) => {
               <hr/>
               <ul class="flex flex-col">
                 <li v-for="item in shoppingList.items" :key="item.title">
-                  <UCheckbox :label="item.title" :model-value="item.isChecked" color="ronchi" @click="updateItemCheck(item.id, item.isChecked)"/>
+                  <UCheckbox
+                      :label="item.title"
+                      :model-value="item.isChecked"
+                      color="emerald"
+                      @click="updateItemCheck(item.id, item.isChecked)"/>
                 </li>
               </ul>
             </div>
