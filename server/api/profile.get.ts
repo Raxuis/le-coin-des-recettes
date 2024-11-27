@@ -25,6 +25,14 @@ export default defineEventHandler(async (event) => {
           slug: true,
         },
       },
+      favoriteRecipes: {
+        take: 5,
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+        },
+      },
     },
   });
 

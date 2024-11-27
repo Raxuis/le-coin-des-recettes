@@ -15,10 +15,11 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  recipes       Recipes[]
-  comments      Comments[]
-  ratings       Ratings[]
-  shoppingLists ShoppingList[]
+  recipes         Recipes[]      @relation("CreatedRecipes")
+  favoriteRecipes Recipes[]      @relation("FavoriteRecipes")
+  comments        Comments[]
+  ratings         Ratings[]
+  shoppingLists   ShoppingList[]
 }
 
 model Recipes {
@@ -41,11 +42,12 @@ model Recipes {
   budget          String
   specialEvent    SpecialEvents?
 
-  creator   User?   @relation(fields: [creatorId], references: [id])
+  creator   User?   @relation("CreatedRecipes", fields: [creatorId], references: [id])
   creatorId String?
 
-  comments Comments[]
-  ratings  Ratings[]
+  favoritedBy User[]     @relation("FavoriteRecipes")
+  comments    Comments[]
+  ratings     Ratings[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

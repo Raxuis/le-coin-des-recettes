@@ -49,13 +49,23 @@ const handleSignOut = async () => {
                   </NuxtLink>
                 </li>
               </ul>
+              <div class="flex flex-col gap-1" v-if="data.favoriteRecipes.length">
+                <h2 class="text-xl font-bold">Favoris</h2>
+                <ul>
+                  <li v-for="favoriteRecipe in data.favoriteRecipes" :key="favoriteRecipe.slug">
+                    <NuxtLink :to="`/recipe/${favoriteRecipe.slug}`">
+                      - {{ favoriteRecipe.title }}
+                    </NuxtLink>
+                  </li>
+                </ul>
+              </div>
               <p class="text-sm text-gray-500">
-                Ce ne sont que vos 5 dernières recettes.
+                Ce ne sont que vos 5 dernières recettes crées<span v-if="data.favoriteRecipes.length">et favorites</span>.
               </p>
               <div class="grid grid-cols-2 space-x-4 mt-2">
-              <UButton size="sm" color="serenade" class="col-span-1 block" @click="router.push('/own-recipes')">
-                Mes recettes
-              </UButton>
+                <UButton size="sm" color="serenade" class="col-span-1 block" @click="router.push('/own-recipes')">
+                  Mes recettes
+                </UButton>
                 <UButton size="sm" color="norway" class="col-span-1 block" @click="router.push('/shopping-list')">
                   Mes listes de courses
                 </UButton>
