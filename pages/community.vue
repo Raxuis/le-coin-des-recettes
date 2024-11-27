@@ -17,30 +17,31 @@ const { toggleFavorite } = useRecipeFavorites()
 const {data} = useFetch<Recipes[]>('/api/community-recipes', {
   default: () => [], // making data an array by default
 });
-console.log(data);
 
 const isOpen = ref(false);
 const isRecipeFavorited = ref<Record<string, boolean>>({});
 
 const fetchFavorites = async () => {
-  if (userDatas.value?.user?.email) {
-    console.log(userDatas.value?.user?.email);
-    const userWithFavorites = await useFetch('/api/user-favorites', {
+  if (!userDatas.value?.user?.email) return;
+
+  try {
+    const { data: userWithFavorites } = await useFetch('/api/user-favorites', {
       query: { email: userDatas.value.user.email }
     });
-    console.log(userWithFavorites);
-    const favorites = userWithFavorites.data.value?.favoriteRecipes ?? [];
-    console.log(favorites);
-    isRecipeFavorited.value = {};
-    data.value?.forEach(recipe => {
-      isRecipeFavorited.value[recipe.id] = favorites.some(fav => fav.id === recipe.id);
-    });
+
+    const favorites = userWithFavorites.value?.favoriteRecipes ?? [];
+    const favoritedMap = Object.fromEntries(
+        favorites.map((fav) => [fav.id, true])
+    );
+    isRecipeFavorited.value = { ...favoritedMap };
+  } catch (error) {
+    console.error("Erreur lors de la récupération des favoris :", error);
   }
 };
 
+
 fetchFavorites(); // Removed onMounted because issue with useFetch response being idle
 
-console.log(isRecipeFavorited);
 
 
 const toast = useToast();
