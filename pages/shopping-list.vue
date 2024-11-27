@@ -2,14 +2,17 @@
 import AddShoppingListModal from "~/components/AddShoppingListModal.vue";
 import {closeModal} from "~/utils/modal";
 
+interface ItemsProps {
+  id: string;
+  title: string;
+  isChecked: boolean;
+  number: number;
+}
+
 interface ShoppingListProps {
   id: string;
   title: string;
-  items: Array<{
-    id: string;
-    title: string;
-    isChecked: boolean;
-  }>;
+  items: ItemsProps[];
   createdAt: string;
   updatedAt: string;
 }
@@ -78,6 +81,38 @@ const newShoppingList = async (formData: { title: string; items: string[] }) => 
   }
 };
 
+const updateItemQuantity = async (itemId: string, number: number) => {
+  try {
+    const response = await useFetch(`/api/shopping-list/update-item/${itemId}`, {
+      method: 'PATCH',
+      body: {
+        email: authDatas.value?.user?.email,
+        number: number,
+      }
+    });
+
+    if (response.data?.value?.statusCode === 200) {
+      if (data.value) {
+        data.value.shoppingLists = data.value.shoppingLists.map(list => ({
+          ...list,
+          items: list.items.map(item =>
+              item.id === itemId
+                  ? { ...item, number }
+                  : item
+          )
+        }));
+      }
+    }
+  } catch (err) {
+    console.error(err);
+    toast.add({
+      title: "Erreur",
+      description: "Impossible de mettre à jour la quantité.",
+      color: "red",
+    });
+  }
+};
+
 const updateItemCheck = async (itemId: string, isChecked: boolean) => {
   try {
     const response = await useFetch(`/api/shopping-list/update-item/${itemId}`, {
@@ -94,7 +129,7 @@ const updateItemCheck = async (itemId: string, isChecked: boolean) => {
           ...list,
           items: list.items.map(item =>
               item.id === itemId
-                  ? { ...item, isChecked: !isChecked }
+                  ? {...item, isChecked: !isChecked}
                   : item
           )
         }));
@@ -102,6 +137,38 @@ const updateItemCheck = async (itemId: string, isChecked: boolean) => {
     }
   } catch (err) {
     console.error(err);
+  }
+};
+
+const deleteItem = async (itemId: string, shoppingListId: string) => {
+  try {
+    const response = await useFetch(`/api/shopping-list/delete-item/${itemId}`, {
+      method: 'DELETE',
+      body: {
+        email: authDatas.value?.user?.email,
+      }
+    });
+
+    if (response.data?.value?.statusCode === 200) {
+      if (data.value) {
+        data.value.shoppingLists = data.value.shoppingLists.map(list => {
+          if (list.id === shoppingListId) {
+            return {
+              ...list,
+              items: list.items.filter(item => item.id !== itemId)
+            };
+          }
+          return list;
+        });
+      }
+    }
+  } catch (err) {
+    console.error(err);
+    toast.add({
+      title: "Erreur",
+      description: "Impossible de supprimer l'article.",
+      color: "red",
+    });
   }
 };
 
@@ -194,12 +261,39 @@ const deleteShoppingListFromId = async (id: string) => {
               {{ shoppingList.title }}
               <hr/>
               <ul class="flex flex-col">
-                <li v-for="item in shoppingList.items" :key="item.title">
-                  <UCheckbox
-                      :label="item.title"
-                      :model-value="item.isChecked"
-                      color="emerald"
-                      @click="updateItemCheck(item.id, item.isChecked)"/>
+                <li v-for="item in shoppingList.items"
+                    :key="item.id"
+                    class="flex items-center justify-between group/item pt-4">
+                  <div class="flex items-center flex-1">
+                    <UCheckbox
+                        :label="item.title"
+                        :model-value="item.isChecked"
+                        color="sky"
+                        @click="updateItemCheck(item.id, item.isChecked)"
+                    />
+                    <span class="ml-2 text-sm text-gray-600">({{ item.number }})</span>
+                  </div>
+                  <div class="flex items-center space-x-2 opacity-0 group-hover/item:opacity-100 transition-opacity">
+                    <UButton
+                        size="xs"
+                        color="white"
+                        :icon="'i-heroicons-minus'"
+                        :disabled="item.number <= 1"
+                        @click="updateItemQuantity(item.id, item.number - 1)"
+                    />
+                    <UButton
+                        size="xs"
+                        color="white"
+                        :icon="'i-heroicons-plus'"
+                        @click="updateItemQuantity(item.id, item.number + 1)"
+                    />
+                    <UButton
+                        size="xs"
+                        color="red"
+                        :icon="'i-heroicons-trash'"
+                        @click="deleteItem(item.id, shoppingList.id)"
+                    />
+                  </div>
                 </li>
               </ul>
             </div>

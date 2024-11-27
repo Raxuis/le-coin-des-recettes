@@ -30,6 +30,7 @@ export default defineEventHandler(async (event) => {
                     create: itemsArray.map((item: string) => ({
                         title: item,
                         isChecked: false,
+                        number: 1
                     })),
                 },
             },

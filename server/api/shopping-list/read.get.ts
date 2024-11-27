@@ -30,6 +30,7 @@ export default defineEventHandler(async (event) => {
                             id: true,
                             title: true,
                             isChecked: true,
+                            number: true
                         },
                     },
                 },
