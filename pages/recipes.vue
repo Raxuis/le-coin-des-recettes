@@ -203,7 +203,7 @@ onBeforeRouteLeave((to, from, next) => {
                        class="size-5 text-white hover:text-persian-red-300 transition-colors"
                        @click="shareRecipe({ slug: recipe.slug ?? '', title: recipe.title, action: 'shareToSocial' })"/>
               </div>
-              <div class="flex flex-col items-center justify-center space-y-2 max-sm:pt-4">
+              <div class="flex flex-col items-center justify-center space-y-2 pt-4">
                 <div class="flex flex-col items-center justify-center">
                   <NuxtLink class="text-lg underline underline-ofset-2" :to="`/recipe/${recipe.slug}`">{{
                       recipe.title

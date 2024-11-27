@@ -8,14 +8,41 @@ import {useFetch} from "#app";
 import type {Recipes} from "@prisma/client";
 import {onBeforeRouteLeave} from "#vue-router";
 import {slugTitleWithTimeStamp} from "~/utils/titleToSlug";
+import {useRecipeFavorites} from "~/composables/useRecipeFavorites";
 
 const {data: userDatas} = useAuth();
+const { toggleFavorite } = useRecipeFavorites()
+
 
 const {data} = useFetch<Recipes[]>('/api/community-recipes', {
   default: () => [], // making data an array by default
 });
+console.log(data);
 
 const isOpen = ref(false);
+const isRecipeFavorited = ref<Record<string, boolean>>({});
+
+const fetchFavorites = async () => {
+  if (userDatas.value?.user?.email) {
+    console.log(userDatas.value?.user?.email);
+    const userWithFavorites = await useFetch('/api/user-favorites', {
+      query: { email: userDatas.value.user.email }
+    });
+    console.log(userWithFavorites);
+    const favorites = userWithFavorites.data.value?.favoriteRecipes ?? [];
+    console.log(favorites);
+    isRecipeFavorited.value = {};
+    data.value?.forEach(recipe => {
+      isRecipeFavorited.value[recipe.id] = favorites.some(fav => fav.id === recipe.id);
+    });
+  }
+};
+
+fetchFavorites(); // Removed onMounted because issue with useFetch response being idle
+
+console.log(isRecipeFavorited);
+
+
 const toast = useToast();
 
 type Schema = z.output<typeof newRecipe>;
@@ -91,6 +118,13 @@ onBeforeRouteLeave((to, from, next) => {
   previousRoute.value = from.fullPath;
   next();
 });
+
+const handleFavoriteClick = async (recipeId: string) => {
+  const result = await toggleFavorite(recipeId)
+  if (result !== undefined) {
+    isRecipeFavorited.value[recipeId] = result
+  }
+}
 </script>
 
 <template>
@@ -129,14 +163,23 @@ onBeforeRouteLeave((to, from, next) => {
       <UCard v-for="recipe in data" :key="recipe.id" class="relative">
         <template #header>
           <div class="absolute top-4 right-4 flex gap-1 items-center justify-center text-sm cursor-pointer">
-            <UIcon name="material-symbols-light:content-copy"
-                   class="size-5 text-white hover:text-persian-red-300 transition-colors"
-                   @click="shareRecipe({ slug: recipe.slug ?? '', title: recipe.title, action: 'copyToClipboard' })"/>
-            <UIcon name="material-symbols-light:share"
-                   class="size-5 text-white hover:text-persian-red-300 transition-colors"
-                   @click="shareRecipe({ slug: recipe.slug ?? '', title: recipe.title, action: 'shareToSocial' })"/>
+            <UIcon
+              :name="isRecipeFavorited[recipe.id] ? 'material-symbols:kid-star' : 'material-symbols:kid-star-outline'"
+              class="size-5 text-white hover:text-yellow-500 transition-colors"
+              @click="handleFavoriteClick(recipe.id)"
+            />
+            <UIcon
+              name="material-symbols-light:content-copy"
+              class="size-5 text-white hover:text-persian-red-300 transition-colors"
+              @click="shareRecipe({ slug: recipe.slug ?? '', title: recipe.title, action: 'copyToClipboard' })"
+            />
+            <UIcon
+              name="material-symbols-light:share"
+              class="size-5 text-white hover:text-blue-300 transition-colors"
+              @click="shareRecipe({ slug: recipe.slug ?? '', title: recipe.title, action: 'shareToSocial' })"
+            />
           </div>
-          <div class="flex flex-col items-center justify-center space-y-2 max-sm:pt-4">
+          <div class="flex flex-col items-center justify-center space-y-2 pt-4">
             <div class="flex flex-col items-center justify-center">
               <NuxtLink class="text-lg underline underline-offset-2" :to="`/recipe/${recipe.slug}`">{{
                   recipe.title

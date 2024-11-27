@@ -184,7 +184,7 @@ onBeforeRouteLeave((to, from, next) => {
                    @click="deleteRecipeFromId(recipe.id)"
             />
           </div>
-          <div class="flex flex-col items-center justify-center space-y-2 max-sm:pt-4">
+          <div class="flex flex-col items-center justify-center space-y-2 pt-4">
             <div class="flex flex-col items-center justify-center">
               <NuxtLink class="text-lg underline underline-offset-2" :to="`/recipe/${recipe.slug}`">
                 {{ recipe.title }}
