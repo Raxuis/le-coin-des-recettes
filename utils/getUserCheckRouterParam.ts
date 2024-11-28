@@ -4,7 +4,6 @@ import {PrismaClient} from "@prisma/client";
 const prisma = new PrismaClient()
 
 export const getUserCheckRouterParam = async (session: any, id: string | undefined) => {
-    console.log(session);
     if (!session) {
         throw createError({
             statusCode: 401,
