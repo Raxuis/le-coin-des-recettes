@@ -234,7 +234,7 @@ const deleteShoppingListFromId = async (id: string) => {
         />
         <div v-if="data && data.shoppingLists.length > 0"
              class="w-full flex flex-col items-center justify-center space-y-4">
-          <p>
+          <p class="text-center">
             Vous pouvez toujours en créer d'autres ! 📋
           </p>
           <UButton
@@ -245,14 +245,14 @@ const deleteShoppingListFromId = async (id: string) => {
               leading-icon="material-symbols:add"
           />
           <div v-else class="w-full flex flex-col items-center justify-center">
-            <p>Doucement, que 6 listes de courses... 🛒</p>
-            <p class="text-sm text-gray-500">Supprimez en pour pouvoir en faire d'autres.</p>
+            <p class="text-center">Doucement, que 6 listes de courses... 🛒</p>
+            <p class="text-sm text-gray-500 text-center">Supprimez en pour pouvoir en faire d'autres.</p>
           </div>
-          <div class="grid grid-cols-3 gap-4 mt-4">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
             <div
                 v-for="shoppingList in data.shoppingLists"
                 :key="shoppingList.id"
-                class="relative w-full col-span-1 flex flex-col bg-ronchi-500 rounded-md shadow-md p-6 min-w-80 min-h-40 group"
+                class="relative w-full col-span-1 flex flex-col bg-ronchi-500 rounded-md shadow-md p-6 group"
             >
               <UIcon name="ic:baseline-delete"
                      class="absolute top-5 right-5 size-5 text-gray-300 dark:text-white dark:hover:text-persian-red-500 hover:text-persian-red-500 opacity-0 group-hover:opacity-100 duration-300 cursor-pointer"
