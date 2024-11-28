@@ -3,6 +3,7 @@ defineProps<{
   routes: Array<{
     label: string
     to: string
+    protected?: boolean
   }>,
   userData: any
 }>()
@@ -23,7 +24,7 @@ const emit = defineEmits(['close', 'sign-out', 'sign-in'])
       />
       <ul class="space-y-4 whitespace-nowrap">
         <li
-            v-for="route in routes"
+            v-for="route in routes.filter((item) => !item.protected)"
             :key="route.label"
             class="text-lg text-masala-900 dark:text-white hover:text-persian-red-800 dark:hover:text-persian-red-400 transition-colors"
         >
@@ -76,6 +77,19 @@ const emit = defineEmits(['close', 'sign-out', 'sign-in'])
             }"
               class="w-full flex justify-center"
           />
+        </li>
+        <li class="sm:hidden border-t"></li>
+        <li
+            v-for="route in routes.filter((item) => item.protected)"
+            :key="route.label"
+        >
+          <NuxtLink
+              :to="route.to"
+              @click="emit('close')"
+              class="flex items-center justify-start sm:justify-end gap-2 text-lg text-masala-900 dark:text-white hover:text-persian-red-800 dark:hover:text-persian-red-400 transition-colors"
+          >
+            {{ route.label }}
+          </NuxtLink>
         </li>
       </ul>
     </div>

@@ -1,6 +1,13 @@
 <script lang="ts" setup>
 import {ref, computed} from 'vue'
 
+interface RoutesProps {
+  label: string;
+  to: string;
+  protected?: boolean;
+}
+
+
 const colorMode = useColorMode()
 const isDark = computed({
   get() {
@@ -11,7 +18,8 @@ const isDark = computed({
   }
 })
 
-const routes = [{
+
+const routes: RoutesProps[] = [{
   label: 'À propos',
   to: '/about'
 }, {
@@ -23,15 +31,24 @@ const routes = [{
 }, {
   label: 'Communauté',
   to: '/community'
-}]
+},
+  {
+    label: "Mes recettes",
+    to: '/own-recipes',
+    protected: true
+  },
+  {
+    label: "Mes listes de courses",
+    to: '/shopping-list',
+    protected: true
+  }
+]
 
 const {data, signOut} = useAuth()
 const router = useRouter()
 const isMobileMenuOpen = ref(false)
 
 const toggleMobileMenu = () => {
-  console.log(isMobileMenuOpen.value);
-  console.log("test")
   isMobileMenuOpen.value = !isMobileMenuOpen.value
 }
 </script>
@@ -101,23 +118,23 @@ const toggleMobileMenu = () => {
         </div>
       </div>
     </nav>
-      <Transition
-          enter-active-class="transition duration-200 ease-out"
-          enter-from-class="transform translate-x-full"
-          enter-to-class="transform translate-x-0"
-          leave-active-class="transition duration-200 ease-in"
-          leave-from-class="transform translate-x-0"
-          leave-to-class="transform translate-x-full"
-      >
-        <BurgerMenu
-            v-if="isMobileMenuOpen"
-            :routes="routes"
-            :user-data="data"
-            @close="toggleMobileMenu"
-            @sign-out="signOut"
-            @sign-in="router.push('/auth/signIn')"
-        />
-      </Transition>
+    <Transition
+        enter-active-class="transition duration-200 ease-out"
+        enter-from-class="transform translate-x-full"
+        enter-to-class="transform translate-x-0"
+        leave-active-class="transition duration-200 ease-in"
+        leave-from-class="transform translate-x-0"
+        leave-to-class="transform translate-x-full"
+    >
+      <BurgerMenu
+          v-if="isMobileMenuOpen"
+          :routes="routes"
+          :user-data="data"
+          @close="toggleMobileMenu"
+          @sign-out="signOut"
+          @sign-in="router.push('/auth/signIn')"
+      />
+    </Transition>
     <NuxtPage/>
   </div>
 </template>
