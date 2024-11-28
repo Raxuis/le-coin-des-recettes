@@ -100,13 +100,14 @@ const toggleMobileMenu = () => {
           />
         </div>
       </div>
+    </nav>
       <Transition
           enter-active-class="transition duration-200 ease-out"
-          enter-from-class="transform -translate-x-full"
+          enter-from-class="transform translate-x-full"
           enter-to-class="transform translate-x-0"
           leave-active-class="transition duration-200 ease-in"
           leave-from-class="transform translate-x-0"
-          leave-to-class="transform -translate-x-full"
+          leave-to-class="transform translate-x-full"
       >
         <BurgerMenu
             v-if="isMobileMenuOpen"
@@ -117,7 +118,6 @@ const toggleMobileMenu = () => {
             @sign-in="router.push('/auth/signIn')"
         />
       </Transition>
-    </nav>
     <NuxtPage/>
   </div>
 </template>
