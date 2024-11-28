@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {ref, computed, watch, onMounted, onBeforeUnmount} from 'vue';
 import {useFetch} from '#app';
-import {type Recipes} from '@prisma/client';
 import {
   difficulty,
   budget,
@@ -9,12 +8,13 @@ import {
 } from '@/constants';
 import {onBeforeRouteLeave} from 'vue-router';
 import {firstCharacterToUppercase} from '@/utils/textFormatting';
+import type {RecipesProps} from "~/utils/types";
 
 
 const writtenRecipe = ref('');
-const correspondingRecipes = ref<Recipes[]>([]);
+const correspondingRecipes = ref<RecipesProps[]>([]);
 
-const {data, status} = useFetch<Recipes[]>('/api/recipes');
+const {data, status} = useFetch<RecipesProps[]>('/api/recipes');
 
 const currentPage = ref(1);
 const recipesPerPage = 30;
@@ -39,7 +39,6 @@ watchEffect(() => {
   console.log('Corresponding Recipes:', correspondingRecipes.value);
   console.log('Paginated Recipes:', paginatedRecipes.value);
 });
-
 
 
 const goToPreviousPage = () => {
@@ -106,7 +105,6 @@ const searchRecipes = () => {
     currentPage.value = 1;
   }
 };
-
 
 
 const resetFilters = () => {
@@ -194,7 +192,7 @@ onBeforeRouteLeave((to, from, next) => {
         </div>
         <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <UCard v-for="(recipe, index) in paginatedRecipes" :key="recipe.id || index" class="relative">
-          <template #header>
+            <template #header>
               <div class="absolute top-4 right-4 flex gap-1 items-center justify-center text-sm cursor-pointer">
                 <UIcon name="material-symbols-light:content-copy"
                        class="size-5 text-white hover:text-persian-red-300 transition-colors"

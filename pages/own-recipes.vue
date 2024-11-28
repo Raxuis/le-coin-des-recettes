@@ -8,7 +8,6 @@ import {z} from "zod";
 import {newRecipe} from "~/validation/schemas";
 import {useFetch} from "#app";
 import {slugTitleWithTimeStamp} from "~/utils/titleToSlug";
-import type {Recipes} from "@prisma/client";
 import {onBeforeRouteLeave} from "#vue-router";
 import {previousRoute} from "~/utils/previousRoute";
 import {closeModal} from "~/utils/modal";

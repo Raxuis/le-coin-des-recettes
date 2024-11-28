@@ -5,16 +5,17 @@ import {newRecipe} from '@/validation/schemas';
 import {firstCharacterToUppercase, previousRoute, useAuth} from "#imports";
 import {parseList} from "~/utils/textFormatting";
 import {useFetch} from "#app";
-import type {Recipes} from "@prisma/client";
 import {onBeforeRouteLeave} from "#vue-router";
 import {slugTitleWithTimeStamp} from "~/utils/titleToSlug";
 import {useRecipeFavorites} from "~/composables/useRecipeFavorites";
+import type {RecipesProps} from "~/utils/types";
+import {isValidRecipe} from "~/utils/isValidRecipe";
 
 const {data: userDatas} = useAuth();
-const { toggleFavorite } = useRecipeFavorites()
+const {toggleFavorite} = useRecipeFavorites()
 
 
-const {data} = useFetch<Recipes[]>('/api/community-recipes', {
+const {data} = useFetch<RecipesProps[]>('/api/community-recipes', {
   default: () => [], // making data an array by default
 });
 
@@ -25,15 +26,15 @@ const fetchFavorites = async () => {
   if (!userDatas.value?.user?.email) return;
 
   try {
-    const { data: userWithFavorites } = await useFetch('/api/user-favorites', {
-      query: { email: userDatas.value.user.email }
+    const {data: userWithFavorites} = await useFetch('/api/user-favorites', {
+      query: {email: userDatas.value.user.email}
     });
 
     const favorites = userWithFavorites.value?.favoriteRecipes ?? [];
     const favoritedMap = Object.fromEntries(
         favorites.map((fav) => [fav.id, true])
     );
-    isRecipeFavorited.value = { ...favoritedMap };
+    isRecipeFavorited.value = {...favoritedMap};
   } catch (error) {
     console.error("Erreur lors de la récupération des favoris :", error);
   }
@@ -41,7 +42,6 @@ const fetchFavorites = async () => {
 
 
 fetchFavorites(); // Removed onMounted because issue with useFetch response being idle
-
 
 
 const toast = useToast();
@@ -82,12 +82,19 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       creatorId: id,
       totalTime: totalTime.value,
       slug: slugTitleWithTimeStamp(state.title)
-    } as Recipes;
+    } as Partial<RecipesProps>;
+
     const response = await useFetch('/api/new-recipe', {
       method: 'POST',
       body: JSON.stringify(newRecipe)
     })
     if (response.status.value === "success") {
+      const createdRecipe = response.data.value?.data;
+
+      if (createdRecipe && isValidRecipe(createdRecipe)) {
+        data.value.push(createdRecipe);
+      }
+      
       toast.add({
         title: 'Félicitations',
         description: 'Vous avez créé une recette !',
@@ -95,8 +102,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         color: 'green'
       })
       isOpen.value = false;
-
-      data.value.push(newRecipe);
     } else if (response.status.value === "error") {
       toast.add({
         title: 'Erreur',
@@ -165,19 +170,19 @@ const handleFavoriteClick = async (recipeId: string) => {
         <template #header>
           <div class="absolute top-4 right-4 flex gap-1 items-center justify-center text-sm cursor-pointer">
             <UIcon
-              :name="isRecipeFavorited[recipe.id] ? 'material-symbols:kid-star' : 'material-symbols:kid-star-outline'"
-              class="size-5 text-white hover:text-yellow-500 transition-colors"
-              @click="handleFavoriteClick(recipe.id)"
+                :name="isRecipeFavorited[recipe.id] ? 'material-symbols:kid-star' : 'material-symbols:kid-star-outline'"
+                class="size-5 text-white hover:text-yellow-500 transition-colors"
+                @click="handleFavoriteClick(recipe.id)"
             />
             <UIcon
-              name="material-symbols-light:content-copy"
-              class="size-5 text-white hover:text-persian-red-300 transition-colors"
-              @click="shareRecipe({ slug: recipe.slug ?? '', title: recipe.title, action: 'copyToClipboard' })"
+                name="material-symbols-light:content-copy"
+                class="size-5 text-white hover:text-persian-red-300 transition-colors"
+                @click="shareRecipe({ slug: recipe.slug ?? '', title: recipe.title, action: 'copyToClipboard' })"
             />
             <UIcon
-              name="material-symbols-light:share"
-              class="size-5 text-white hover:text-blue-300 transition-colors"
-              @click="shareRecipe({ slug: recipe.slug ?? '', title: recipe.title, action: 'shareToSocial' })"
+                name="material-symbols-light:share"
+                class="size-5 text-white hover:text-blue-300 transition-colors"
+                @click="shareRecipe({ slug: recipe.slug ?? '', title: recipe.title, action: 'shareToSocial' })"
             />
           </div>
           <div class="flex flex-col items-center justify-center space-y-2 pt-4">
