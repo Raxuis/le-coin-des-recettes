@@ -1,12 +1,8 @@
 <script setup lang="ts">
 
-import {useDark} from "@vueuse/core";
-
 definePageMeta({
   name: 'recipe-slug'
 });
-
-import {type Recipes} from '@prisma/client';
 import {useFetch} from 'nuxt/app';
 import {useRoute, useRouter} from 'vue-router';
 import {previousRoute} from '@/utils/previousRoute';
@@ -16,10 +12,8 @@ import {exportToPDF} from '@/utils/exportToPDF';
 
 const route = useRoute();
 const router = useRouter();
-const colorMode = useColorMode();
-const isDarkMode: boolean = colorMode.value !== 'dark';
 const recipeSlug = route.params.slug;
-const {data, status} = useFetch<Recipes>('/api/recipe', {
+const {data, status} = useFetch<RecipesProps>('/api/recipe', {
   method: 'POST',
   body: {
     slug: recipeSlug

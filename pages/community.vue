@@ -9,7 +9,7 @@ import {onBeforeRouteLeave} from "#vue-router";
 import {slugTitleWithTimeStamp} from "~/utils/titleToSlug";
 import {useRecipeFavorites} from "~/composables/useRecipeFavorites";
 import type {RecipesProps} from "~/utils/types";
-import {isValidRecipe} from "~/utils/isValidRecipe";
+import {isValidRecipe} from "~/utils/recipeFunctions";
 
 const {data: userDatas} = useAuth();
 const {toggleFavorite} = useRecipeFavorites()
@@ -94,7 +94,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       if (createdRecipe && isValidRecipe(createdRecipe)) {
         data.value.push(createdRecipe);
       }
-      
+
       toast.add({
         title: 'Félicitations',
         description: 'Vous avez créé une recette !',

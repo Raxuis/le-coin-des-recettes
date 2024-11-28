@@ -21,3 +21,26 @@ export function isValidRecipe(recipe: any): recipe is RecipesProps {
         typeof recipe.updatedAt === "string"
     );
 }
+
+export function mapToRecipesProps(data: any): RecipesProps[] {
+    return data.map((recipe: any) => ({
+        id: recipe.id,
+        title: recipe.title,
+        description: recipe.description || undefined,
+        type: recipe.type,
+        people: recipe.people ?? undefined,
+        slug: recipe.slug ?? undefined,
+        author: recipe.author ?? undefined,
+        ingredients: recipe.ingredients || [],
+        steps: recipe.steps || [],
+        preparationTime: recipe.preparationTime,
+        restingTime: recipe.restingTime,
+        cookingTime: recipe.cookingTime,
+        totalTime: recipe.totalTime,
+        difficulty: recipe.difficulty,
+        budget: recipe.budget,
+        specialEvent: recipe.specialEvent ?? undefined,
+        createdAt: new Date(recipe.createdAt),
+        updatedAt: new Date(recipe.updatedAt),
+    }));
+}
