@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {ref} from "vue";
-import {firstCharacterToUppercase, parseList} from "~/utils/textFormatting";
+import {parseList} from "~/utils/textFormatting";
 import {type OwnRecipesDatas} from "@/utils/types";
 import {useToast} from "#ui/composables/useToast";
 import EditRecipeModal from "~/components/EditRecipeModal.vue";
@@ -83,7 +83,7 @@ const saveRecipe = async (updatedRecipe: Schema) => {
         creatorId: id,
         totalTime: totalTime.value,
         slug: titleToSlug
-      } as Recipes;
+      };
 
       const {data, status} = await useFetch('/api/update-own-recipe', {
         method: 'PUT',
