@@ -165,74 +165,7 @@ const handleFavoriteClick = async (recipeId: string) => {
     <NewRecipeSlideOver :isOpen="isOpen" :formState="state" :onSubmit="onSubmit"
                         @update:isOpen="(value) => isOpen = value"/>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-10">
-      <UCard v-for="recipe in data" :key="recipe.id" class="relative">
-        <template #header>
-          <div class="absolute top-4 right-4 flex gap-1 items-center justify-center text-sm cursor-pointer">
-            <UIcon
-                :name="isRecipeFavorited[recipe.id] ? 'material-symbols:kid-star' : 'material-symbols:kid-star-outline'"
-                class="size-5 text-white hover:text-yellow-500 transition-colors"
-                @click="handleFavoriteClick(recipe.id)"
-            />
-            <UIcon
-                name="material-symbols-light:content-copy"
-                class="size-5 text-white hover:text-persian-red-300 transition-colors"
-                @click="shareRecipe({ slug: recipe.slug ?? '', title: recipe.title, action: 'copyToClipboard' })"
-            />
-            <UIcon
-                name="material-symbols-light:share"
-                class="size-5 text-white hover:text-blue-300 transition-colors"
-                @click="shareRecipe({ slug: recipe.slug ?? '', title: recipe.title, action: 'shareToSocial' })"
-            />
-          </div>
-          <div class="flex flex-col items-center justify-center space-y-2 pt-4">
-            <div class="flex flex-col items-center justify-center">
-              <NuxtLink class="text-lg underline underline-offset-2" :to="`/recipe/${recipe.slug}`">{{
-                  recipe.title
-                }}
-              </NuxtLink>
-              <p class="text-sm text-gray-500">{{ firstCharacterToUppercase(recipe.type.toLowerCase()) }}</p>
-            </div>
-            <div class="flex justify-center w-full gap-4 cursor-default">
-              <UTooltip text="Temps de préparation" :popper="{ placement: 'top' }">
-                <UBadge color="norway" variant="subtle" class="inline-flex gap-2">
-                  <UIcon name="material-symbols:concierge-rounded" class="size-5"/>
-                  {{ recipe.preparationTime }}min
-                </UBadge>
-              </UTooltip>
-              <UTooltip text="Temps de cuisson" :popper="{ placement: 'top' }">
-                <UBadge color="serenade" variant="subtle" class="inline-flex gap-2">
-                  <UIcon name="ph:cooking-pot-fill" class="size-5"/>
-                  {{ recipe.cookingTime }}min
-                </UBadge>
-              </UTooltip>
-              <UTooltip text="Temps de repos" :popper="{ placement: 'top' }">
-                <UBadge color="mercury" variant="subtle" class="inline-flex gap-2">
-                  <UIcon name="material-symbols:alarm" class="size-5"/>
-                  {{ recipe.restingTime }}min
-                </UBadge>
-              </UTooltip>
-            </div>
-          </div>
-        </template>
-        <template #footer>
-          <div class="flex justify-between px-2">
-            <UTooltip text="Difficulté" :popper="{ placement: 'top' }">
-              <UButton color="gray" class="text-serenade-500">
-                <UIcon name="mdi:chef-hat" class="size-5"/>
-                {{ firstCharacterToUppercase(recipe.difficulty) }}
-              </UButton>
-            </UTooltip>
-            <UTooltip text="Budget" :popper="{ placement: 'top' }">
-              <UButton color="gray" class="text-norway-500">
-                <UIcon name="material-symbols:money-bag-rounded" class="size-5"/>
-                {{ firstCharacterToUppercase(recipe.budget) }}
-              </UButton>
-            </UTooltip>
-          </div>
-        </template>
-      </UCard>
-    </div>
+    <RecipesGrid :recipes="data" />
   </div>
   <div class="flex flex-col justify-center items-center py-10 sm:py-20">
     <p v-if="userDatas?.user?.email" class="text-center">Vous souhaitez voir celles que vous avez fait ?</p>

@@ -34,31 +34,34 @@ export interface UpdateOwnRecipesDatas {
 }
 
 //👇Defining an interface corresponding to model Recipes in prisma schema due to an error
-export interface RecipesProps {
+
+export interface BaseRecipe {
     id: string;
     title: string;
-    description?: string;
-    type: RecipeCategoryType;
-    people?: number;
-    slug?: string;
-    author?: string;
+    slug: string;
+    type: string;
+    difficulty: string;
+    budget: string;
+    preparationTime: number;
+    cookingTime: number;
+    restingTime: number;
+}
+
+export interface RecipesProps extends BaseRecipe {
     ingredients: string[];
     steps: string[];
-    preparationTime: number;
-    restingTime: number;
-    cookingTime: number;
     totalTime: number;
-    difficulty: DifficultyType;
-    budget: BudgetType;
-    specialEvent?: SpecialEventType;
+    createdAt: string;
+    updatedAt: string;
+    specialEvent?: string;
+    author: string;
+    creatorId: string;
+}
 
-    creator?: UserProps;
-    favoritedBy?: UserProps[];
-    comments?: CommentsProps[];
-    ratings?: RatingsProps[];
-
-    createdAt: Date;
-    updatedAt: Date;
+export interface OwnRecipesDatas extends BaseRecipe {
+    ingredients: string;
+    steps: string;
+    specialEvent?: string;
 }
 
 export interface UserProps {
