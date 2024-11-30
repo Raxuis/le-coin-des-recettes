@@ -59,6 +59,8 @@ fetchFavorites();
           :show-management-actions="isOwnRecipesView"
           :is-favorited="isRecipeFavorited[recipe.id]"
           @favorite-updated="(newState) => isRecipeFavorited[recipe.id] = newState"
+          @edit="$emit('edit', $event)"
+          @delete="$emit('delete', $event)"
           v-else
       />
     </template>
