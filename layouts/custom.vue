@@ -39,7 +39,7 @@ const routes: RoutesProps[] = [{
   },
   {
     label: "Mes listes de courses",
-    to: '/shopping-list',
+    to: '/shopping-lists',
     protected: true
   }
 ]

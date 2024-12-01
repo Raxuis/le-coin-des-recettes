@@ -66,7 +66,7 @@ const handleSignOut = async () => {
                 <UButton size="sm" color="serenade" class="col-span-1 block" @click="router.push('/own-recipes')">
                   Mes recettes
                 </UButton>
-                <UButton size="sm" color="norway" class="col-span-1 block" @click="router.push('/shopping-list')">
+                <UButton size="sm" color="norway" class="col-span-1 block" @click="router.push('/shopping-lists')">
                   Mes listes de courses
                 </UButton>
               </div>
