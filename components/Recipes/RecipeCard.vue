@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import type { RecipesProps } from '~/utils/types';
-import { useRecipeFavorites } from '~/composables/useRecipeFavorites';
-import { firstCharacterToUppercase } from '#imports';
+import type {RecipesProps} from '~/utils/types';
+import {useRecipeFavorites} from '~/composables/useRecipeFavorites';
+import {firstCharacterToUppercase} from '#imports';
 import TimeBadge from "~/components/Recipes/TimeBadge.vue";
+import {calculateAverageRating} from '~/utils/calculateAverageRating';
 
 interface Props {
   recipe: RecipesProps | OwnRecipesDatas;
@@ -13,12 +14,11 @@ interface Props {
   isAuthenticated: boolean;
 }
 
-
-
 defineProps<Props>();
+
 const emit = defineEmits(['edit', 'delete', 'favoriteUpdated']);
 
-const { toggleFavorite } = useRecipeFavorites();
+const {toggleFavorite} = useRecipeFavorites();
 
 const handleFavoriteClick = async (recipeId: string) => {
   const result = await toggleFavorite(recipeId);
@@ -31,8 +31,9 @@ const handleFavoriteClick = async (recipeId: string) => {
 <template>
   <UCard class="relative group">
     <template #header>
-      <div v-if="showSocialActions" class="absolute top-4 right-4 flex gap-1 items-center justify-center text-sm cursor-pointer">
-      <UIcon
+      <div v-if="showSocialActions"
+           class="absolute top-4 right-4 flex gap-1 items-center justify-center text-sm cursor-pointer">
+        <UIcon
             :name="isFavorited ? 'material-symbols:kid-star' : 'material-symbols:kid-star-outline'"
             class="size-5 text-yellow-500"
             @click="handleFavoriteClick(recipe.id)"
@@ -50,7 +51,8 @@ const handleFavoriteClick = async (recipeId: string) => {
         />
       </div>
 
-      <div v-if="showManagementActions" class="absolute top-4 right-4 flex gap-1 items-center justify-center text-sm cursor-pointer">
+      <div v-if="showManagementActions"
+           class="absolute top-4 right-4 flex gap-1 items-center justify-center text-sm cursor-pointer">
         <UIcon
             name="material-symbols:edit-outline"
             class="size-5 text-blue-500"
@@ -65,10 +67,30 @@ const handleFavoriteClick = async (recipeId: string) => {
 
       <div class="flex flex-col items-center justify-center space-y-2 pt-4">
         <div class="flex flex-col items-center justify-center">
-          <NuxtLink class="text-lg underline underline-offset-2" :to="`/recipe/${recipe.slug}`">
+          <NuxtLink class="text-center text-lg underline underline-offset-2" :to="`/recipe/${recipe.slug}`">
             {{ recipe.title }}
           </NuxtLink>
-          <p class="text-sm text-gray-500">{{ firstCharacterToUppercase(recipe.type.toLowerCase()) }}</p>
+          <div class="flex gap-4">
+            <p class="text-sm flex items-center gap-1 text-gray-500/50">
+              <UIcon
+                  name="gravity-ui:comments"
+                  size="sm"
+              />
+              {{ recipe.comments || 0 }}
+            </p>
+            <p class="text-sm flex items-center gap-1 text-yellow-500/50">
+              <UIcon
+                  name="gravity-ui:star"
+                  size="sm"
+              />
+              {{
+                recipe.ratingValues && Array.isArray(recipe.ratingValues) ? calculateAverageRating(recipe.ratingValues) : "Pas de notes"
+              }}
+            </p>
+          </div>
+          <p class="text-sm text-gray-500">
+            {{ firstCharacterToUppercase(recipe.type.toLowerCase()) }}
+          </p>
         </div>
 
         <div class="flex justify-center w-full gap-4 cursor-default">

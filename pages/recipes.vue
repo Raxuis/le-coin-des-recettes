@@ -34,11 +34,6 @@ watchEffect(() => {
   }
 });
 
-watchEffect(() => {
-  console.log('Corresponding Recipes:', correspondingRecipes.value);
-  console.log('Paginated Recipes:', paginatedRecipes.value);
-});
-
 
 const goToPreviousPage = () => {
   if (currentPage.value > 1) {

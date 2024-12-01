@@ -1,22 +1,4 @@
-import {
-    type RecipeCategoryType,
-    type SpecialEventType,
-    type BudgetType,
-    type DifficultyType,
-    type RatingValueType
-} from "~/constants";
-
-export interface OwnRecipesDatas {
-    id: string,
-    title: string,
-    slug: string,
-    type: string,
-    difficulty: string,
-    budget: string,
-    preparationTime: number,
-    cookingTime: number,
-    restingTime: number,
-}
+import {type RatingValueType} from "~/constants";
 
 export interface UpdateOwnRecipesDatas {
     id: string,
@@ -56,12 +38,16 @@ export interface RecipesProps extends BaseRecipe {
     specialEvent?: string;
     author: string;
     creatorId: string;
+    comments?: number;
+    ratingValues?: RatingValueType[];
 }
 
 export interface OwnRecipesDatas extends BaseRecipe {
     ingredients: string;
     steps: string;
     specialEvent?: string;
+    comments?: number;
+    ratingValues?: RatingValueType[];
 }
 
 export interface UserProps {
