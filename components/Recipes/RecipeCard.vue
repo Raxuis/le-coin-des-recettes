@@ -9,7 +9,7 @@ interface Props {
   recipe: RecipesProps | OwnRecipesDatas;
   showSocialActions: boolean;
   showManagementActions: boolean;
-  isFavorited: boolean;
+  isFavorited: boolean | undefined;
   isFavoritesLoading: boolean;
   isAuthenticated: boolean;
 }
