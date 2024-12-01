@@ -78,18 +78,22 @@ const emit = defineEmits(['close', 'sign-out', 'sign-in'])
               class="w-full flex justify-center"
           />
         </li>
-        <li class="sm:hidden border-t"></li>
-        <li
-            v-for="route in routes.filter((item) => item.protected)"
-            :key="route.label"
-        >
-          <NuxtLink
-              :to="route.to"
-              @click="emit('close')"
-              class="flex items-center justify-start sm:justify-end gap-2 text-lg text-masala-900 dark:text-white hover:text-persian-red-800 dark:hover:text-persian-red-400 transition-colors"
-          >
-            {{ route.label }}
-          </NuxtLink>
+        <li v-if="userData">
+          <ul class="space-y-4">
+            <li class="sm:hidden border-t"></li>
+            <li
+                v-for="route in routes.filter((item) => item.protected)"
+                :key="route.label"
+            >
+              <NuxtLink
+                  :to="route.to"
+                  @click="emit('close')"
+                  class="flex items-center justify-start sm:justify-end gap-2 text-lg text-masala-900 dark:text-white hover:text-persian-red-800 dark:hover:text-persian-red-400 transition-colors"
+              >
+                {{ route.label }}
+              </NuxtLink>
+            </li>
+          </ul>
         </li>
       </ul>
     </div>
