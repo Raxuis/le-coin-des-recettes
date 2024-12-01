@@ -22,7 +22,10 @@ const isRecipeFavorited = ref<Record<string, boolean>>({});
 const isFavoritesLoading = ref(true);
 
 const fetchFavorites = async () => {
-  if (!userDatas.value?.user?.email) return;
+  if (!userDatas.value?.user?.email) {
+    isFavoritesLoading.value = false;
+    return;
+  }
 
   try {
     const {data: userWithFavorites} = await useFetch('/api/user-favorites', {
@@ -41,6 +44,7 @@ const fetchFavorites = async () => {
   }
 };
 
+
 fetchFavorites();
 
 </script>
@@ -50,18 +54,19 @@ fetchFavorites();
     <p v-if="!recipes.length && !loading">Aucune recette trouvée.</p>
     <p v-if="loading">Chargement...</p>
     <template v-else>
-      <div v-if="isFavoritesLoading">Chargement des favoris...</div>
+      <div v-if="isFavoritesLoading && userDatas?.user?.email">Chargement des favoris...</div>
       <RecipeCard
           v-for="recipe in recipes"
           :key="recipe.id"
           :recipe="recipe"
           :show-social-actions="showSocialActions"
           :show-management-actions="isOwnRecipesView"
+          :is-favorites-loading="isFavoritesLoading"
+          :is-authenticated="!!userDatas?.user?.email"
           :is-favorited="isRecipeFavorited[recipe.id]"
           @favorite-updated="(newState) => isRecipeFavorited[recipe.id] = newState"
           @edit="$emit('edit', $event)"
           @delete="$emit('delete', $event)"
-          v-else
       />
     </template>
   </div>

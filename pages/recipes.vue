@@ -7,7 +7,6 @@ import {
   category
 } from '@/constants';
 import {onBeforeRouteLeave} from 'vue-router';
-import {firstCharacterToUppercase} from '@/utils/textFormatting';
 import type {RecipesProps} from "~/utils/types";
 
 

@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import {checkUserSession} from "~/utils/checkUserSession";
 
 const prisma = new PrismaClient();
 

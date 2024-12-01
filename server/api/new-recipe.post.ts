@@ -1,17 +1,19 @@
 import {PrismaClient} from '@prisma/client';
 import {getServerSession} from "#auth";
+import {checkUserSession} from "~/utils/checkUserSession";
 
 const prisma = new PrismaClient();
 
 export default defineEventHandler(async (event) => {
-    const session = await getServerSession(event);
+    const sessionExists = await checkUserSession(event);
 
-    if (!session || !session.user) {
+    if (!sessionExists) {
         throw createError({
-            statusCode: 401,
-            statusMessage: 'Vous devez etre connecte pour creer une recette.',
+            statusCode: 403,
+            statusMessage: 'Authentication failed',
         });
     }
+
     const body = await readBody(event);
 
     if (!body || Object.keys(body).length === 0) {

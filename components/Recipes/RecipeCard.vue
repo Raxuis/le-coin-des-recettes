@@ -9,6 +9,8 @@ interface Props {
   showSocialActions: boolean;
   showManagementActions: boolean;
   isFavorited: boolean;
+  isFavoritesLoading: boolean;
+  isAuthenticated: boolean;
 }
 
 
@@ -30,10 +32,11 @@ const handleFavoriteClick = async (recipeId: string) => {
   <UCard class="relative group">
     <template #header>
       <div v-if="showSocialActions" class="absolute top-4 right-4 flex gap-1 items-center justify-center text-sm cursor-pointer">
-        <UIcon
+      <UIcon
             :name="isFavorited ? 'material-symbols:kid-star' : 'material-symbols:kid-star-outline'"
             class="size-5 text-yellow-500"
             @click="handleFavoriteClick(recipe.id)"
+            v-if="!isFavoritesLoading && isAuthenticated"
         />
         <UIcon
             name="material-symbols-light:content-copy"
@@ -91,7 +94,6 @@ const handleFavoriteClick = async (recipeId: string) => {
       </div>
     </template>
 
-    <!-- Card Footer -->
     <template #footer>
       <div class="flex justify-between px-2">
         <UTooltip text="Difficulté" :popper="{ placement: 'top' }">
