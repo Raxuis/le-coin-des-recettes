@@ -22,7 +22,6 @@ onMounted(() => {
   <div class="space-y-4">
     <h3 class="text-lg font-semibold">Commentaires</h3>
 
-    <!-- Comment Input -->
     <div class="space-y-2">
       <textarea
           v-model="newComment"
@@ -40,10 +39,8 @@ onMounted(() => {
       </UButton>
     </div>
 
-    <!-- Error Message -->
     <p v-if="error" class="text-red-500">{{ error }}</p>
 
-    <!-- Comments List -->
     <div v-if="comments.length > 0" class="space-y-4">
       <div
           v-for="comment in comments"
@@ -57,7 +54,7 @@ onMounted(() => {
         </div>
       </div>
     </div>
-    <p v-else-not-loading class="text-gray-500 italic">
+    <p v-if="!isLoading" class="text-gray-500 italic">
       Aucun commentaire pour le moment
     </p>
   </div>
