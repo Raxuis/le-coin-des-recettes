@@ -70,7 +70,7 @@ const handleFavoriteClick = async (recipeId: string) => {
           <NuxtLink class="text-center text-lg underline underline-offset-2" :to="`/recipe/${recipe.slug}`">
             {{ recipe.title }}
           </NuxtLink>
-          <div class="flex gap-4">
+          <div class="flex gap-4" v-if="recipe.creatorId">
             <p class="text-sm flex items-center gap-1 text-gray-500/50">
               <UIcon
                   name="gravity-ui:comments"

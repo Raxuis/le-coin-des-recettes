@@ -1,14 +1,18 @@
 <script setup lang="ts">
 
+
 definePageMeta({
   name: 'recipe-slug'
 });
+
 import {useFetch} from 'nuxt/app';
 import {useRoute, useRouter} from 'vue-router';
 import {previousRoute} from '@/utils/previousRoute';
 import {firstCharacterToUppercase} from '@/utils/textFormatting';
 import {ref} from 'vue';
 import {exportToPDF} from '@/utils/exportToPDF';
+import RecipeRating from "~/components/Recipes/RecipeRating.vue";
+import RecipeComments from "~/components/Recipes/RecipeComments.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -88,6 +92,10 @@ const handleExportToPDF = () => {
         <div v-if="data?.creatorId">
           <hr/>
           <p class="pt-2">Par <span class="text-serenade-600">{{ data.author }}</span></p>
+          <div class="mt-6 space-y-8">
+            <RecipeRating :recipe-id="data.id" />
+            <RecipeComments :recipe-id="data.id" />
+          </div>
         </div>
       </div>
     </UCard>
