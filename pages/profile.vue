@@ -43,7 +43,7 @@ const handleSignOut = async () => {
             <div class="flex flex-col gap-1" v-if="data.recipes">
               <h2 class="text-xl font-bold">Recettes</h2>
               <ul>
-                <li v-for="recipe in data.recipes" :key="recipe.slug">
+                <li v-for="recipe in data.recipes" :key="recipe.slug ?? recipe.title">
                   <NuxtLink :to="`/recipe/${recipe.slug}`">
                     - {{ recipe.title }}
                   </NuxtLink>
@@ -52,7 +52,7 @@ const handleSignOut = async () => {
               <div class="flex flex-col gap-1" v-if="data.favoriteRecipes.length">
                 <h2 class="text-xl font-bold">Favoris</h2>
                 <ul>
-                  <li v-for="favoriteRecipe in data.favoriteRecipes" :key="favoriteRecipe.slug">
+                  <li v-for="favoriteRecipe in data.favoriteRecipes" :key="favoriteRecipe.slug ?? favoriteRecipe.title">
                     <NuxtLink :to="`/recipe/${favoriteRecipe.slug}`">
                       - {{ favoriteRecipe.title }}
                     </NuxtLink>
