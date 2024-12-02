@@ -33,7 +33,7 @@ onMounted(() => {
           :loading="isLoading"
           @click="submitComment"
           color="serenade"
-          class="w-full sm:w-auto"
+          class="w-full sm:w-auto block"
       >
         Ajouter un commentaire
       </UButton>
