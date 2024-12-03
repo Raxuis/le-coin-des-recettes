@@ -115,12 +115,12 @@ export interface RecipeComment {
 }
 
 export interface CommentResponse {
-    data: Comment[];
+    data: RecipeComment[];
     status: string;
 }
 
 export interface SingleCommentResponse {
-    data: Comment;
+    data: RecipeComment;
     status: string;
     statusCode: number;
 }

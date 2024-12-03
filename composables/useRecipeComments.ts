@@ -18,7 +18,6 @@ export function useRecipeComments(recipeId: string) {
       });
 
       if (response.value?.data) {
-        console.log(response.value.data);
         comments.value.unshift(response.value.data);
         newComment.value = '';
       }
@@ -34,7 +33,6 @@ export function useRecipeComments(recipeId: string) {
       isLoading.value = true;
       const { data: response } = await useFetch<CommentResponse>(`/api/recipe/comments/${recipeId}`);
 
-      console.log(response);
       if (response.value?.data) {
         comments.value = response.value.data;
       }
