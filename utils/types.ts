@@ -108,9 +108,8 @@ export interface ItemsProps {
 
 export interface RecipeComment {
     id: string;
-    text: string;
-    authorId: string;
-    authorName: string;
+    content: string;
+    user: UserProps;
     createdAt: string;
     recipeId: string;
 }
@@ -123,6 +122,7 @@ export interface CommentResponse {
 export interface SingleCommentResponse {
     data: Comment;
     status: string;
+    statusCode: number;
 }
 
 export interface Rating {

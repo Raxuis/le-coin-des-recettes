@@ -56,7 +56,6 @@ const fetchRecipes = async () => {
 await fetchRecipes();
 
 const openModal = (recipe: OwnRecipesDatas) => {
-  console.log("openModal", recipe);
   Object.assign(state, {...recipe});
   modal.open(EditRecipeModal, {
     formState: state,

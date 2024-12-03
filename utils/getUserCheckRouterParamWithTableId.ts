@@ -2,7 +2,7 @@ import {PrismaClient} from "@prisma/client";
 
 const prisma = new PrismaClient()
 
-export const getUserCheckRouterParam = async (session: any) => {
+export const getUserCheckRouterParamWithTableId = async (session: any, id: string | undefined) => {
     if (!session) {
         throw createError({
             statusCode: 401,
@@ -20,6 +20,13 @@ export const getUserCheckRouterParam = async (session: any) => {
         throw createError({
             statusCode: 404,
             message: 'User not found'
+        })
+    }
+
+    if (!id) {
+        throw createError({
+            statusCode: 400,
+            message: 'Element Id is required'
         })
     }
     return user;

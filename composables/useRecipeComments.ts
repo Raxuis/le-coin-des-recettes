@@ -12,12 +12,13 @@ export function useRecipeComments(recipeId: string) {
 
     try {
       isLoading.value = true;
-      const { data: response } = await useFetch<SingleCommentResponse>(`/api/recipes/${recipeId}/comments`, {
+      const { data: response } = await useFetch<SingleCommentResponse>(`/api/recipe/comments/${recipeId}`, {
         method: 'POST',
-        body: { text: newComment.value }
+        body: { content: newComment.value }
       });
 
       if (response.value?.data) {
+        console.log(response.value.data);
         comments.value.unshift(response.value.data);
         newComment.value = '';
       }
@@ -31,8 +32,9 @@ export function useRecipeComments(recipeId: string) {
   const loadComments = async () => {
     try {
       isLoading.value = true;
-      const { data: response } = await useFetch<CommentResponse>(`/api/recipes/${recipeId}/comments`);
+      const { data: response } = await useFetch<CommentResponse>(`/api/recipe/comments/${recipeId}`);
 
+      console.log(response);
       if (response.value?.data) {
         comments.value = response.value.data;
       }

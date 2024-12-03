@@ -1,6 +1,6 @@
 import {PrismaClient} from '@prisma/client'
 import {getServerSession} from '#auth'
-import {getUserCheckRouterParam} from "~/utils/getUserCheckRouterParam";
+import {getUserCheckRouterParamWithTableId} from "~/utils/getUserCheckRouterParamWithTableId";
 
 const prisma = new PrismaClient()
 
@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
     try {
         const session = await getServerSession(event);
         const id = getRouterParam(event, 'id');
-        const user = await getUserCheckRouterParam(session, id);
+        const user = await getUserCheckRouterParamWithTableId(session, id);
 
 
         const body = await readBody(event)
