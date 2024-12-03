@@ -67,7 +67,7 @@ loadComments();
         </div>
       </div>
     </div>
-    <p v-if="!isLoading" class="text-gray-500 italic">
+    <p v-if="!isLoading && comments.length == 0" class="text-gray-500 italic">
       Aucun commentaire pour le moment
     </p>
   </div>
