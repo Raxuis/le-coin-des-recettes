@@ -38,7 +38,9 @@ export interface RecipesProps extends BaseRecipe {
   specialEvent?: string;
   author: string;
   creatorId: string;
-  comments?: number;
+  _count?: {
+    comments: number;
+  }
   ratingValues?: RatingValueType[];
   people?: number;
 }
@@ -47,7 +49,9 @@ export interface OwnRecipesDatas extends BaseRecipe {
   ingredients: string;
   steps: string;
   specialEvent?: string;
-  comments?: number;
+  _count?: {
+    comments: number;
+  }
   ratingValues?: RatingValueType[];
   creatorId: string;
 }
