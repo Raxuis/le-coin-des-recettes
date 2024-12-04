@@ -92,7 +92,7 @@ const handleExportToPDF = () => {
         <div v-if="data?.creatorId">
           <hr/>
           <p class="pt-2">Par <span class="text-serenade-600">{{ data.author }}</span></p>
-          <div class="mt-6 space-y-8">
+          <div class="mt-6 space-y-8 export-hidden">
             <RecipeRating :recipe-id="data.id" />
             <RecipeComments :recipe-id="data.id" />
           </div>
