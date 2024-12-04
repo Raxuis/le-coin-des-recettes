@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { defineEmits } from 'vue';
 import { newRecipe } from '~/validation/schemas';
 import { budget, category, difficulty, SPECIAL_EVENTS } from '~/constants';
 
