@@ -3,7 +3,6 @@ import type {RecipesProps} from '~/utils/types';
 import {useRecipeFavorites} from '~/composables/useRecipeFavorites';
 import {firstCharacterToUppercase} from '#imports';
 import TimeBadge from "~/components/Recipes/TimeBadge.vue";
-import {calculateAverageRating} from '~/utils/calculateAverageRating';
 
 interface Props {
   recipe: RecipesProps | OwnRecipesDatas;
@@ -14,8 +13,8 @@ interface Props {
   isAuthenticated: boolean;
 }
 
-defineProps<Props>();
 
+defineProps<Props>();
 const emit = defineEmits(['edit', 'delete', 'favoriteUpdated']);
 
 const {toggleFavorite} = useRecipeFavorites();
@@ -83,9 +82,7 @@ const handleFavoriteClick = async (recipeId: string) => {
                   name="gravity-ui:star"
                   size="sm"
               />
-              {{
-                recipe.ratingValues && Array.isArray(recipe.ratingValues) ? calculateAverageRating(recipe.ratingValues) : "Pas de notes"
-              }}
+              {{ recipe.averageRating ? recipe.averageRating + "/5" : "Pas de notes"}}
             </p>
           </div>
           <p class="text-sm text-gray-500">

@@ -19,22 +19,7 @@ export default defineEventHandler(async (event) => {
             preparationTime: true,
             cookingTime: true,
             restingTime: true,
-            totalTime: true,
-            ingredients: true,
-            steps: true,
             specialEvent: true,
-            author: true,
-            creatorId: true,
-            ratings: {
-                select: {
-                    value: true,
-                },
-            },
-            _count: {
-                select: {
-                    comments: true,
-                },
-            },
         }
     });
     if (!recipes) throw createError({statusCode: 500, statusMessage: 'An error occurred try again.'})

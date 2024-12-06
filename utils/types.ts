@@ -1,5 +1,3 @@
-import { type RatingValueType } from "~/constants";
-
 export interface UpdateOwnRecipesDatas {
   id: string,
   title: string,
@@ -41,7 +39,8 @@ export interface RecipesProps extends BaseRecipe {
   _count?: {
     comments: number;
   }
-  ratingValues?: RatingValueType[];
+  ratings?: RatingsProps[];
+  averageRating: number;
   people?: number;
 }
 
@@ -52,7 +51,8 @@ export interface OwnRecipesDatas extends BaseRecipe {
   _count?: {
     comments: number;
   }
-  ratingValues?: RatingValueType[];
+  ratings?: RatingsProps[];
+  averageRating: number;
   creatorId: string;
 }
 
@@ -83,7 +83,7 @@ export interface CommentsProps {
 
 export interface RatingsProps {
   id: string;
-  value: RatingValueType;
+  value: number;
   createdAt: Date;
   updatedAt: Date;
 

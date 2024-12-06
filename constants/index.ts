@@ -24,17 +24,8 @@ export const category = [
     "DESSERT"
 ] as const;
 
-export const RatingValue = [
-    "ONE",
-    "TWO",
-    "THREE",
-    "FOUR",
-    "FIVE",
-] as const;
-
 // Inferring types
 export type SpecialEventType = (typeof SPECIAL_EVENTS)[number];
 export type DifficultyType = (typeof difficulty)[number];
 export type BudgetType = (typeof budget)[number];
 export type RecipeCategoryType = (typeof category)[number];
-export type RatingValueType = (typeof RatingValue)[number];
