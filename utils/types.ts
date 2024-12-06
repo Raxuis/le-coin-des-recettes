@@ -134,3 +134,7 @@ export interface Rating {
   userId: string;
   createdAt: string;
 }
+
+export interface RatingResponse {
+  data: Rating;
+}

@@ -42,9 +42,10 @@ export const useRecipeFavorites = () => {
                 return response.data?.value?.isFavorited
             }
         } catch (error) {
+            console.error(error)
             toast.add({
                 title: 'Erreur',
-                description: 'Une erreur est survenue',
+                description: 'Une erreur est survenue 😕',
                 icon: 'material-symbols:error',
                 color: 'red',
             })
