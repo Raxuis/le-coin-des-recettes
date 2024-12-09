@@ -82,7 +82,7 @@ const handleFavoriteClick = async (recipeId: string) => {
                   name="gravity-ui:star"
                   size="sm"
               />
-              {{ recipe.averageRating ? recipe.averageRating + "/5" : "Pas de notes"}}
+              {{ recipe.averageRating ? recipe.averageRating.toFixed(1) + "/5" : "Pas de notes"}}
             </p>
           </div>
           <p class="text-sm text-gray-500">
