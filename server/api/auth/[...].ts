@@ -35,15 +35,6 @@ export default NuxtAuthHandler({
         console.error("Error during sign-in:", error)
         return false
       }
-    },
-    async session({ session, user }) {
-      // session.user = {
-      //   name: user.name || null,
-      //   email: user.email || null,
-      //   image: user.image || null,
-      // };
-      // session.expires = new Date(session.expires).toISOString();
-      return session;
-    },
+    }
   }
 })

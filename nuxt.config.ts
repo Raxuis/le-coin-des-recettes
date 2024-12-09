@@ -21,7 +21,6 @@ export default defineNuxtConfig({
       defaultProvider: "google",
       type: "authjs",
       trustHost: false,
-      addDefaultCallbackUrl: true
     },
     sessionRefresh: {
       enablePeriodically: true,
