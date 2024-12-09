@@ -163,8 +163,6 @@ onBeforeRouteLeave((to, from, next) => {
 <template>
   <p class="text-xl">Vos recettes :</p>
   <div class="mt-8">
-    <p v-if="!recipes.length && !loading">Aucune recette trouvée.</p>
-    <p v-if="loading">Chargement...</p>
     <RecipesGrid
         :recipes="recipes"
         :loading="loading"
