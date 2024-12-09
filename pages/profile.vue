@@ -40,7 +40,7 @@ const handleSignOut = async () => {
               <h2 class="text-xl font-bold">{{ data.name }}</h2>
               <p class="text-sm">{{ data.email }}</p>
             </div>
-            <div class="flex flex-col gap-1" v-if="data.recipes">
+            <div class="flex flex-col gap-1" v-if="data.recipes.length">
               <h2 class="text-xl font-bold">Recettes</h2>
               <ul>
                 <li v-for="recipe in data.recipes" :key="recipe.slug ?? recipe.title">
@@ -59,7 +59,7 @@ const handleSignOut = async () => {
                   </li>
                 </ul>
               </div>
-              <p class="text-sm text-gray-500">
+              <p class="text-sm text-gray-500" v-if="data.recipes.length">
                 Ce ne sont que vos 5 dernières recettes crées<span v-if="data.favoriteRecipes.length">et favorites</span>.
               </p>
               <div class="grid grid-cols-2 space-x-4 mt-2">
