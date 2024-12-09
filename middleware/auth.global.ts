@@ -11,9 +11,6 @@ export default defineNuxtRouteMiddleware((to) => {
     ];
     const excludedNames = ['recipe-slug'];
 
-    console.log('Navigating to:', to.path);
-    console.log('Route meta:', to.meta);
-
     if (excludedPaths.includes(to.path) || excludedNames.includes(to.name as string)) {
         if (status.value === 'authenticated' && to.meta?.auth?.unauthenticatedOnly) {
             return navigateTo(to.meta.auth.navigateAuthenticatedTo || '/profile');
