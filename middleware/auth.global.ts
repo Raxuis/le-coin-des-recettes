@@ -1,6 +1,6 @@
 export default defineNuxtRouteMiddleware((to) => {
     const { status } = useAuth();
-
+    console.log('Auth Status:', status.value);
     const excludedPaths = [
         '/auth/signIn',
         '/about',
@@ -9,18 +9,19 @@ export default defineNuxtRouteMiddleware((to) => {
         '/special-events-recipes',
         '/community'
     ];
-
     const excludedNames = ['recipe-slug'];
 
+    console.log('Navigating to:', to.path);
+    console.log('Route meta:', to.meta);
+
     if (excludedPaths.includes(to.path) || excludedNames.includes(to.name as string)) {
-        if (status.value === 'authenticated' && to.meta.auth?.unauthenticatedOnly) {
-            return navigateTo(to.meta.auth?.navigateAuthenticatedTo || '/profile');
+        if (status.value === 'authenticated' && to.meta?.auth?.unauthenticatedOnly) {
+            return navigateTo(to.meta.auth.navigateAuthenticatedTo || '/profile');
         }
         return;
     }
 
-    // Redirect unauthenticated users for protected routes
     if (status.value !== 'authenticated') {
-        return navigateTo(to.meta.auth?.navigateUnauthenticatedTo || '/auth/signIn');
+        return navigateTo(to.meta?.auth?.navigateUnauthenticatedTo || '/auth/signIn');
     }
 });
