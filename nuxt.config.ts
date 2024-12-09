@@ -16,7 +16,7 @@ export default defineNuxtConfig({
   auth: {
     isEnabled: true,
     disableServerSideAuth: false,
-    baseURL: `http://localhost:${process.env.PORT || 3000}`,
+    baseURL: process.env.BASE_URL || `http://localhost:${process.env.PORT || 3000}`,
     provider: {
       defaultProvider: "google",
       type: "authjs",
