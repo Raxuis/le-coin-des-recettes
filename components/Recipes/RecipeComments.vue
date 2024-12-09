@@ -21,12 +21,14 @@ loadComments();
     <h3 class="text-lg font-semibold">Commentaires</h3>
 
     <div class="space-y-2">
-      <textarea
-          v-model="newComment"
-          placeholder="Partagez votre expérience avec cette recette..."
-          class="w-full p-3 border rounded-md focus:ring-2 focus:ring-serenade-600 focus:border-transparent"
-          rows="3"
-      />
+     <textarea
+         v-model="newComment"
+         placeholder="Partagez votre expérience avec cette recette..."
+         class="w-full p-3 border rounded-md focus:ring-2 focus:ring-serenade-600 focus:border-transparent"
+         rows="3"
+     ></textarea>
+
+      <p v-if="error" class="text-sm text-red-600">{{ error }}</p>
       <UButton
           :loading="isLoading"
           @click="submitComment"
@@ -36,8 +38,6 @@ loadComments();
         Ajouter un commentaire
       </UButton>
     </div>
-
-    <p v-if="error" class="text-red-500">{{ error }}</p>
 
     <div v-if="comments.length > 0" class="space-y-4">
       <div
@@ -51,7 +51,7 @@ loadComments();
           <NuxtLink to="/profile" class="flex items-center gap-2">
             <div
                 class="flex relative bg-gray-300 hover:bg-persian-red-400 text-persian-red-400 hover:text-white rounded-full transition-colors"
-                >
+            >
               <UAvatar
                   :src="comment.user.image"
                   alt="User avatar"
@@ -59,7 +59,8 @@ loadComments();
                   onerror="this.onerror=null; this.remove();"
               >
               </UAvatar>
-              <p class="z-5 absolute inset-0 flex justify-center items-center bg-gray-900 rounded-full">{{ comment.user.name!.charAt(0) }}</p>
+              <p class="z-5 absolute inset-0 flex justify-center items-center bg-gray-900 rounded-full">
+                {{ comment.user.name!.charAt(0) }}</p>
             </div>
             <span>{{ comment.user?.name || 'Utilisateur inconnu' }}</span>
           </NuxtLink>

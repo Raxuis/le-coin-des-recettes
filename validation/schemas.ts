@@ -21,3 +21,11 @@ export const newRecipe = z.object({
     specialEvent: z.enum(SPECIAL_EVENTS).optional(),
 });
 
+export const comment = z.object({
+    comment: z.string().min(1, {
+        message: "Le commentaire doit faire au moins un caractère."
+    }).max(200, {
+        message: "Votre commentaire est trop long, doucement..."
+    }).trim(),
+})
+
