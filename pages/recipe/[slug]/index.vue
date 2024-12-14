@@ -14,6 +14,8 @@ import {exportToPDF} from '@/utils/exportToPDF';
 import RecipeRating from "~/components/Recipes/RecipeRating.vue";
 import RecipeComments from "~/components/Recipes/RecipeComments.vue";
 
+const {data:userData} = useAuth();
+
 const route = useRoute();
 const router = useRouter();
 const recipeSlug = route.params.slug;
@@ -92,7 +94,7 @@ const handleExportToPDF = () => {
         <div v-if="data?.creatorId">
           <hr/>
           <p class="pt-2">Par <span class="text-serenade-600">{{ data.author }}</span></p>
-          <div class="mt-6 space-y-8 export-hidden">
+          <div class="mt-6 space-y-8 export-hidden" v-if="userData?.user">
             <RecipeRating :recipe-id="data.id" />
             <RecipeComments :recipe-id="data.id" />
           </div>
