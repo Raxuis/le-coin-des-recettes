@@ -152,13 +152,13 @@ const handleFavoriteClick = async (recipeId: string) => {
       </div>
       <NuxtLink
           class="select-none group cursor-pointer text-gray-700 dark:text-white
-          grid grid-flow-col auto-cols-max justify-center bg-clip-border border-2 border-persian-red-300
+          auto-cols-max bg-clip-border border-2 border-persian-red-300
           border-dashed rounded-lg bg-slate-400 bg-opacity-15 hover:bg-persian-red-300 hover:bg-opacity-20
-          duration-300 p-8"
+          duration-300 p-8 flex justify-center items-center"
           v-else
           to="/auth/signIn"
       >
-        <p class="flex justify-center items-center">Vous devez être connecté pour créer votre propre recette.</p>
+        <p class="">Vous devez être connecté pour créer votre propre recette.</p>
       </NuxtLink>
     </div>
 
