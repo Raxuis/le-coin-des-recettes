@@ -1,0 +1,124 @@
+[
+  {
+    "title": "Guacamole maison",
+    "type": "PLAT",
+    "people": 4,
+    "slug": "guacamole-maison",
+    "author": "Chef Amis",
+    "ingredients": [
+      "2 avocats bien mûrs",
+      "1 tomate coupée en petits dés",
+      "1 petit oignon rouge émincé",
+      "1 jus de citron vert",
+      "Sel",
+      "Poivre",
+      "Coriandre fraîche"
+    ],
+    "steps": [
+      "Écrase les avocats dans un bol.",
+      "Ajoute la tomate, l’oignon, le jus de citron, le sel, le poivre et la coriandre.",
+      "Mélange bien et goûte pour ajuster les assaisonnements. Servir avec des chips de maïs ou des crudités."
+    ],
+    "preparationTime": 10,
+    "restingTime": 0,
+    "cookingTime": 0,
+    "totalTime": 10,
+    "difficulty": "Facile",
+    "budget": "Bon marché",
+    "creatorId": null,
+    "createdAt": "2024-11-05T10:00:00.000Z",
+    "updatedAt": "2024-11-05T10:00:00.000Z"
+  },
+  {
+    "title": "Bruschetta à la tomate et au basilic",
+    "type": "PLAT",
+    "people": 4,
+    "slug": "bruschetta-tomate-basilic",
+    "author": "Chef Amis",
+    "ingredients": [
+      "1 baguette de pain",
+      "2-3 tomates mûres coupées en dés",
+      "Quelques feuilles de basilic frais",
+      "1 gousse d’ail",
+      "Huile d'olive",
+      "Sel",
+      "Poivre"
+    ],
+    "steps": [
+      "Coupe la baguette en tranches et fais-les griller légèrement.",
+      "Frotte chaque tranche avec de l’ail.",
+      "Mélange les tomates avec un filet d’huile d’olive, du sel, du poivre, et du basilic ciselé.",
+      "Dispose le mélange sur les tranches de pain grillé."
+    ],
+    "preparationTime": 15,
+    "restingTime": 0,
+    "cookingTime": 5,
+    "totalTime": 20,
+    "difficulty": "Facile",
+    "budget": "Bon marché",
+    "creatorId": null,
+    "createdAt": "2024-11-05T10:05:00.000Z",
+    "updatedAt": "2024-11-05T10:05:00.000Z"
+  },
+  {
+    "title": "Tacos DIY",
+    "type": "PLAT",
+    "people": 4,
+    "slug": "tacos-diy",
+    "author": "Chef Amis",
+    "ingredients": [
+      "Tortillas (maïs ou blé)",
+      "500g de poulet, boeuf, ou crevettes",
+      "Mélange d’épices pour tacos (cumin, paprika, ail en poudre)",
+      "Laitue",
+      "Tomates",
+      "Avocat",
+      "Oignons rouges",
+      "Fromage râpé",
+      "Sauce salsa ou guacamole"
+    ],
+    "steps": [
+      "Fais cuire la viande avec le mélange d'épices.",
+      "Dispose les tortillas et tous les ingrédients dans des bols pour que chacun puisse composer son propre taco."
+    ],
+    "preparationTime": 20,
+    "restingTime": 0,
+    "cookingTime": 10,
+    "totalTime": 30,
+    "difficulty": "Facile",
+    "budget": "Moyen",
+    "creatorId": null,
+    "createdAt": "2024-11-05T10:10:00.000Z",
+    "updatedAt": "2024-11-05T10:10:00.000Z"
+  },
+  {
+    "title": "Cookies au chocolat fondant",
+    "type": "DESSERT",
+    "people": 4,
+    "slug": "cookies-chocolat-fondant",
+    "author": "Chef Amis",
+    "ingredients": [
+      "120g de beurre",
+      "100g de sucre roux",
+      "150g de farine",
+      "1 œuf",
+      "100g de pépites de chocolat",
+      "1 cuillère à café de levure chimique"
+    ],
+    "steps": [
+      "Préchauffe le four à 180°C.",
+      "Mélange le beurre ramolli avec le sucre.",
+      "Ajoute l'œuf, puis incorpore la farine, la levure et les pépites de chocolat.",
+      "Forme des petites boules de pâte, dispose-les sur une plaque et fais cuire pendant 10-12 minutes."
+    ],
+    "preparationTime": 10,
+    "restingTime": 0,
+    "cookingTime": 12,
+    "totalTime": 22,
+    "difficulty": "Facile",
+    "budget": "Bon marché",
+    "creatorId": null,
+    "createdAt": "2024-11-05T10:15:00.000Z",
+    "updatedAt": "2024-11-05T10:15:00.000Z"
+  }
+]
